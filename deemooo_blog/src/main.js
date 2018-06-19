@@ -4,6 +4,7 @@ import VueRouter from 'vue-router';
 import Routers from './router';
 import store from './store';
 import Util from './libs/util';
+import axios from 'axios';
 import App from './app.vue';
 import 'iview/dist/styles/iview.css';
 
@@ -17,6 +18,7 @@ Vue.use(store);
 Vue.use(VueI18n);
 Vue.use(iView);
 
+Vue.prototype.axios = axios;
 // 自动设置语言
 const navLang = navigator.language;
 const localLang = (navLang === 'zh-CN' || navLang === 'en-US') ? navLang : false;
