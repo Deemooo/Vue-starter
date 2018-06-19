@@ -1,0 +1,12 @@
+<template>
+    <div class="index">
+        home
+    </div>
+</template>
+<script>
+    export default {
+        methods: {}
+    };
+</script>
+<style lang="less" scoped>
+</style>
