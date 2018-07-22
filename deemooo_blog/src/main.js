@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import iView from 'iview';
-import VueRouter from 'vue-router';
-import Routers from './router';
+import router from './router';
 import store from './store';
 import Util from './libs/util';
 import axios from 'axios';
@@ -13,7 +12,6 @@ import Locales from './locale';
 import zhLocale from 'iview/src/locale/lang/zh-CN';
 import enLocale from 'iview/src/locale/lang/en-US';
 
-Vue.use(VueRouter);
 Vue.use(store);
 Vue.use(VueI18n);
 Vue.use(iView);
@@ -34,12 +32,6 @@ Vue.locale('zh-CN', mergeZH);
 Vue.locale('en-US', mergeEN);
 
 
-// 路由配置
-const RouterConfig = {
-    mode: 'history',
-    routes: Routers
-};
-const router = new VueRouter(RouterConfig);
 
 router.beforeEach((to, from, next) => {
     iView.LoadingBar.start();

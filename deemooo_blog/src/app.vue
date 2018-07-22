@@ -6,17 +6,17 @@
                     <div class="layout-nav">
                         <MenuItem name="1">
                             <Icon type="home"></Icon>
-                            主页
+                            <router-link to="/" tag="span">主页</router-link>
                         </MenuItem>
                         <MenuItem name="2">
                             <Icon type="pricetag"></Icon>
-                            标签
+                            <router-link to="/tags" tag="span">标签</router-link>
                         </MenuItem>
                         <MenuItem name="3">
                             <Icon type="paper-airplane"></Icon>
                             发布
                         </MenuItem>
-                        <MenuItem name="4">
+                        <MenuItem name="4" @click.native="loginIn">
                             <Icon type="log-in"></Icon>
                             登陆
                         </MenuItem>
@@ -32,10 +32,15 @@
             </Content>
             <Footer class="layout-footer-center">2018-2019 &copy; Deemooo</Footer>
         </Layout>
+        <login :modalShow="modalShow"></login>
     </div>
 </template>
 <script>
+    import login from './views/login';
     export default {
+        components: {
+            login
+        },
         data() {
             return {
                 // 触发响应式布局的断点
@@ -46,7 +51,7 @@
                     lg: '1200px',
                     xl: '1600px'
                 },
-
+                modalShow: false
             };
         },
         mounted() {
@@ -56,7 +61,9 @@
 
         },
         methods: {
-
+            loginIn () {
+                this.modalShow = true;
+            }
         }
     };
 </script>
