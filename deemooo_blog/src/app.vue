@@ -76,10 +76,9 @@
         overflow: hidden;
     }
     .layout-nav{
-        width: 420px;
+        width: 520px;
         height: 100%;
-        margin: 0 auto;
-        margin-right: 0;
+        margin-left: 70%;
     }
     .layout-footer-center{
         text-align: center;

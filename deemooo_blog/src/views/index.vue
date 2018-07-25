@@ -44,7 +44,9 @@
             }
         },
         mounted () {
-            this.getContents();
+            if (!this.$route.query.tagGo) {
+                this.getContents();
+            }
         }
     };
 </script>
