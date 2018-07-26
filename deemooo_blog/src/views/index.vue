@@ -51,50 +51,44 @@
     };
 </script>
 <style lang="less" scoped>
-    .index-main {
-        position: relative;
+    .index-contents {
         width: 100%;
         min-height: 500px;
-        margin: 0 auto;
-        .index-contents {
-            width: 100%;
-            min-height: 500px;
-        }
-        .index-contents-wrap {
-            padding-top: 50px;
-            box-sizing: border-box;
-            width: 100%;
-            min-height: 500px;
-            text-align: center;
-            .index-contents-item {
-                width: 50%;
-                height: 200px;
-                margin: 0 auto;
-                list-style-type: none;
-                box-shadow: 0 2px 8px 0 rgba(7,17,27,.06);
-                p {
-                    margin: 10px 0;
-                }
-                .index-contents-item-title {
-                    font-size: 2em;
-                    font-weight: 900;
-                }
-                .index-contents-item-content {
-                    overflow: hidden;
-                    .index-contents-item-content-ellipsis {
-                        font-weight: 700;
-                    }
-                }
-                .index-contents-item-footer {
-                    color: #8492a6;
-                    .index-contents-item-footer-author {
-                        padding-right: 10px;
-                        margin-right: 10px;
-                        border-right: 1px solid #8492a6;
-                    }
-                }
-
+    }
+    .index-contents-wrap {
+        padding-top: 50px;
+        box-sizing: border-box;
+        width: 100%;
+        min-height: 500px;
+        text-align: center;
+        .index-contents-item {
+            width: 50%;
+            height: 200px;
+            margin: 0 auto;
+            list-style-type: none;
+            box-shadow: 0 2px 8px 0 rgba(7,17,27,.06);
+            p {
+                margin: 10px 0;
             }
+            .index-contents-item-title {
+                font-size: 2em;
+                font-weight: 900;
+            }
+            .index-contents-item-content {
+                overflow: hidden;
+                .index-contents-item-content-ellipsis {
+                    font-weight: 700;
+                }
+            }
+            .index-contents-item-footer {
+                color: #8492a6;
+                .index-contents-item-footer-author {
+                    padding-right: 10px;
+                    margin-right: 10px;
+                    border-right: 1px solid #8492a6;
+                }
+            }
+
         }
     }
 </style>

@@ -13,6 +13,11 @@ export default new Router({
             path: '/tags',
             name: 'tags',
             component: (resolve) => require(['./views/tags.vue'], resolve)
+        },
+        {
+            path: '/about',
+            name: 'tags',
+            component: (resolve) => require(['./views/about.vue'], resolve)
         }
     ]
 });

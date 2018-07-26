@@ -1,5 +1,5 @@
 <template>
-    <div class="tags-main">
+    <div class="index-main">
         <div class="tags-main-wrap">
             <span @click="getContentsByTag(item.objectId)" v-for="(item, index) in tags" :key="index" class="tags-item">{{ item.tagName }}</span>
         </div>
@@ -42,31 +42,24 @@
 </script>
 
 <style lang="less" scoped>
-    .tags-main {
-        position: relative;
-        width: 100%;
+    .tags-main-wrap {
+        width: 50%;
         min-height: 500px;
-        margin: 0 auto;
-        .tags-main-wrap {
-            width: 50%;
-            min-height: 500px;
-            margin: 50px auto;
-            text-align: center;
-        }
-        .tags-item {
-            display: inline-block;
-            min-width: 50px;
-            height: 30px;
-            padding: 0 10px;
-            margin: 10px;
-            line-height: 30px;
-            text-align: center;
-            border-radius: 4px ;
-            color: #666;
-            background-color: #eee;
-            font-size: 1.5em;
-            cursor: pointer;
-        }
+        margin: 50px auto;
+        text-align: center;
     }
-
+    .tags-item {
+        display: inline-block;
+        min-width: 50px;
+        height: 30px;
+        padding: 0 10px;
+        margin: 10px;
+        line-height: 30px;
+        text-align: center;
+        border-radius: 4px ;
+        color: #666;
+        background-color: #eee;
+        font-size: 1.5em;
+        cursor: pointer;
+    }
 </style>

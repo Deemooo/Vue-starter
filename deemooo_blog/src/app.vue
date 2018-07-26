@@ -22,7 +22,7 @@
                         </MenuItem>
                         <MenuItem name="4">
                             <Icon type="ios-paper"></Icon>
-                            关于
+                            <router-link to="/about" tag="span">关于</router-link>
                         </MenuItem>
                     </div>
                 </Menu>
@@ -82,5 +82,13 @@
     }
     .layout-footer-center{
         text-align: center;
+    }
+</style>
+<style lang="less">
+    .index-main {
+        position: relative;
+        width: 100%;
+        min-height: 500px;
+        margin: 0 auto;
     }
 </style>
