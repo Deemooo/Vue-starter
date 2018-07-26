@@ -16,7 +16,7 @@
         methods: {
             // 获取标签集, 获取指定标签列表
             getTags () {
-                this.axios.get('https://bird.ioliu.cn/v1/?url=http://nickj.leanapp.cn/api/tags')
+                this.axios.get(this._API + 'api/tags')
                     .then(response => {
                         this.tags = response.data;
                     })
@@ -25,7 +25,7 @@
                     });
             },
             getContentsByTag (tagId) {
-                this.axios.get('https://bird.ioliu.cn/v1/?url=http://nickj.leanapp.cn/api/tags/' + tagId)
+                this.axios.get(this._API + 'api/tags/' + tagId)
                     .then(response => {
                         this.$store.commit('updateContents', response);
                         this.$router.push({ path: '/' , query: { tagGo: true }});

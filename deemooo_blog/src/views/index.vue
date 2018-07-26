@@ -31,7 +31,7 @@
         },
         methods: {
             getContents () {
-                this.axios.get('https://bird.ioliu.cn/v1/?url=http://nickj.leanapp.cn/api/contentAll')
+                this.axios.get(this._API + 'api/contentAll')
                     .then((response) => {
                         if (response.data && response.data.length !== 0) {
                             this.$store.commit('updateContents', response.data);

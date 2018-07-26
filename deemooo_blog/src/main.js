@@ -11,12 +11,14 @@ import VueI18n from 'vue-i18n';
 import Locales from './locale';
 import zhLocale from 'iview/src/locale/lang/zh-CN';
 import enLocale from 'iview/src/locale/lang/en-US';
+import { _API } from './public/API';
 
 Vue.use(store);
 Vue.use(VueI18n);
 Vue.use(iView);
 
 Vue.prototype.axios = axios;
+Vue.prototype._API = _API;
 // 自动设置语言
 const navLang = navigator.language;
 const localLang = (navLang === 'zh-CN' || navLang === 'en-US') ? navLang : false;
