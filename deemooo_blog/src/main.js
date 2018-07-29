@@ -17,6 +17,7 @@ Vue.use(store);
 Vue.use(VueI18n);
 Vue.use(iView);
 
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 Vue.prototype.axios = axios;
 Vue.prototype._API = _API;
 // 自动设置语言

@@ -32,7 +32,7 @@
             </Content>
             <Footer class="layout-footer-center">2018-2019 &copy; Deemooo</Footer>
         </Layout>
-        <login :modalShow="modalShow"></login>
+        <login></login>
     </div>
 </template>
 <script>
@@ -50,8 +50,7 @@
                     md: '992px',
                     lg: '1200px',
                     xl: '1600px'
-                },
-                modalShow: false
+                }
             };
         },
         mounted() {
@@ -62,7 +61,7 @@
         },
         methods: {
             loginIn () {
-                this.modalShow = true;
+                this.$store.commit('updateModalShow', true);
             }
         }
     };
