@@ -6,7 +6,9 @@
                     <p class="index-contents-item-title">{{ item.title }}</p>
                     <p class="index-contents-item-content">
                         <span>{{ item.abstract }}</span>
-                        <span class="index-contents-item-content-ellipsis">>>></span>
+                        <router-link :to="{ path: '/article',query: { artcleId: item.objectId } }" class="item">
+                            <span class="index-contents-item-content-ellipsis">>>></span>
+                        </router-link>
                     </p>
                     <div class="index-contents-item-footer">
                         <span class="index-contents-item-footer-author">{{ item.author }}</span>

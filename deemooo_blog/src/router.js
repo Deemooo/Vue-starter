@@ -16,8 +16,13 @@ export default new Router({
         },
         {
             path: '/about',
-            name: 'tags',
+            name: 'about',
             component: (resolve) => require(['./views/about.vue'], resolve)
+        },
+        {
+            path: '/article',
+            name: 'article',
+            component: (resolve) => require(['./views/article.vue'], resolve)
         }
     ]
 });
