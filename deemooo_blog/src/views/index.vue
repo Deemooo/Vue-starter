@@ -3,7 +3,9 @@
         <div class="index-contents">
             <ul class="index-contents-wrap">
                 <li v-for="(item, index) in contents" :key="index" class="index-contents-item">
-                    <p class="index-contents-item-title">{{ item.title }}</p>
+                    <router-link :to="{ path: '/article',query: { artcleId: item.objectId } }" tag="p" class="index-contents-item-title">
+                        {{ item.title }}
+                    </router-link>
                     <p class="index-contents-item-content">
                         <span>{{ item.abstract }}</span>
                         <router-link :to="{ path: '/article',query: { artcleId: item.objectId } }" class="item">
@@ -64,17 +66,21 @@
         min-height: 500px;
         text-align: center;
         .index-contents-item {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             width: 50%;
             height: 200px;
             margin: 0 auto;
             list-style-type: none;
-            box-shadow: 0 2px 8px 0 rgba(7,17,27,.06);
+            box-shadow: 0px 1px 2px rgba(7,17,27,.06);;
             p {
                 margin: 10px 0;
             }
             .index-contents-item-title {
                 font-size: 2em;
                 font-weight: 900;
+                cursor: pointer;
             }
             .index-contents-item-content {
                 overflow: hidden;
