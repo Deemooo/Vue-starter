@@ -1,7 +1,7 @@
 <template>
     <div class="layout">
         <Layout :breakpoint="breakpoint">
-            <Header :style="{position: 'fixed', width: '100%'}">
+            <Header :style="{ width: '100%'}">
                 <Menu mode="horizontal" theme="dark" active-name="1">
                     <div class="layout-nav">
                         <MenuItem name="1">
@@ -27,7 +27,7 @@
                     </div>
                 </Menu>
             </Header>
-            <Content :style="{margin: '88px 20px 0', background: '#fff', minHeight: '500px'}">
+            <Content :style="{background: '#fff', minHeight: '500px'}">
                 <router-view></router-view>
             </Content>
             <Footer class="layout-footer-center">2018-2019 &copy; Deemooo</Footer>
