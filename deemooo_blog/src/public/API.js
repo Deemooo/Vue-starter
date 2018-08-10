@@ -1,0 +1,1 @@
+export const _API = ('https://bird.ioliu.cn/v1/?url=http://nickj.leanapp.cn/');
