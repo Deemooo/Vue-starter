@@ -9,6 +9,11 @@ export default new Router({
       path: '/',
       name: 'login',
       component: resolve => require(['../pages/login.vue'], resolve)
+    },
+    {
+      path: '/manage',
+      name: 'manage',
+      component: resolve => require(['../pages/manage.vue'], resolve)
     }
   ]
 });
