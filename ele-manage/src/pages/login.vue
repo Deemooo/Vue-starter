@@ -3,18 +3,18 @@
       <div class="login-page-title">ele后台管理系统</div>
       <div class="login-page-form-wrap">
           <Form ref="formInline" :model="formInline" :rules="ruleInline">
-              <FormItem prop="user">
-                  <Input type="text" v-model="formInline.user" placeholder="Username">
+              <FormItem prop="username">
+                  <Input type="text" v-model="formInline.username" placeholder="用户名">
                   <Icon type="ios-person-outline" slot="prepend"></Icon>
                   </Input>
               </FormItem>
               <FormItem prop="password">
-                  <Input type="password" v-model="formInline.password" placeholder="Password">
+                  <Input type="password" v-model="formInline.password" placeholder="密码">
                   <Icon type="ios-lock-outline" slot="prepend"></Icon>
                   </Input>
               </FormItem>
               <FormItem>
-                  <Button type="primary" @click="handleSubmit('formInline')">Signin</Button>
+                  <Button type="primary" @click="handleSubmit('formInline')">登陆</Button>
               </FormItem>
           </Form>
       </div>
@@ -27,17 +27,16 @@ export default {
     data () {
         return {
             formInline: {
-                user: '',
-                password: ''
+              username: '',
+              password: ''
             },
             ruleInline: {
-                user: [
-                    { required: true, message: 'Please fill in the user name', trigger: 'blur' }
-                ],
-                password: [
-                    { required: true, message: 'Please fill in the password.', trigger: 'blur' },
-                    { type: 'string', min: 6, message: 'The password length cannot be less than 6 bits', trigger: 'blur' }
-                ]
+              username: [
+                { validator: this.validateUser, trigger: 'blur' }
+              ],
+              password: [
+                { validator: this.validatePassword, trigger: 'blur' }
+              ]
             }
         };
     },
@@ -45,14 +44,17 @@ export default {
         handleSubmit (name) {
             this.$refs[name].validate((valid) => {
                 if (valid) {
-                    this.$Message.success('Success!');
+                    this.$Message.success('登录成功!');
+                    this.$router.push('/manage');
                 } else {
-                    this.$Message.error('Fail!');
+                    this.$Message.error('请输入正确的用户名密码!');
                 }
             })
         }
     },
-    mounted () {},
+    mounted () {
+      console.log(this.$data);
+    },
     watch: {}
 };
 </script>
@@ -63,7 +65,7 @@ export default {
     background-color: #515a6e;
     .login-page-title {
       position: relative;
-      top: 50px;
+      top: 28%;
       font-size: 25px;
       color: #f8f8f9;
     }
