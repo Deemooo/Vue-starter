@@ -44,8 +44,14 @@ export default {
         handleSubmit (name) {
             this.$refs[name].validate((valid) => {
                 if (valid) {
+                  let params = {
+                    user_name: this.formInline.username,
+                    password: this.formInline.password
+                  };
+                  this.https({url: '/admin/login', method: 'post', params}, (response) => {
                     this.$Message.success('登录成功!');
                     this.$router.push('/manage');
+                  });
                 } else {
                     this.$Message.error('请输入正确的用户名密码!');
                 }

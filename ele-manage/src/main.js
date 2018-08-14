@@ -9,9 +9,12 @@ import 'iview/dist/styles/iview.css';
 import './assets/style/myTheme/index.less';
 // 全局混入
 import publicFn from  './publicFn/mixins';
+// 请求方法
+import https from  './publicFn/https';
 Vue.config.productionTip = false;
 
 Vue.use(iView);
+Vue.use(https);
 Vue.mixin(publicFn);
 
 /* eslint-disable no-new */
