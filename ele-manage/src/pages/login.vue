@@ -14,7 +14,11 @@
                   </Input>
               </FormItem>
               <FormItem>
-                  <Button type="primary" @click="handleSubmit('formInline')">登陆</Button>
+                  <Button
+                    type="primary"
+                    @click="handleSubmit('formInline')">
+                    登陆
+                  </Button>
               </FormItem>
           </Form>
       </div>
@@ -49,17 +53,24 @@ export default {
                     password: this.formInline.password
                   };
                   this.https({url: '/admin/login', method: 'post', params}, (response) => {
-                    this.$Message.success('登录成功!');
-                    this.$router.push('/manage');
+                    if (response.status === 1) {
+                      this.$Message.success(response.success);
+                      this.$router.push('manage');
+                    }
                   });
                 } else {
-                    this.$Message.error('请输入正确的用户名密码!');
+                    this.$Message.error('请输入正确的用户名密码！');
                 }
             })
+        },
+      keyBordLogin () {
+        if (window.event.keyCode === 13) {
+          this.handleSubmit('formInline');
         }
+      }
     },
     mounted () {
-      console.log(this.$data);
+      document.addEventListener('keydown', this.keyBordLogin, true);
     },
     watch: {}
 };
