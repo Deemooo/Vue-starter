@@ -8,14 +8,17 @@ import 'iview/dist/styles/iview.css';
 // 更改默认主题色
 import './assets/style/myTheme/index.less';
 // 全局混入
-import publicFn from  './publicFn/mixins';
+import mixins from  './publicFn/mixins';
+// 表单验证方法
+import validate from  './publicFn/validate';
 // 请求方法
 import https from  './publicFn/https';
 Vue.config.productionTip = false;
 
 Vue.use(iView);
 Vue.use(https);
-Vue.mixin(publicFn);
+Vue.mixin(mixins);
+Vue.mixin(validate);
 
 /* eslint-disable no-new */
 new Vue({
