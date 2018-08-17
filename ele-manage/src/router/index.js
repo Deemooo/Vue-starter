@@ -14,6 +14,11 @@ const router = new Router({
       path: '/manage',
       name: 'manage',
       component: resolve => require(['../pages/manage.vue'], resolve)
+    },
+    {
+      path: '/usersList',
+      name: 'usersList',
+      component: resolve => require(['../pages/usersList.vue'], resolve)
     }
   ]
 });

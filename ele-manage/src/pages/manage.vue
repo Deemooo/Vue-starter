@@ -1,9 +1,9 @@
 <template>
-  <div class="manage-wrap">
+  <div class="main-wrap">
     <top-header></top-header>
-    <Row class="manage-wrap-content">
+    <Row class="main-wrap-content">
       <Col span="4">
-        <Menu width="auto" theme="dark">
+        <Menu width="auto" theme="dark" class="menu-wrap">
           <Submenu v-for="(item, index) in menus" :name="item.name" :key="index">
             <template slot="title">
               <Icon :type="item.icon" />
@@ -12,6 +12,7 @@
             <MenuItem
               v-for="(childItem, childIndex) in item.children"
               :name="childItem.name" :key="childIndex"
+              :to="childItem.name"
             >
               <Icon :type="childItem.icon" />
               {{ childItem.title}}
@@ -29,11 +30,8 @@
 </template>
 
 <script>
-  import topHeader from '../components/topHeader';
     export default {
-      components: {
-        topHeader
-      },
+      components: {},
       data () {
         return {
           menus: [
@@ -158,14 +156,7 @@
 </script>
 
 <style lang="less" scoped>
-  .manage-wrap {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    .manage-wrap-content {
-      width: 100%;
-      height: calc(100% - 60px);
-      margin-top: 60px;
+    .menu-wrap {
+      height: 100%;
     }
-  }
 </style>

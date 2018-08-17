@@ -13,12 +13,15 @@ import mixins from  './publicFn/mixins';
 import validate from  './publicFn/validate';
 // 请求方法
 import https from  './publicFn/https';
+// 顶栏
+import topHeader from './components/topHeader.vue';
 Vue.config.productionTip = false;
 
 Vue.use(iView);
 Vue.use(https);
 Vue.mixin(mixins);
 Vue.mixin(validate);
+Vue.component('top-header', topHeader);
 
 /* eslint-disable no-new */
 new Vue({
