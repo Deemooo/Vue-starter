@@ -13,12 +13,18 @@ import mixins from  './publicFn/mixins';
 import validate from  './publicFn/validate';
 // 请求方法
 import https from  './publicFn/https';
+// 顶栏
+import topHeader from './components/topHeader.vue';
+// 图表
+import lineBarChart from './components/echarts/lineBarChart.vue';
 Vue.config.productionTip = false;
 
 Vue.use(iView);
 Vue.use(https);
 Vue.mixin(mixins);
 Vue.mixin(validate);
+Vue.component('top-header', topHeader);
+Vue.component('line-bar-chart', lineBarChart);
 
 /* eslint-disable no-new */
 new Vue({

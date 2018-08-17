@@ -34,8 +34,6 @@
   .header-warp {
     display: flex;
     align-items: center;
-    position: fixed;
-    top: 0;
     width: 100%;
     height: 60px;
     background-color: #EFF2F7;

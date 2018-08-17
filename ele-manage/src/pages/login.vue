@@ -85,6 +85,7 @@ export default {
       top: 28%;
       font-size: 25px;
       color: #f8f8f9;
+      text-align: center;
     }
     .login-page-form-wrap {
       position: absolute;

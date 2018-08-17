@@ -1,8 +1,8 @@
 <template>
-  <div class="manage-wrap">
+  <div class="main-wrap">
     <top-header></top-header>
-    <Row class="manage-wrap-content">
-      <Col span="4">
+    <Row class="main-wrap-content">
+      <Col span="4" class="menu-wrap">
         <Menu width="auto" theme="dark">
           <Submenu v-for="(item, index) in menus" :name="item.name" :key="index">
             <template slot="title">
@@ -12,6 +12,7 @@
             <MenuItem
               v-for="(childItem, childIndex) in item.children"
               :name="childItem.name" :key="childIndex"
+              :to="childItem.name"
             >
               <Icon :type="childItem.icon" />
               {{ childItem.title}}
@@ -19,7 +20,7 @@
           </Submenu>
         </Menu>
       </Col>
-      <Col span="20">
+      <Col span="20" class="right-content-wrap">
         <keep-alive>
           <router-view></router-view>
         </keep-alive>
@@ -29,11 +30,8 @@
 </template>
 
 <script>
-  import topHeader from '../components/topHeader';
     export default {
-      components: {
-        topHeader
-      },
+      components: {},
       data () {
         return {
           menus: [
@@ -158,14 +156,24 @@
 </script>
 
 <style lang="less" scoped>
-  .manage-wrap {
+  .main-wrap {
     width: 100%;
     height: 100%;
-    overflow: hidden;
-    .manage-wrap-content {
+    overflow-x: hidden;
+    overflow-y: auto;
+    .main-wrap-content {
       width: 100%;
-      height: calc(100% - 60px);
-      margin-top: 60px;
+      height: calc(~'100% - 60px');
+      .menu-wrap {
+        height: 100%;
+        min-height: 600px;
+        overflow: auto;
+        background-color: #515a6e;
+      }
+      .right-content-wrap {
+        height: 100%;
+        min-height: 600px;
+      }
     }
   }
 </style>

@@ -12,10 +12,14 @@ export default {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(params),
         mode: 'cors',
         cache: 'force-cache'
       };
+      if (config.method === 'post') {
+        Object.defineProperty(requestConfig, 'body', {
+          value: JSON.stringify(params)
+        });
+      }
       try {
         const response = await fetch(url, requestConfig);
         const responseJson = await response.json();
