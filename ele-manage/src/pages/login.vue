@@ -81,6 +81,7 @@ export default {
   .login-page {
     width: 100%;
     height: 100%;
+    overflow: hidden;
     background-color: #515a6e;
     .login-page-main {
       display: flex;
@@ -88,10 +89,12 @@ export default {
       justify-content: center;
       align-items: center;
       width: 50%;
-      height: 50%;
+      height: 100%;
       margin: auto;
+      margin-top: -50px;
       .login-page-title {
         width: 320px;
+        padding: 20px;
         font-size: 25px;
         color: #f8f8f9;
         text-align: center;

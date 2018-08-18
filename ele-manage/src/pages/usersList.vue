@@ -21,7 +21,7 @@
                 },
                 dataView: {readOnly: false},
                 magicType: {type: ['bar', 'line']},
-                restore: {},
+                restore: {}
               }
             },
             legend: {

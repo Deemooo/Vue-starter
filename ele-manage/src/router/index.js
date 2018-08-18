@@ -7,12 +7,10 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'login',
       component: resolve => require(['../pages/login.vue'], resolve)
     },
     {
       path: '/manage',
-      name: 'manage',
       component: resolve => require(['../pages/manage.vue'], resolve),
       children: [
         {
@@ -23,6 +21,7 @@ const router = new Router({
         {
           path: '/usersList',
           name: 'usersList',
+          meta: ['数据管理', '用户列表'],
           component: resolve => require(['../pages/usersList.vue'], resolve)
         }
       ]
