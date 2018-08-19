@@ -23,6 +23,12 @@ const router = new Router({
           name: 'usersList',
           meta: ['数据管理', '用户列表'],
           component: resolve => require(['../pages/usersList.vue'], resolve)
+        },
+        {
+          path: '/shopList',
+          name: 'shopList',
+          meta: ['数据管理', '商家列表'],
+          component: resolve => require(['../pages/shopList.vue'], resolve)
         }
       ]
     }

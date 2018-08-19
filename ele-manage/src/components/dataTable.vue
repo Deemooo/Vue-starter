@@ -8,7 +8,7 @@
  onPageSizeChange() 每页显示数量变化事件 Function
 -->
 <template>
-  <div class="pns-table">
+  <div class="data-table">
     <div class="table">
       <Table
           :columns="columns"
@@ -245,14 +245,22 @@
         this.$emit('on-page-size-change', pageSize);
       }
     },
-    mounted () {},
+    mounted () {
+      if (this.$refs.table) {
+        if (this.$refs.table.columns && this.$refs.table.columns.length !== 0) {
+          this.$refs.table.columns.forEach((item) => {
+            item['tooltip'] = true;
+          });
+        }
+      }
+    },
     watch: {},
     components: {}
   };
 </script>
 
 <style lang="less" scoped>
-  .pns-table {
+  .data-table {
     .table {
       padding-bottom: 12px;
     }

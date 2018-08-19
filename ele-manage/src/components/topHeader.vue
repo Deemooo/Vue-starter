@@ -53,10 +53,11 @@
       background-image: url("../assets/images/icon/eleLogo.svg");
     }
     .breadcrumb-wrap {
+      width: 300px;
       order: 0;
     }
     .user-info-wrap {
-      margin-left: 75%;
+      margin-left: 70%;
       order: 1;
       .header-warp-avatar {
         display: inline-block;

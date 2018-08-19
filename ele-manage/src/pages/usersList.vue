@@ -30,6 +30,7 @@
         };
       },
     methods: {
+      // 获取表格数据
       getTableData () {
         let params = this.setStrOfUrl({
           offset: this.pageIndex,
@@ -42,6 +43,7 @@
           }
         });
       },
+      // 获取总数
       getTableDataTotal () {
         this.https({url: '/v1/users/count', method: 'get'}, (response) => {
           if (response.status === 1) {
@@ -49,14 +51,14 @@
           }
         });
       },
+      // 构造表格数据
       setTableData (response) {
         if (response && response.length !== 0) {
           response.forEach((item) => {
-            let row = {
-              username: item.username,
-              registe_time: item.registe_time,
-              city: item.city
-            };
+            let row = {};
+            for (let key in item) {
+              row[key] = item[key];
+            }
             this.tableData.push(row);
           });
         }
