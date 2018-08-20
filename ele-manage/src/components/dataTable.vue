@@ -155,7 +155,7 @@
       // 条数下拉框展开方向 bottom top
       placement: {
         type: String,
-        default: 'bottom'
+        default: 'top'
       },
       // 自定义样式类
       className: {

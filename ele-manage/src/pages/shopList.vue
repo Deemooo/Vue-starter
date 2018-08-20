@@ -121,7 +121,53 @@
           },
           {key: 'name', title: '店铺名称', align: 'center', minWidth: 100},
           {key: 'address', title: '店铺地址', align: 'center', minWidth: 100},
-          {key: 'description', title: '店铺介绍', align: 'center', minWidth: 100}
+          {key: 'description', title: '店铺介绍', align: 'center', minWidth: 100},
+          {key: 'action',
+            title: '操作',
+            width: 240,
+            align: 'center',
+            render: (h, params) => {
+              return h('div', {
+                attrs: {
+                  class: 'table-cell-actions-wrap'
+                }
+              }, [
+                h('action-button', {
+                  props: {
+                    type: 'primary',
+                    text: '新增'
+                  },
+                  on: {
+                    click: () => {
+                      this.addTable(params.row);
+                    }
+                  }
+                }),
+                h('action-button', {
+                  props: {
+                    type: 'error',
+                    text: '删除'
+                  },
+                  on: {
+                    click: () => {
+                      this.deleteTable(params.row);
+                    }
+                  }
+                }),
+                h('action-button', {
+                  props: {
+                    type: 'warning',
+                    text: '修改'
+                  },
+                  on: {
+                    click: () => {
+                      this.editTable(params.row);
+                    }
+                  }
+                })
+              ]);
+            }
+          }
         ],
         tableData: [],
         tableLoading: false,
@@ -165,6 +211,13 @@
           }
         });
       },
+      // 新增
+      addTable (rowData) {
+      },
+      // 删除
+      deleteTable (rowData) {},
+      // 修改
+      editTable (rowData) {},
       // 构造表格数据
       setTableData (response) {
         if (response && response.length !== 0) {
@@ -181,7 +234,6 @@
     },
     mounted () {
       this.getCityInfo();
-      console.log(this.$refs);
     }
   };
 </script>
