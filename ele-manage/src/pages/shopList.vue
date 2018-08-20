@@ -145,23 +145,23 @@
                 }),
                 h('action-button', {
                   props: {
-                    type: 'error',
-                    text: '删除'
-                  },
-                  on: {
-                    click: () => {
-                      this.deleteTable(params.row);
-                    }
-                  }
-                }),
-                h('action-button', {
-                  props: {
                     type: 'warning',
                     text: '修改'
                   },
                   on: {
                     click: () => {
                       this.editTable(params.row);
+                    }
+                  }
+                }),
+                h('action-button', {
+                  props: {
+                    type: 'error',
+                    text: '删除'
+                  },
+                  on: {
+                    click: () => {
+                      this.deleteTable(params.row);
                     }
                   }
                 })
