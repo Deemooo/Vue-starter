@@ -2,17 +2,16 @@
     <div class="header-warp">
       <span class="logo-wrap"></span>
       <Breadcrumb class="breadcrumb-wrap">
-        <BreadcrumbItem to="/manage">Home</BreadcrumbItem>
-        <BreadcrumbItem>Breadcrumb</BreadcrumbItem>
+        <BreadcrumbItem to="/manage">首页</BreadcrumbItem>
+        <BreadcrumbItem v-for="(item, index) in $route.meta" :key="index">{{ item }}</BreadcrumbItem>
       </Breadcrumb>
-      <Dropdown class="user-info-wrap">
-        <span href="javascript:void(0)">
-          用户头像
-        </span>
+      <Dropdown
+        class="user-info-wrap"
+        @on-click="loginOut"
+        trigger="hover">
+        <span class="header-warp-avatar"></span>
         <DropdownMenu slot="list">
-          <DropdownItem>驴打滚</DropdownItem>
-          <DropdownItem>炸酱面</DropdownItem>
-          <DropdownItem>冰糖葫芦</DropdownItem>
+          <DropdownItem name="logOut">退出</DropdownItem>
         </DropdownMenu>
       </Dropdown>
     </div>
@@ -24,7 +23,16 @@
         data () {
             return {};
         },
-        methods: {},
+        methods: {
+          loginOut (name) {
+            this.https({url: '/admin/singout', method: 'get'}, (response) => {
+              if (response.status === 1) {
+                this.$Message.success(response.success);
+                this.$router.push('/');
+              }
+            });
+          }
+        },
         mounted () {
         },
         watch: {}
@@ -45,11 +53,19 @@
       background-image: url("../assets/images/icon/eleLogo.svg");
     }
     .breadcrumb-wrap {
+      width: 300px;
       order: 0;
     }
     .user-info-wrap {
-      margin-left: 75%;
+      margin-left: 70%;
       order: 1;
+      .header-warp-avatar {
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+        background-image: url("../assets/images/icon/user.svg");
+        cursor: pointer;
+      }
     }
   }
 </style>

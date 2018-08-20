@@ -21,11 +21,11 @@
               },
               dataView: {readOnly: false},
               magicType: {type: ['bar', 'line']},
-              restore: {},
+              restore: {}
             }
           },
           legend: {
-            bottom: 0,
+            top: '5%',
             data: ['新注册用户', '新增订单', '新增管理员']
           },
           xAxis: [
