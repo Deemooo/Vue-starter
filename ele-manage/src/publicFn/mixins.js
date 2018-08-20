@@ -4,6 +4,15 @@ export default {
     return {};
   },
   methods: {
+    // 分页相关
+    pageChange (page) {
+      this.pageIndex = page;
+      this.getTableData();
+    },
+    pageSizeChange (size) {
+      this.pageSize = size;
+      this.getTableData();
+    },
     // 对象转url所需字符串
     setStrOfUrl (data) {
       if (this._typeCheck(data) === '[object Object]') {
