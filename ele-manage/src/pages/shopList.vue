@@ -10,6 +10,31 @@
       @on-page-size-change="pageSizeChange"
       ref="pnsTable">
     </data-table>
+    <Modal
+      :title="winTitle + '店铺信息'"
+      ok-text="保存"
+      cancel-text="取消"
+      v-model="modalShow"
+      scrollable>
+      <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
+        <FormItem label="Name" prop="name">
+          <Input v-model="formValidate.name" placeholder="Enter your name"></Input>
+        </FormItem>
+        <FormItem label="E-mail" prop="mail">
+          <Input v-model="formValidate.mail" placeholder="Enter your e-mail"></Input>
+        </FormItem>
+        <FormItem label="City" prop="city">
+          <Select v-model="formValidate.city" placeholder="Select your city">
+            <Option value="beijing">New York</Option>
+            <Option value="shanghai">London</Option>
+            <Option value="shenzhen">Sydney</Option>
+          </Select>
+        </FormItem>
+        <FormItem label="Desc" prop="desc">
+          <Input v-model="formValidate.desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..."></Input>
+        </FormItem>
+      </Form>
+    </Modal>
   </div>
 </template>
 
@@ -161,7 +186,7 @@
                   },
                   on: {
                     click: () => {
-                      this.deleteTable(params.row);
+                      this.deleteTable(params.row, params.index);
                     }
                   }
                 })
@@ -174,7 +199,48 @@
         pageIndex: 0,
         pageSize: 20,
         tableTotal: 0,
-        city: {}
+        city: {},
+        modalShow: false,
+        winTitle: '',
+        formValidate: {
+          name: '',
+          mail: '',
+          city: '',
+          gender: '',
+          interest: [],
+          date: '',
+          time: '',
+          desc: ''
+        },
+        ruleValidate: {
+          name: [
+            { required: true, message: 'The name cannot be empty', trigger: 'blur' }
+          ],
+          mail: [
+            { required: true, message: 'Mailbox cannot be empty', trigger: 'blur' },
+            { type: 'email', message: 'Incorrect email format', trigger: 'blur' }
+          ],
+          city: [
+            { required: true, message: 'Please select the city', trigger: 'change' }
+          ],
+          gender: [
+            { required: true, message: 'Please select gender', trigger: 'change' }
+          ],
+          interest: [
+            { required: true, type: 'array', min: 1, message: 'Choose at least one hobby', trigger: 'change' },
+            { type: 'array', max: 2, message: 'Choose two hobbies at best', trigger: 'change' }
+          ],
+          date: [
+            { required: true, type: 'date', message: 'Please select the date', trigger: 'change' }
+          ],
+          time: [
+            { required: true, type: 'string', message: 'Please select time', trigger: 'change' }
+          ],
+          desc: [
+            { required: true, message: 'Please enter a personal introduction', trigger: 'blur' },
+            { type: 'string', min: 20, message: 'Introduce no less than 20 words', trigger: 'blur' }
+          ]
+        }
       };
     },
     methods: {
@@ -213,11 +279,29 @@
       },
       // 新增
       addTable (rowData) {
+        this.$router.push({path: 'addGoods', query: { restaurant_id: rowData.id }});
       },
       // 删除
-      deleteTable (rowData) {},
+      deleteTable (rowData, index) {
+        let params = {};
+        this.https({url: '/shopping/restaurant/' + rowData.id, params, method: 'delete'}, (response) => {
+          if (response.status === 1) {
+            this.$Message.success(response.success);
+            this.tableData.splice(index, 1);
+          } else {
+            this.$Message.error(response.message);
+          }
+        });
+      },
       // 修改
-      editTable (rowData) {},
+      editTable (rowData) {
+        this.winTitle = '修改';
+        this.modalShow = true;
+      },
+      // 保存
+      saveFn () {},
+      // 关闭
+      closeFn () {},
       // 构造表格数据
       setTableData (response) {
         if (response && response.length !== 0) {

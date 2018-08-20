@@ -3,7 +3,6 @@
     :type="type"
     :ghost="ghost"
     :size="size"
-    :shape="shape"
     :long="long"
     :disabled="disabled"
     :icon="icon"
