@@ -1,7 +1,7 @@
 'use strict';
+import { baseUrl } from '../../config/env';
 export default {
   install (Vue) {
-    const baseUrl = '//elm.cangdu.org';
     Vue.prototype.https = async (config, successCallBack) => {
       let url = baseUrl + config.url || '';
       let params = config.params || {};

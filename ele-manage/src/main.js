@@ -21,6 +21,8 @@ import lineBarChart from './components/echarts/lineBarChart.vue';
 import dataTable from './components/dataTable.vue';
 // 按钮
 import actionButton from './components/actionButton.vue';
+// 图片展示
+import imgShowWrap from './components/imgShowWrap.vue';
 Vue.config.productionTip = false;
 
 Vue.use(iView);
@@ -31,6 +33,7 @@ Vue.component('top-header', topHeader);
 Vue.component('line-bar-chart', lineBarChart);
 Vue.component('data-table', dataTable);
 Vue.component('action-button', actionButton);
+Vue.component('img-show-wrap', imgShowWrap);
 
 /* eslint-disable no-new */
 new Vue({

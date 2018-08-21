@@ -11,27 +11,38 @@
       ref="pnsTable">
     </data-table>
     <Modal
-      :title="winTitle + '店铺信息'"
+      :title="winTitle + '商铺信息'"
+      width="600"
       ok-text="保存"
       cancel-text="取消"
       v-model="modalShow"
       scrollable>
       <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
-        <FormItem label="Name" prop="name">
-          <Input v-model="formValidate.name" placeholder="Enter your name"></Input>
+        <FormItem label="商铺名称" prop="name">
+          <Input v-model="formValidate.name"></Input>
         </FormItem>
-        <FormItem label="E-mail" prop="mail">
-          <Input v-model="formValidate.mail" placeholder="Enter your e-mail"></Input>
+        <FormItem label="详细地址" prop="address">
+          <Input v-model="formValidate.address"></Input>
         </FormItem>
-        <FormItem label="City" prop="city">
-          <Select v-model="formValidate.city" placeholder="Select your city">
-            <Option value="beijing">New York</Option>
-            <Option value="shanghai">London</Option>
-            <Option value="shenzhen">Sydney</Option>
-          </Select>
+        <FormItem label="商铺介绍" prop="description">
+          <Input v-model="formValidate.description"></Input>
         </FormItem>
-        <FormItem label="Desc" prop="desc">
-          <Input v-model="formValidate.desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..."></Input>
+        <FormItem label="联系电话" prop="phone">
+          <Input v-model="formValidate.phone"></Input>
+        </FormItem>
+        <FormItem label="商铺分类" prop="selectedCategory">
+          <Cascader :data="selectedCategoryList" v-model="formValidate.selectedCategory"></Cascader>
+        </FormItem>
+        <FormItem label="商铺图片" prop="image_path">
+          <Upload
+            :action="baseUrl + '/v1/addimg/shop'"
+            :max-size="2000"
+            :on-success="fileUploadSuccess"
+            :on-error="fileUploadError"
+            type="drag"
+            accept="image/*">
+            <img-show-wrap :imgSrc="formValidate.image_path"></img-show-wrap>
+          </Upload>
         </FormItem>
       </Form>
     </Modal>
@@ -39,9 +50,12 @@
 </template>
 
 <script>
+  import { baseUrl, baseImgPath } from '../../config/env';
   export default {
     data () {
       return {
+        baseUrl,
+        baseImgPath,
         tableColumns: [
           {type: 'expand',
             align: 'center',
@@ -68,7 +82,7 @@
                     style: {
                       fontWeight: '700'
                     }
-                  }, '店铺ID：'),
+                  }, '商铺ID：'),
                   h('span', params.row.id)
                 ]),
                 h('Col', {
@@ -144,9 +158,9 @@
             ]);
             }
           },
-          {key: 'name', title: '店铺名称', align: 'center', minWidth: 100},
-          {key: 'address', title: '店铺地址', align: 'center', minWidth: 100},
-          {key: 'description', title: '店铺介绍', align: 'center', minWidth: 100},
+          {key: 'name', title: '商铺名称', align: 'center', minWidth: 100},
+          {key: 'address', title: '商铺地址', align: 'center', minWidth: 100},
+          {key: 'description', title: '商铺介绍', align: 'center', minWidth: 100},
           {key: 'action',
             title: '操作',
             width: 240,
@@ -204,41 +218,36 @@
         winTitle: '',
         formValidate: {
           name: '',
-          mail: '',
-          city: '',
-          gender: '',
-          interest: [],
-          date: '',
-          time: '',
-          desc: ''
+          address: '',
+          description: '',
+          phone: '',
+          selectedCategory: [],
+          image_path: ''
         },
+        selectedCategoryList: [],
         ruleValidate: {
           name: [
-            { required: true, message: 'The name cannot be empty', trigger: 'blur' }
+            { required: true, message: '商铺名称不能为空！', trigger: 'blur' },
+            { validator: this.validateShopName, trigger: 'blur' }
           ],
-          mail: [
-            { required: true, message: 'Mailbox cannot be empty', trigger: 'blur' },
-            { type: 'email', message: 'Incorrect email format', trigger: 'blur' }
+          address: [
+            { required: true, message: '商铺地址不能为空！', trigger: 'blur' },
+            { type: 'string', min: 1, max: 100, message: '商铺地址字符长度必须小于100！', trigger: 'change' }
           ],
-          city: [
-            { required: true, message: 'Please select the city', trigger: 'change' }
+          description: [
+            { required: true, message: '商铺描述不能为空！', trigger: 'blur' },
+            { type: 'string', min: 1, max: 100, message: '商铺描述字符长度必须小于100！', trigger: 'change' }
           ],
-          gender: [
-            { required: true, message: 'Please select gender', trigger: 'change' }
+          phone: [
+            { required: true, message: '联系方式不能为空！', trigger: 'blur' },
+            { validator: this.validatePhone, trigger: 'blur' }
           ],
-          interest: [
-            { required: true, type: 'array', min: 1, message: 'Choose at least one hobby', trigger: 'change' },
-            { type: 'array', max: 2, message: 'Choose two hobbies at best', trigger: 'change' }
+          selectedCategory: [
+            { required: true, type: 'array',  message: '商铺分类不能为空！', trigger: 'change' },
+            { type: 'array', min: 1, max: 10, message: '商铺分类字符长度必须小于10！', trigger: 'change' }
           ],
-          date: [
-            { required: true, type: 'date', message: 'Please select the date', trigger: 'change' }
-          ],
-          time: [
-            { required: true, type: 'string', message: 'Please select time', trigger: 'change' }
-          ],
-          desc: [
-            { required: true, message: 'Please enter a personal introduction', trigger: 'blur' },
-            { type: 'string', min: 20, message: 'Introduce no less than 20 words', trigger: 'blur' }
+          image_path: [
+            { required: true, message: '商铺图片不能为空！', trigger: 'change' }
           ]
         }
       };
@@ -274,6 +283,14 @@
           if (response) {
             this.city = response;
             this.getTableData();
+          }
+        });
+      },
+      // 获取商铺类型
+      getfoodCategory () {
+        this.https({url: '/shopping/v2/restaurant/category', method: 'get'}, (response) => {
+          if (response) {
+            this.setfoodCategory(response);
           }
         });
       },
@@ -313,11 +330,41 @@
             this.tableData.push(row);
           });
         }
-
+      },
+      // 构造商铺种类数据
+      setfoodCategory (response) {
+        let categories = [...response];
+        categories.forEach(item => {
+          if (item.sub_categories.length) {
+            const addnew = {
+              value: item.name,
+              label: item.name,
+              children: []
+            }
+            item.sub_categories.forEach((subitem, index) => {
+              if (index === 0) {
+                return;
+              }
+              addnew.children.push({
+                value: subitem.name,
+                label: subitem.name
+              })
+            })
+            this.selectedCategoryList.push(addnew)
+          }
+        })
+      },
+      // 文件上传相关方法
+      fileUploadSuccess (response) {
+        this.formValidate.image_path = baseImgPath + response.image_path;
+      },
+      fileUploadError (error) {
+        this.$Message.error(error);
       }
     },
     mounted () {
       this.getCityInfo();
+      this.getfoodCategory();
     }
   };
 </script>

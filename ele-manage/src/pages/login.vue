@@ -38,9 +38,11 @@ export default {
             },
             ruleInline: {
               username: [
+                { required: true, message: '用户名不能为空！', trigger: 'blur' },
                 { validator: this.validateUser, trigger: 'blur' }
               ],
               password: [
+                { required: true, message: '密码不能为空！', trigger: 'blur' },
                 { validator: this.validatePassword, trigger: 'blur' }
               ]
             }
@@ -49,6 +51,7 @@ export default {
     methods: {
         handleSubmit (name) {
             this.$refs[name].validate((valid) => {
+              console.log('valid', valid);
                 if (valid) {
                   let params = {
                     user_name: this.formInline.username,
