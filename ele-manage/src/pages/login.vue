@@ -49,6 +49,7 @@ export default {
     methods: {
         handleSubmit (name) {
             this.$refs[name].validate((valid) => {
+              console.log('valid', valid);
                 if (valid) {
                   let params = {
                     user_name: this.formInline.username,

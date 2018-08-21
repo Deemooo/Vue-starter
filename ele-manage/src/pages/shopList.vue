@@ -17,21 +17,28 @@
       v-model="modalShow"
       scrollable>
       <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
-        <FormItem label="Name" prop="name">
-          <Input v-model="formValidate.name" placeholder="Enter your name"></Input>
+        <FormItem label="店铺名称" prop="name">
+          <Input v-model="formValidate.name"></Input>
         </FormItem>
-        <FormItem label="E-mail" prop="mail">
-          <Input v-model="formValidate.mail" placeholder="Enter your e-mail"></Input>
+        <FormItem label="详细地址" prop="address">
+          <Input v-model="formValidate.address"></Input>
         </FormItem>
-        <FormItem label="City" prop="city">
-          <Select v-model="formValidate.city" placeholder="Select your city">
-            <Option value="beijing">New York</Option>
-            <Option value="shanghai">London</Option>
-            <Option value="shenzhen">Sydney</Option>
+        <FormItem label="店铺介绍" prop="description">
+          <Input v-model="formValidate.description"></Input>
+        </FormItem>
+        <FormItem label="联系电话" prop="phone">
+          <Input v-model="formValidate.phone"></Input>
+        </FormItem>
+        <FormItem label="店铺分类" prop="selectedCategory">
+          <Select v-model="formValidate.selectedCategory">
+            <Option v-for="(item, index) in selectedCategoryList" :value="item.value" :key="index">{{ item.title }}</Option>
           </Select>
         </FormItem>
-        <FormItem label="Desc" prop="desc">
-          <Input v-model="formValidate.desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..."></Input>
+        <FormItem label="商铺图片" prop="image_path">
+          <Upload :action="baseUrl + '/v1/addimg/shop'">
+            <img v-if="formValidate.image_path" :src="baseImgPath + formValidate.image_path" class="avatar">
+            <Icon v-else type="md-image" />
+          </Upload>
         </FormItem>
       </Form>
     </Modal>
@@ -39,9 +46,12 @@
 </template>
 
 <script>
+  import { baseUrl, baseImgPath } from '../../config/env';
   export default {
     data () {
       return {
+        baseUrl,
+        baseImgPath,
         tableColumns: [
           {type: 'expand',
             align: 'center',
@@ -204,41 +214,33 @@
         winTitle: '',
         formValidate: {
           name: '',
-          mail: '',
-          city: '',
-          gender: '',
-          interest: [],
-          date: '',
-          time: '',
-          desc: ''
+          address: '',
+          description: '',
+          phone: '',
+          selectedCategory: '',
+          image_path: ''
         },
+        selectedCategoryList: [],
         ruleValidate: {
           name: [
             { required: true, message: 'The name cannot be empty', trigger: 'blur' }
           ],
-          mail: [
+          address: [
             { required: true, message: 'Mailbox cannot be empty', trigger: 'blur' },
             { type: 'email', message: 'Incorrect email format', trigger: 'blur' }
           ],
           city: [
             { required: true, message: 'Please select the city', trigger: 'change' }
           ],
-          gender: [
+          phone: [
             { required: true, message: 'Please select gender', trigger: 'change' }
           ],
-          interest: [
+          selectedCategory: [
             { required: true, type: 'array', min: 1, message: 'Choose at least one hobby', trigger: 'change' },
             { type: 'array', max: 2, message: 'Choose two hobbies at best', trigger: 'change' }
           ],
-          date: [
+          image_path: [
             { required: true, type: 'date', message: 'Please select the date', trigger: 'change' }
-          ],
-          time: [
-            { required: true, type: 'string', message: 'Please select time', trigger: 'change' }
-          ],
-          desc: [
-            { required: true, message: 'Please enter a personal introduction', trigger: 'blur' },
-            { type: 'string', min: 20, message: 'Introduce no less than 20 words', trigger: 'blur' }
           ]
         }
       };
