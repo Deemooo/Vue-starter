@@ -16,13 +16,20 @@
       ok-text="保存"
       cancel-text="取消"
       v-model="modalShow"
+      @on-ok="saveFn"
+      @on-cancel="closeFn"
       scrollable>
       <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
         <FormItem label="商铺名称" prop="name">
           <Input v-model="formValidate.name"></Input>
         </FormItem>
         <FormItem label="详细地址" prop="address">
-          <Input v-model="formValidate.address"></Input>
+          <AutoComplete
+            v-model="formValidate.address"
+            @on-select="setAddress"
+            @on-change="getAddressData">
+            <Option v-for="(item, index) in addressData" :value="item.address" :key="index">{{ item.address }}</Option>
+          </AutoComplete>
         </FormItem>
         <FormItem label="商铺介绍" prop="description">
           <Input v-model="formValidate.description"></Input>
@@ -30,8 +37,8 @@
         <FormItem label="联系电话" prop="phone">
           <Input v-model="formValidate.phone"></Input>
         </FormItem>
-        <FormItem label="商铺分类" prop="selectedCategory">
-          <Cascader :data="selectedCategoryList" v-model="formValidate.selectedCategory"></Cascader>
+        <FormItem label="商铺分类" prop="category">
+          <Cascader :data="categoryList" v-model="formValidate.category"></Cascader>
         </FormItem>
         <FormItem label="商铺图片" prop="image_path">
           <Upload
@@ -216,33 +223,35 @@
         city: {},
         modalShow: false,
         winTitle: '',
+        shopId: '',
         formValidate: {
           name: '',
           address: '',
           description: '',
           phone: '',
-          selectedCategory: [],
+          category: [],
           image_path: ''
         },
-        selectedCategoryList: [],
+        categoryList: [],
+        addressData: [],
+        address: '',
         ruleValidate: {
           name: [
             { required: true, message: '商铺名称不能为空！', trigger: 'blur' },
-            { validator: this.validateShopName, trigger: 'blur' }
+            { type: 'string', min: 1, max: 20, message: '商铺名称字符长度必须小于20！', trigger: 'blur' }
           ],
           address: [
             { required: true, message: '商铺地址不能为空！', trigger: 'blur' },
             { type: 'string', min: 1, max: 100, message: '商铺地址字符长度必须小于100！', trigger: 'change' }
           ],
           description: [
-            { required: true, message: '商铺描述不能为空！', trigger: 'blur' },
-            { type: 'string', min: 1, max: 100, message: '商铺描述字符长度必须小于100！', trigger: 'change' }
+            { type: 'string', min: 1, max: 100, message: '商铺描述字符长度必须小于100！', trigger: 'blur' }
           ],
           phone: [
             { required: true, message: '联系方式不能为空！', trigger: 'blur' },
             { validator: this.validatePhone, trigger: 'blur' }
           ],
-          selectedCategory: [
+          category: [
             { required: true, type: 'array',  message: '商铺分类不能为空！', trigger: 'change' },
             { type: 'array', min: 1, max: 10, message: '商铺分类字符长度必须小于10！', trigger: 'change' }
           ],
@@ -294,6 +303,21 @@
           }
         });
       },
+      // 获取商铺地址
+      getAddressData () {
+        let params = this.setStrOfUrl({
+          type: 'search',
+          city_id: this.city.id,
+          keyword: this.formValidate.address
+        });
+        this.https({url: '/v1/pois?' + params, method: 'get'}, (response) => {
+          if (response) {
+            if (response && response.length !== 0) {
+              this.addressData = response;
+            }
+          }
+        });
+      },
       // 新增
       addTable (rowData) {
         this.$router.push({path: 'addGoods', query: { restaurant_id: rowData.id }});
@@ -312,13 +336,41 @@
       },
       // 修改
       editTable (rowData) {
+        console.log('rowData', rowData);
         this.winTitle = '修改';
+        this.shopId = rowData.id;
+        this.$nextTick(() => {
+          this.backfillForm(this.formValidate, rowData);
+          this.formValidate.category = rowData.category.split('/');
+          this.formValidate.image_path = baseImgPath + rowData.image_path;
+        });
         this.modalShow = true;
       },
       // 保存
-      saveFn () {},
+      saveFn () {
+        this.$refs.formValidate.validate((valid) => {
+          if (valid) {
+            let params = {...this.formValidate};
+            params['category'] = this.formValidate.category.join('/');
+            params['id'] = this.shopId;
+            Object.assign(params, this.address);
+            console.log('params', params);
+            this.https({url: '/shopping/updateshop', method: 'post', params}, (response) => {
+              if (response.status === 1) {
+                this.$Message.success(response.success);
+                this.modalShow = false;
+                this.getTableData();
+              } else {
+                this.$Message.error(response.message);
+              }
+            });
+          }
+        });
+      },
       // 关闭
-      closeFn () {},
+      closeFn () {
+        this.$refs.formValidate.resetFields();
+      },
       // 构造表格数据
       setTableData (response) {
         if (response && response.length !== 0) {
@@ -350,9 +402,20 @@
                 label: subitem.name
               })
             })
-            this.selectedCategoryList.push(addnew)
+            this.categoryList.push(addnew)
           }
         })
+      },
+      // 设置address
+      setAddress (val) {
+        this.addressData.forEach((item) => {
+          Object.keys(item).forEach((key) => {
+            if (key === 'address' && item[key] === val) {
+              let {address, latitude, longitude} = item;
+              this.address = {address, latitude, longitude};
+            }
+          });
+        });
       },
       // 文件上传相关方法
       fileUploadSuccess (response) {

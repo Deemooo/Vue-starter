@@ -4,6 +4,17 @@ export default {
     return {};
   },
   methods: {
+    /**
+     * 表单回填
+     * beFilledData 需要回填的表单数据
+     * orginData 原数据
+    **/
+    backfillForm (beFilledData, orginData) {
+      Object.keys(beFilledData).forEach((key) => {
+        let value = (typeof orginData[key] !== 'undefined' && orginData[key] !== null) ? orginData[key] : '';
+        this.$set(beFilledData, key, value);
+      });
+    },
     // 分页相关
     pageChange (page) {
       this.pageIndex = page;
