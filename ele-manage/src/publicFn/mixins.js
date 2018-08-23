@@ -24,6 +24,24 @@ export default {
       this.pageSize = size;
       this.getTableData();
     },
+    // 将数据写入sessionStorage
+    setListData (key, data) {
+      if (data && data.length !== 0) {
+        sessionStorage.setItem(key, JSON.stringify(data));
+      }
+    },
+    // 返回sessionStorage数据
+    getListData (key) {
+      return JSON.parse(sessionStorage.getItem(key)) || '';
+    },
+    // 删除某项数据
+    removeListData (...arg) {
+      if (arg && arg.length !== 0) {
+        arg.forEach((item) => {
+          sessionStorage.removeItem(item);
+        });
+      }
+    },
     // 对象转url所需字符串
     setStrOfUrl (data) {
       if (this._typeCheck(data) === '[object Object]') {

@@ -17,7 +17,7 @@
             <FormItem>
               <Button
                 type="primary"
-                @click="handleSubmit('formInline')">
+                @click="login">
                 登陆
               </Button>
             </FormItem>
@@ -27,58 +27,67 @@
     </div>
 </template>
 <script>
-export default {
-    components: {},
-    computed: {},
-    data () {
-        return {
-            formInline: {
-              username: '',
-              password: ''
-            },
-            ruleInline: {
-              username: [
-                { required: true, message: '用户名不能为空！', trigger: 'blur' },
-                { validator: this.validateUser, trigger: 'blur' }
-              ],
-              password: [
-                { required: true, message: '密码不能为空！', trigger: 'blur' },
-                { validator: this.validatePassword, trigger: 'blur' }
-              ]
+  import { mapMutations } from 'vuex';
+  export default {
+      components: {},
+      computed: {},
+      data () {
+          return {
+              formInline: {
+                username: '',
+                password: ''
+              },
+              ruleInline: {
+                username: [
+                  { required: true, message: '用户名不能为空！', trigger: 'blur' },
+                  { validator: this.validateUser, trigger: 'blur' }
+                ],
+                password: [
+                  { required: true, message: '密码不能为空！', trigger: 'blur' },
+                  { validator: this.validatePassword, trigger: 'blur' }
+                ]
+              }
+          };
+      },
+      methods: {
+        ...mapMutations(['saveAdminInfo']),
+        getAdminInfo () {
+          this.https({url: '/admin/info', method: 'get'}, (response) => {
+            if (response.status === 1) {
+              this.saveAdminInfo(response.data);
             }
-        };
-    },
-    methods: {
-        handleSubmit (name) {
-            this.$refs[name].validate((valid) => {
-              console.log('valid', valid);
-                if (valid) {
-                  let params = {
-                    user_name: this.formInline.username,
-                    password: this.formInline.password
-                  };
-                  this.https({url: '/admin/login', method: 'post', params}, (response) => {
-                    if (response.status === 1) {
-                      this.$Message.success(response.success);
-                      this.$router.push('manage');
-                    }
-                  });
-                } else {
-                    this.$Message.error('请输入正确的用户名密码！');
-                }
-            })
+          });
         },
-      keyBordLogin () {
-        if (window.event.keyCode === 13) {
-          this.handleSubmit('formInline');
+          login () {
+              this.$refs.formInline.validate((valid) => {
+                  if (valid) {
+                    let params = {
+                      user_name: this.formInline.username,
+                      password: this.formInline.password
+                    };
+                    this.https({url: '/admin/login', method: 'post', params}, (response) => {
+                      if (response.status === 1) {
+                        this.$Message.success(response.success);
+                        this.$router.push('manage');
+                        this.getAdminInfo();
+                      }
+                    });
+                  } else {
+                      this.$Message.error('请输入正确的用户名密码！');
+                  }
+              })
+          },
+        keyBordLogin () {
+          if (window.event.keyCode === 13) {
+            this.login();
+          }
         }
-      }
-    },
-    mounted () {
-      document.addEventListener('keydown', this.keyBordLogin, true);
-    },
-    watch: {}
-};
+      },
+      mounted () {
+        document.addEventListener('keydown', this.keyBordLogin, true);
+      },
+      watch: {}
+  };
 </script>
 <style lang="less" scoped>
   .login-page {

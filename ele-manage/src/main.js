@@ -17,6 +17,7 @@ import https from  './publicFn/https';
 import topHeader from './components/topHeader.vue';
 // 图表
 import lineBarChart from './components/echarts/lineBarChart.vue';
+import pieChart from './components/echarts/pieChart.vue';
 // 数据表格
 import dataTable from './components/dataTable.vue';
 // 按钮
@@ -31,6 +32,7 @@ Vue.mixin(mixins);
 Vue.mixin(validate);
 Vue.component('top-header', topHeader);
 Vue.component('line-bar-chart', lineBarChart);
+Vue.component('pie-chart', pieChart);
 Vue.component('data-table', dataTable);
 Vue.component('action-button', actionButton);
 Vue.component('img-show-wrap', imgShowWrap);

@@ -26,7 +26,7 @@
     background: #f4f4f4;
     color: #ddd;
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: hidden;
     display: flex;
     justify-content: center;
     align-items: center;

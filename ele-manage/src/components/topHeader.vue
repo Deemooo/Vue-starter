@@ -9,7 +9,7 @@
         class="user-info-wrap"
         @on-click="loginOut"
         trigger="hover">
-        <span class="header-warp-avatar"></span>
+        <img :src="baseImgPath + adminInfo.avatar" class="header-warp-avatar"/>
         <DropdownMenu slot="list">
           <DropdownItem name="logOut">退出</DropdownItem>
         </DropdownMenu>
@@ -17,11 +17,17 @@
     </div>
 </template>
 <script>
-    export default {
+  import { baseImgPath } from '../../config/env';
+  import { mapState } from 'vuex';
+  export default {
         components: {},
-        computed: {},
+        computed: {
+          ...mapState(['adminInfo'])
+        },
         data () {
-            return {};
+            return {
+              baseImgPath
+            };
         },
         methods: {
           loginOut (name) {
@@ -63,7 +69,7 @@
         display: inline-block;
         width: 32px;
         height: 32px;
-        background-image: url("../assets/images/icon/user.svg");
+        border-radius: 50%;
         cursor: pointer;
       }
     }

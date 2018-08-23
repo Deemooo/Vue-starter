@@ -41,6 +41,18 @@ const router = new Router({
           name: 'adminList',
           meta: ['数据管理', '管理员列表'],
           component: resolve => require(['../pages/adminList.vue'], resolve)
+        },
+        {
+          path: '/visitor',
+          name: 'visitor',
+          meta: ['数据管理', '用户分布'],
+          component: resolve => require(['../pages/visitor.vue'], resolve)
+        },
+        {
+          path: '/adminConfig',
+          name: 'adminConfig',
+          meta: ['设置', '管理员设置'],
+          component: resolve => require(['../pages/adminConfig.vue'], resolve)
         }
       ]
     }
