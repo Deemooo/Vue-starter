@@ -16,19 +16,20 @@
 <script>
   export default {
     data () {
-        return {
-          tableColumns: [
-            {key: 'registe_time', title: '注册日期', align: 'center', minWidth: 100},
-            {key: 'username', title: '用户姓名', align: 'center', minWidth: 100},
-            {key: 'city', title: '注册地址', align: 'center', minWidth: 100}
-          ],
-          tableData: [],
-          tableLoading: false,
-          pageIndex: 0,
-          pageSize: 20,
-          tableTotal: 0
-        };
-      },
+      return {
+        tableColumns: [
+          {key: 'user_name', title: '用户名', align: 'center', minWidth: 100},
+          {key: 'create_time', title: '注册日期', align: 'center', minWidth: 100},
+          {key: 'city', title: '所在地', align: 'center', minWidth: 100},
+          {key: 'admin', title: '权限', align: 'center', minWidth: 100}
+        ],
+        tableData: [],
+        tableLoading: false,
+        pageIndex: 0,
+        pageSize: 20,
+        tableTotal: 0
+      };
+    },
     methods: {
       // 获取表格数据
       getTableData () {
@@ -36,16 +37,16 @@
           offset: this.pageIndex,
           limit: this.pageSize
         });
-        this.https({url: '/v1/users/list?' + params, method: 'get'}, (response) => {
+        this.https({url: '/admin/all?' + params, method: 'get'}, (response) => {
           if (response) {
             this.getTableDataTotal();
-            this.setTableData(response);
+            this.setTableData(response.data);
           }
         });
       },
       // 获取总数
       getTableDataTotal () {
-        this.https({url: '/v1/users/count', method: 'get'}, (response) => {
+        this.https({url: '/admin/count', method: 'get'}, (response) => {
           if (response.status === 1) {
             this.tableTotal = response.count;
           }

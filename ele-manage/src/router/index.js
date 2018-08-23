@@ -29,6 +29,18 @@ const router = new Router({
           name: 'shopList',
           meta: ['数据管理', '商家列表'],
           component: resolve => require(['../pages/shopList.vue'], resolve)
+        },
+        {
+          path: '/orderList',
+          name: 'orderList',
+          meta: ['数据管理', '订单列表'],
+          component: resolve => require(['../pages/orderList.vue'], resolve)
+        },
+        {
+          path: '/adminList',
+          name: 'adminList',
+          meta: ['数据管理', '管理员列表'],
+          component: resolve => require(['../pages/adminList.vue'], resolve)
         }
       ]
     }
