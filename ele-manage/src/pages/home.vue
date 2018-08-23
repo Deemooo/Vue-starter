@@ -114,4 +114,10 @@
 </script>
 
 <style lang="less" scoped>
+  .main-right-content-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
 </style>

@@ -175,7 +175,7 @@
         min-height: 600px;
         overflow-y: auto;
         box-sizing: border-box;
-        padding: 5px;
+        padding: 10px;
         box-shadow: 1px 1px 1px #515a6e;
       }
     }
