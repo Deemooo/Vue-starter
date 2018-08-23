@@ -64,7 +64,7 @@
           });
           this.tableData = arr;
         }
-      },
+      }
     },
     mounted () {
       this.getTableData();
