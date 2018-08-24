@@ -53,6 +53,12 @@ const router = new Router({
           name: 'adminConfig',
           meta: ['设置', '管理员设置'],
           component: resolve => require(['../pages/adminConfig.vue'], resolve)
+        },
+        {
+          path: '/explain',
+          name: 'explain',
+          meta: ['关于', '说明'],
+          component: resolve => require(['../pages/explain.vue'], resolve)
         }
       ]
     }

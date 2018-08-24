@@ -136,7 +136,7 @@
               ]
             },
             {
-              title: '说明',
+              title: '关于',
               icon: 'md-alert',
               name: 'about',
               path: '/about',
