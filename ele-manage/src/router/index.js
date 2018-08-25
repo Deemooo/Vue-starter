@@ -59,6 +59,12 @@ const router = new Router({
           name: 'explain',
           meta: ['关于', '说明'],
           component: resolve => require(['../pages/explain.vue'], resolve)
+        },
+        {
+          path: '/textEdit',
+          name: 'textEdit',
+          meta: ['编辑', '文本编辑'],
+          component: resolve => require(['../pages/textEdit.vue'], resolve)
         }
       ]
     }
