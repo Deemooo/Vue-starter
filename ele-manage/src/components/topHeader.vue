@@ -11,6 +11,7 @@
         trigger="hover">
         <img :src="baseImgPath + adminInfo.avatar" class="header-warp-avatar"/>
         <DropdownMenu slot="list">
+          <ColorPicker v-model="themeColor" @on-active-change="changeThemeColor" :colors="recommendColors"/>
           <DropdownItem name="logOut">退出</DropdownItem>
         </DropdownMenu>
       </Dropdown>
@@ -26,7 +27,9 @@
         },
         data () {
             return {
-              baseImgPath
+              baseImgPath,
+              themeColor: '#515a6e',
+              recommendColors: ['#5cadff']
             };
         },
         methods: {
@@ -37,6 +40,13 @@
                 this.$router.push('/');
               }
             });
+          },
+          changeThemeColor (value) {
+            if (value.indexOf('#') === 0) {
+              console.log(typeof value);
+              let color = value.substring(1);
+              required(`../assets/style/myTheme/${color}.less`);
+            }
           }
         },
         mounted () {

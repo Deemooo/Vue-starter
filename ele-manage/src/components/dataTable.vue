@@ -249,7 +249,7 @@
       if (this.$refs.table) {
         if (this.$refs.table.columns && this.$refs.table.columns.length !== 0) {
           this.$refs.table.columns.forEach((item) => {
-            item['tooltip'] = true;
+            this.$set(item, 'tooltip', true);
           });
         }
       }

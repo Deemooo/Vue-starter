@@ -37,6 +37,12 @@ const router = new Router({
           component: resolve => require(['../pages/orderList.vue'], resolve)
         },
         {
+          path: '/foodList',
+          name: 'foodList',
+          meta: ['数据管理', '食品列表'],
+          component: resolve => require(['../pages/foodList.vue'], resolve)
+        },
+        {
           path: '/adminList',
           name: 'adminList',
           meta: ['数据管理', '管理员列表'],
