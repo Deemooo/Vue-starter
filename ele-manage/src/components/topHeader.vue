@@ -6,12 +6,28 @@
         <BreadcrumbItem v-for="(item, index) in $route.meta" :key="index">{{ item }}</BreadcrumbItem>
       </Breadcrumb>
       <Dropdown
+        class="color-palette-wrap"
+        @on-click="changeThemeColor"
+        trigger="hover">
+        <Icon type="md-color-palette" size="32"/>
+        <DropdownMenu slot="list">
+          <DropdownItem
+            v-for="(item, index) in colorPalette"
+            :name="item.name"
+            :key="index"
+            :disabled="item.disabled"
+            :divided="item.divided">
+            {{ item.title }}
+            <span class="color-wrap" :style="{backgroundColor: `#${item.name}`}"></span>
+          </DropdownItem>
+        </DropdownMenu>
+      </Dropdown>
+      <Dropdown
         class="user-info-wrap"
         @on-click="loginOut"
         trigger="hover">
         <img :src="baseImgPath + adminInfo.avatar" class="header-warp-avatar"/>
         <DropdownMenu slot="list">
-          <ColorPicker v-model="themeColor" @on-active-change="changeThemeColor" :colors="recommendColors"/>
           <DropdownItem name="logOut">退出</DropdownItem>
         </DropdownMenu>
       </Dropdown>
@@ -28,8 +44,30 @@
         data () {
             return {
               baseImgPath,
-              themeColor: '#515a6e',
-              recommendColors: ['#5cadff']
+              colorPalette: [
+                {
+                  name: 'theme',
+                  title: '皮肤',
+                  disabled: true
+                },
+                {
+                  name: 'index',
+                  title: '默认',
+                  divided: true
+                },
+                {
+                  name: '2d8cf0',
+                  title: '天空蓝'
+                },
+                {
+                  name: '009688',
+                  title: '翡翠绿'
+                },
+                {
+                  name: 'ba68c8',
+                  title: '石英紫'
+                }
+              ]
             };
         },
         methods: {
@@ -40,13 +78,6 @@
                 this.$router.push('/');
               }
             });
-          },
-          changeThemeColor (value) {
-            if (value.indexOf('#') === 0) {
-              console.log(typeof value);
-              let color = value.substring(1);
-              required(`../assets/style/myTheme/${color}.less`);
-            }
           }
         },
         mounted () {
@@ -72,9 +103,21 @@
       width: 300px;
       order: 0;
     }
-    .user-info-wrap {
-      margin-left: 70%;
+    .color-palette-wrap {
       order: 1;
+      margin-left: 69%;
+      .color-wrap {
+        position: relative;
+        top: 5px;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        margin-left: 6px;
+      }
+    }
+    .user-info-wrap {
+      order: 2;
+      padding: 0 20px;
       .header-warp-avatar {
         display: inline-block;
         width: 32px;

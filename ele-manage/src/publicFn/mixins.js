@@ -4,6 +4,10 @@ export default {
     return {};
   },
   methods: {
+    // 修改主题颜色
+    changeThemeColor (color) {
+      require(`../assets/style/myTheme/${color}.less`);
+    },
     /**
      * 表单回填
      * beFilledData 需要回填的表单数据
