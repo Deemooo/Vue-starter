@@ -52,8 +52,13 @@
       height: 90%;
       box-sizing: border-box;
       margin: 10px 0;
+      .ql-container {
+        height: 90%;
+      }
     }
     .ql-container {
+      width: 100%;
+      height: 90%;
       margin-bottom: 10px;
       .content-wrap {
         width: 100%;
