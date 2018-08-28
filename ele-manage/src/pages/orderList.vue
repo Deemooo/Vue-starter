@@ -6,6 +6,7 @@
       :loading="tableLoading"
       :total="tableTotal"
       :current="pageIndex"
+      @on-expand="expandChange"
       @on-change="pageChange"
       @on-page-size-change="pageSizeChange"
       ref="pnsTable">
@@ -153,6 +154,32 @@
             this.tableTotal = response.count;
           }
         });
+      },
+      // 面板展开事件
+      async expandChange (row, status) {
+        if (status) {
+          let restaurant = null;
+          let userInfo = null;
+          let addressInfo = null;
+          await this.https({url: '/shopping/restaurant/' + row.restaurant_id, method: 'get'}, (response) => {
+            if (response.status === 1) {
+              restaurant = response;
+            }
+          });
+          await this.https({url: '/v1/user/' + row.user_id, method: 'get'}, (response) => {
+            if (response) {
+              userInfo = response;
+            }
+          });
+          await this.https({url: '/v1/addresse/' + row.address_id, method: 'get'}, (response) => {
+            if (response) {
+              addressInfo = response;
+            }
+          });
+          this.tableData.splice(row.index, 1, {...row, ...{restaurant_name: restaurant.name, restaurant_address: restaurant.address, address: addressInfo.address, user_name: userInfo.username, _expanded: true}});
+        } else {
+          this.tableData.splice(row.index, 1, {...row, ...{_expanded: false}});
+        }
       },
       // 构造表格数据
       setTableData (response) {
