@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import https from  '../publicFn/https';
 
 Vue.use(Vuex);
 
@@ -20,7 +19,7 @@ export default new Vuex.Store({
       Object.keys(state.adminInfo).forEach((key) => {
         state.adminInfo[key] = data[key];
       });
-      console.log('adminInfo', state.adminInfo);
+      sessionStorage.setItem('user_id', JSON.stringify(state.adminInfo.id));
     }
   },
   actions: {

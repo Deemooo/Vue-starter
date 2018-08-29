@@ -13,10 +13,7 @@
     <Modal
       :title="winTitle + '商铺信息'"
       width="600"
-      ok-text="保存"
-      cancel-text="取消"
       v-model="modalShow"
-      @on-ok="saveFn"
       @on-cancel="closeFn"
       scrollable>
       <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
@@ -52,6 +49,10 @@
           </Upload>
         </FormItem>
       </Form>
+      <div slot="footer">
+        <action-button text="取消" @click="closeFn"></action-button>
+        <action-button type="primary" text="保存" @click="saveFn"></action-button>
+      </div>
     </Modal>
   </div>
 </template>
@@ -181,7 +182,7 @@
                 h('action-button', {
                   props: {
                     type: 'primary',
-                    text: '新增'
+                    text: '新增食品'
                   },
                   on: {
                     click: () => {
@@ -358,17 +359,20 @@
             this.https({url: '/shopping/updateshop', method: 'post', params}, (response) => {
               if (response.status === 1) {
                 this.$Message.success(response.success);
-                this.modalShow = false;
+                this.closeFn();
                 this.getTableData();
               } else {
                 this.$Message.error(response.message);
               }
             });
+          } else {
+            this.$Message.error('验证失败！');
           }
         });
       },
       // 关闭
       closeFn () {
+        this.modalShow = false;
         this.$refs.formValidate.resetFields();
       },
       // 构造表格数据

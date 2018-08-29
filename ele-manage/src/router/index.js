@@ -7,6 +7,7 @@ const router = new Router({
   routes: [
     {
       path: '/',
+      name: 'login',
       component: resolve => require(['../pages/login.vue'], resolve)
     },
     {
@@ -49,6 +50,18 @@ const router = new Router({
           component: resolve => require(['../pages/adminList.vue'], resolve)
         },
         {
+          path: '/addGoods',
+          name: 'addGoods',
+          meta: ['添加数据', '添加商品'],
+          component: resolve => require(['../pages/addGoods.vue'], resolve)
+        },
+        {
+          path: '/addShop',
+          name: 'addShop',
+          meta: ['添加数据', '添加商铺'],
+          component: resolve => require(['../pages/addShop.vue'], resolve)
+        },
+        {
           path: '/visitor',
           name: 'visitor',
           meta: ['数据管理', '用户分布'],
@@ -81,9 +94,12 @@ const router = new Router({
 //   // from: Route: 当前导航正要离开的路由
 //   // next: Function: 一定要调用该方法来 resolve 这个钩子。执行效果依赖 next 方法的调用参数。
 //   // 判断是否登录
-//   if (to.name !== 'login') {
-//     router.push('login');
+//   let isLogined = sessionStorage.getItem('user_id');
+//   let loginPath = to.path === '/';
+//   if (isLogined) {
+//     loginPath ? next({name: from.name}) : next();
+//   } else {
+//     loginPath ? next() : next({path: '/'});
 //   }
-//   next();
 // });
 export default router;
