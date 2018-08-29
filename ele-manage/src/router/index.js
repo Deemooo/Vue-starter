@@ -49,6 +49,18 @@ const router = new Router({
           component: resolve => require(['../pages/adminList.vue'], resolve)
         },
         {
+          path: '/addGoods',
+          name: 'addGoods',
+          meta: ['添加数据', '添加商品'],
+          component: resolve => require(['../pages/addGoods.vue'], resolve)
+        },
+        {
+          path: '/addShop',
+          name: 'addShop',
+          meta: ['添加数据', '添加商铺'],
+          component: resolve => require(['../pages/addShop.vue'], resolve)
+        },
+        {
           path: '/visitor',
           name: 'visitor',
           meta: ['数据管理', '用户分布'],
