@@ -6,6 +6,7 @@
       :loading="tableLoading"
       :total="tableTotal"
       :current="pageIndex"
+      @on-expand="expandChange"
       @on-change="pageChange"
       @on-page-size-change="pageSizeChange"
       ref="pnsTable">
@@ -401,6 +402,26 @@
       // 关闭
       closeFn () {
         this.$refs.formValidate.resetFields();
+      },
+      // 面板展开事件
+      async expandChange (row, status) {
+        if (status) {
+          let restaurant = null;
+          let category = null;
+          await this.https({url: '/shopping/restaurant/' + row.restaurant_id, method: 'get'}, (response) => {
+            if (response) {
+              restaurant = response;
+            }
+          });
+          await this.https({url: '/shopping/v2/menu/' + row.category_id, method: 'get'}, (response) => {
+            if (response) {
+              category = response;
+            }
+          });
+          console.log(restaurant, category);
+        } else {
+          this.tableData.splice(row.index, 1, {...row, ...{_expanded: false}});
+        }
       },
       // 构造表格数据
       setTableData (response) {
