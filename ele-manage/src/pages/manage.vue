@@ -48,7 +48,7 @@
                   path: '/usersList'
                 },
                 {
-                  title: '商家列表',
+                  title: '商铺列表',
                   icon: 'md-home',
                   name: 'shopList',
                   path: '/shopList'

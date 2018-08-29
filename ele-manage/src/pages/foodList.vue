@@ -6,25 +6,26 @@
       :loading="tableLoading"
       :total="tableTotal"
       :current="pageIndex"
+      @on-expand="expandChange"
       @on-change="pageChange"
       @on-page-size-change="pageSizeChange"
       ref="pnsTable">
     </data-table>
+    <!--食品新增-->
     <Modal
       :title="winTitle + '食品信息'"
       width="600"
-      ok-text="保存"
-      cancel-text="取消"
       v-model="modalShow"
-      @on-ok="saveFn"
       @on-cancel="closeFn"
       scrollable>
       <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
         <FormItem label="食品名称" prop="name">
           <Input v-model="formValidate.name"></Input>
         </FormItem>
-        <FormItem label="食品分类" prop="category">
-          <Cascader :data="categoryList" v-model="formValidate.category"></Cascader>
+        <FormItem label="食品分类" prop="category_id">
+          <Select v-model="formValidate.category_id">
+            <Option v-for="(item, index) in categoryList" :value="item.value" :key="index">{{ item.label }}</Option>
+          </Select>
         </FormItem>
         <FormItem label="食品介绍" prop="description">
           <Input v-model="formValidate.description"></Input>
@@ -41,8 +42,8 @@
           </Upload>
         </FormItem>
         <Row>
-          <Col span="24">
-            <action-button text="规格" icon="md-add"></action-button>
+          <Col span="24" style="margin-bottom: 10px;">
+            <action-button type="primary" text="规格" icon="md-add" @click="addStandard"></action-button>
           </Col>
         </Row>
         <Row>
@@ -56,6 +57,33 @@
           </Col>
         </Row>
       </Form>
+      <div slot="footer">
+        <action-button text="取消" @click="closeFn"></action-button>
+        <action-button type="primary" text="保存" @click="saveFn"></action-button>
+      </div>
+    </Modal>
+    <!--规格新增-->
+    <Modal
+      :title="winStandardTitle + '规格信息'"
+      width="600"
+      v-model="modalStandardShow"
+      @on-cancel="closeStandardFn"
+      scrollable>
+      <Form ref="formStandardValidate" :model="formStandardValidate" :rules="ruleStandardValidate" :label-width="80">
+        <FormItem label="规格" prop="specs_name">
+          <Input v-model="formStandardValidate.specs_name"></Input>
+        </FormItem>
+        <FormItem label="包装费" prop="packing_fee">
+          <InputNumber :min="1" :max="100" v-model="formStandardValidate.packing_fee"></InputNumber>
+        </FormItem>
+        <FormItem label="价格" prop="price">
+          <InputNumber :min="1" :max="100" v-model="formStandardValidate.price"></InputNumber>
+        </FormItem>
+      </Form>
+      <div slot="footer">
+        <action-button text="取消" @click="closeStandardFn"></action-button>
+        <action-button type="primary" text="保存" @click="saveStandardFn"></action-button>
+      </div>
     </Modal>
   </div>
 </template>
@@ -108,6 +136,45 @@
                       style: {
                         fontWeight: '700'
                       }
+                    }, '餐馆ID：'),
+                    h('span', params.row.restaurant_id)
+                  ]),
+                  h('Col', {
+                    props: {
+                      span: 8
+                    },
+                    style: {
+                      textAlign: 'center'
+                    }
+                  }, [
+                    h('span', {
+                      style: {
+                        fontWeight: '700'
+                      }
+                    }, '餐馆地址：'),
+                    h('span', params.row.restaurant_address)
+                  ])
+                ]),
+                h('Row', {
+                  style: {
+                    width: 'calc(100% - 50px)',
+                    height: '100%',
+                    padding: '10px',
+                    fontSize: '1.1em'
+                  }
+                }, [
+                  h('Col', {
+                    props: {
+                      span: 8
+                    },
+                    style: {
+                      textAlign: 'center'
+                    }
+                  }, [
+                    h('span', {
+                      style: {
+                        fontWeight: '700'
+                      }
                     }, '食品ID：'),
                     h('span', params.row.item_id)
                   ]),
@@ -125,16 +192,7 @@
                       }
                     }, '食品分类：'),
                     h('span', params.row.category_name)
-                  ])
-                ]),
-                h('Row', {
-                  style: {
-                    width: 'calc(100% - 50px)',
-                    height: '100%',
-                    padding: '10px',
-                    fontSize: '1.1em'
-                  }
-                }, [
+                  ]),
                   h('Col', {
                     props: {
                       span: 8
@@ -159,7 +217,7 @@
           {key: 'description', title: '食品介绍', align: 'center', minWidth: 100},
           {key: 'action',
             title: '操作',
-            width: 240,
+            width: 150,
             align: 'center',
             render: (h, params) => {
               return h('div', {
@@ -167,17 +225,6 @@
                   class: 'table-cell-actions-wrap'
                 }
               }, [
-                h('action-button', {
-                  props: {
-                    type: 'primary',
-                    text: '新增'
-                  },
-                  on: {
-                    click: () => {
-                      this.addTable(params.row);
-                    }
-                  }
-                }),
                 h('action-button', {
                   props: {
                     type: 'warning',
@@ -212,13 +259,10 @@
         city: {},
         modalShow: false,
         winTitle: '',
-        shopId: '',
         formValidate: {
           name: '',
-          address: '',
+          category_id: '',
           description: '',
-          phone: '',
-          category: [],
           image_path: ''
         },
         categoryList: [],
@@ -240,19 +284,16 @@
             { required: true, message: '联系方式不能为空！', trigger: 'blur' },
             { validator: this.validatePhone, trigger: 'blur' }
           ],
-          category: [
-            { required: true, type: 'array',  message: '食品分类不能为空！', trigger: 'change' },
-            { type: 'array', min: 1, max: 10, message: '食品分类字符长度必须小于10！', trigger: 'change' }
-          ],
+          category_id: [],
           image_path: [
             { required: true, message: '食品图片不能为空！', trigger: 'change' }
           ]
         },
         restaurantId: '',
         tableStandardColumns: [
-          {key: 'name', title: '规格', align: 'center', minWidth: 100},
-          {key: 'rating', title: '价格', align: 'center', minWidth: 100},
-          {key: 'description', title: '包装费', align: 'center', minWidth: 100},
+          {key: 'specs', title: '规格', align: 'center', minWidth: 100},
+          {key: 'packing_fee', title: '价格', align: 'center', minWidth: 100},
+          {key: 'price', title: '包装费', align: 'center', minWidth: 100},
           {key: 'action',
             title: '操作',
             width: 140,
@@ -281,7 +322,7 @@
                   },
                   on: {
                     click: () => {
-                      this.deleteStandardTable(params.row, params.index);
+                      this.deleteStandardTable(params.row._index);
                     }
                   }
                 })
@@ -289,7 +330,27 @@
             }
           }
         ],
-        tableStandardData: []
+        tableStandardData: [],
+        winStandardTitle: '',
+        modalStandardShow: false,
+        formStandardValidate: {
+          specs_name: '',
+          packing_fee: 0,
+          price: 20
+        },
+        ruleStandardValidate: {
+          specs_name: [
+            { required: true, message: '规格不能为空！', trigger: 'blur' },
+            { type: 'string', min: 1, max: 20, message: '规格字符长度必须小于20！', trigger: 'blur' }
+          ],
+          packing_fee: [
+            { type: 'number', required: true, message: '包装费不能为空！', trigger: 'change' }
+          ],
+          price: [
+            { type: 'number', required: true, message: '价格不能为空！', trigger: 'change' }
+          ]
+        },
+        rowIndex: ''
       };
     },
     methods: {
@@ -315,18 +376,13 @@
           }
         });
       },
-      // 获取定位城市
-      getCityInfo () {
-        this.https({url: '/v1/cities?type=guess', method: 'get'}, (response) => {
-          if (response) {
-            this.city = response;
-            this.getTableData();
-          }
-        });
-      },
       // 获取食品类型
-      getfoodCategory () {
-        this.https({url: '/shopping/v2/restaurant/category', method: 'get'}, (response) => {
+      getMenu (rowData) {
+        let params = this.setStrOfUrl({
+          restaurant_id: rowData.restaurant_id,
+          allMenu: true
+        });
+        this.https({url: '/shopping/v2/menu?' + params, method: 'get'}, (response) => {
           if (response) {
             this.setfoodCategory(response);
           }
@@ -347,10 +403,6 @@
           }
         });
       },
-      // 新增
-      addTable (rowData) {
-        this.$router.push({path: 'addGoods', query: { restaurant_id: rowData.id }});
-      },
       // 删除
       deleteTable (rowData, index) {
         let params = {};
@@ -363,44 +415,103 @@
           }
         });
       },
+      // 新增规格
+      addStandard () {
+        this.winStandardTitle = '新增';
+        this.modalStandardShow = true;
+      },
       // 修改
       editTable (rowData) {
         console.log('rowData', rowData);
         this.winTitle = '修改';
-        this.shopId = rowData.id;
+        this.getMenu(rowData);
         this.$nextTick(() => {
           this.backfillForm(this.formValidate, rowData);
-          this.formValidate.category = rowData.category.split('/');
+          this.setTableStandardData(rowData.specfoods);
           this.formValidate.image_path = baseImgPath + rowData.image_path;
         });
         this.modalShow = true;
       },
-      editStandardTable (rowData) {},
-      deleteStandardTable (rowData, index) {},
+      // 食品规格修改
+      editStandardTable (rowData) {
+        console.log('editStandardTable', rowData);
+        this.winStandardTitle = '修改';
+        this.rowIndex = rowData._index;
+        this.$nextTick(() => {
+          this.backfillForm(this.formStandardValidate, rowData);
+          this.formStandardValidate.specs_name = rowData.specs;
+        });
+        this.modalStandardShow = true;
+      },
+      // 食品规格删除
+      deleteStandardTable (index) {
+        this.tableStandardData.splice(index, 1);
+      },
       // 保存
       saveFn () {
         this.$refs.formValidate.validate((valid) => {
           if (valid) {
-            let params = {...this.formValidate};
-            params['category'] = this.formValidate.category.join('/');
-            params['id'] = this.shopId;
-            Object.assign(params, this.address);
+            let subData = {new_category_id: this.formValidate.category_id, specs: this.tableStandardData};
+            let params = {...this.formValidate, ...subData};
             console.log('params', params);
-            this.https({url: '/shopping/updateshop', method: 'post', params}, (response) => {
+            this.https({url: '/shopping/v2/updatefood', method: 'post', params}, (response) => {
               if (response.status === 1) {
                 this.$Message.success(response.success);
-                this.modalShow = false;
+                this.closeFn();
                 this.getTableData();
               } else {
                 this.$Message.error(response.message);
               }
             });
+          } else {
+            this.$Message.error('验证失败！');
           }
         });
       },
       // 关闭
       closeFn () {
+        this.modalShow = false;
         this.$refs.formValidate.resetFields();
+      },
+      // 规格保存
+      saveStandardFn () {
+        this.$refs.formStandardValidate.validate((valid) => {
+          if (valid) {
+            if (this.winStandardTitle === '新增') {
+              this.tableStandardData.push({...this.formStandardValidate});
+            } else {
+              this.tableStandardData.splice(this.rowIndex, 1, {...this.formStandardValidate});
+            }
+            this.closeStandardFn();
+          } else {
+            this.$Message.error('验证失败！');
+          }
+        });
+      },
+      // 规格关闭
+      closeStandardFn () {
+        this.modalStandardShow = false;
+        this.$refs.formStandardValidate.resetFields();
+      },
+      // 面板展开事件
+      async expandChange (row, status) {
+        if (status) {
+          let restaurant = null;
+          let category = null;
+          await this.https({url: '/shopping/restaurant/' + row.restaurant_id, method: 'get'}, (response) => {
+            if (response) {
+              restaurant = response;
+            }
+          });
+          await this.https({url: '/shopping/v2/menu/' + row.category_id, method: 'get'}, (response) => {
+            if (response) {
+              category = response;
+            }
+          });
+          this.tableData.splice(row.index, 1, {...row, ...{restaurant_name: restaurant.name, restaurant_address: restaurant.address, category_name: category.name, _expanded: true}});
+        } else {
+          this.tableData.splice(row.index, 1, {...row, ...{_expanded: false}});
+        }
       },
       // 构造表格数据
       setTableData (response) {
@@ -416,39 +527,33 @@
           this.tableData = arr;
         }
       },
+      // 构造规格表格数据
+      setTableStandardData (response) {
+        if (response && response.length !== 0) {
+          let arr = [];
+          response.forEach((item) => {
+            let row = {
+              specs: item.specs_name,
+              packing_fee: item.packing_fee,
+              price: item.price
+            };
+            arr.push(row);
+          });
+          this.tableStandardData = arr;
+        }
+      },
       // 构造食品种类数据
       setfoodCategory (response) {
         let categories = [...response];
-        categories.forEach(item => {
-          if (item.sub_categories.length) {
-            const addnew = {
-              value: item.name,
+        this.categoryList = [];
+        categories.forEach((item, index) => {
+            let addnew = {
               label: item.name,
-              children: []
+              value: item.id,
+              index
             }
-            item.sub_categories.forEach((subitem, index) => {
-              if (index === 0) {
-                return;
-              }
-              addnew.children.push({
-                value: subitem.name,
-                label: subitem.name
-              })
-            })
-            this.categoryList.push(addnew)
-          }
+          this.categoryList.push(addnew);
         })
-      },
-      // 设置address
-      setAddress (val) {
-        this.addressData.forEach((item) => {
-          Object.keys(item).forEach((key) => {
-            if (key === 'address' && item[key] === val) {
-              let {address, latitude, longitude} = item;
-              this.address = {address, latitude, longitude};
-            }
-          });
-        });
       },
       // 文件上传相关方法
       fileUploadSuccess (response) {
