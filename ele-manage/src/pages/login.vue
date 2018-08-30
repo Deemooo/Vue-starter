@@ -54,7 +54,10 @@
         getAdminInfo () {
           this.https({url: '/admin/info', method: 'get'}, (response) => {
             if (response.status === 1) {
+              console.log(JSON.stringify(response.data));
               this.saveAdminInfo(response.data);
+              sessionStorage.setItem('user_id', JSON.stringify(response.data.id));
+              this.$router.push('manage');
             }
           });
         },
@@ -68,7 +71,6 @@
                     this.https({url: '/admin/login', method: 'post', params}, (response) => {
                       if (response.status === 1) {
                         this.$Message.success(response.success);
-                        this.$router.push('manage');
                         this.getAdminInfo();
                       }
                     });

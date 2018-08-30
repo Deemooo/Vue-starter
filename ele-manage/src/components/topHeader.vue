@@ -74,6 +74,7 @@
           loginOut (name) {
             this.https({url: '/admin/singout', method: 'get'}, (response) => {
               if (response.status === 1) {
+                sessionStorage.removeItem('user_id');
                 this.$Message.success(response.success);
                 this.$router.push('/');
               }

@@ -19,7 +19,6 @@ export default new Vuex.Store({
       Object.keys(state.adminInfo).forEach((key) => {
         state.adminInfo[key] = data[key];
       });
-      sessionStorage.setItem('user_id', JSON.stringify(state.adminInfo.id));
     }
   },
   actions: {
