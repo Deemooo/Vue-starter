@@ -9,7 +9,7 @@
         class="color-palette-wrap"
         @on-click="changeThemeColor"
         trigger="hover">
-        <Icon type="md-color-palette" size="32"/>
+        <Icon type="md-color-palette" size="38"/>
         <DropdownMenu slot="list">
           <DropdownItem
             v-for="(item, index) in colorPalette"
@@ -74,6 +74,7 @@
           loginOut (name) {
             this.https({url: '/admin/singout', method: 'get'}, (response) => {
               if (response.status === 1) {
+                sessionStorage.removeItem('user_id');
                 this.$Message.success(response.success);
                 this.$router.push('/');
               }

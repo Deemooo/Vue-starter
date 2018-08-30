@@ -54,7 +54,7 @@
                   path: '/shopList'
                 },
                 {
-                  title: '食品列表',
+                  title: '商品列表',
                   icon: 'md-beer',
                   name: 'foodList',
                   path: '/foodList'

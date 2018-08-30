@@ -11,26 +11,26 @@
       @on-page-size-change="pageSizeChange"
       ref="pnsTable">
     </data-table>
-    <!--食品新增-->
+    <!--商品新增-->
     <Modal
-      :title="winTitle + '食品信息'"
+      :title="winTitle + '商品信息'"
       width="600"
       v-model="modalShow"
       @on-cancel="closeFn"
       scrollable>
       <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
-        <FormItem label="食品名称" prop="name">
+        <FormItem label="商品名称" prop="name">
           <Input v-model="formValidate.name"></Input>
         </FormItem>
-        <FormItem label="食品分类" prop="category_id">
+        <FormItem label="商品分类" prop="category_id">
           <Select v-model="formValidate.category_id">
             <Option v-for="(item, index) in categoryList" :value="item.value" :key="index">{{ item.label }}</Option>
           </Select>
         </FormItem>
-        <FormItem label="食品介绍" prop="description">
+        <FormItem label="商品介绍" prop="description">
           <Input v-model="formValidate.description"></Input>
         </FormItem>
-        <FormItem label="食品图片" prop="image_path">
+        <FormItem label="商品图片" prop="image_path">
           <Upload
             :action="baseUrl + '/v1/addimg/food'"
             :max-size="2000"
@@ -175,7 +175,7 @@
                       style: {
                         fontWeight: '700'
                       }
-                    }, '食品ID：'),
+                    }, '商品ID：'),
                     h('span', params.row.item_id)
                   ]),
                   h('Col', {
@@ -190,7 +190,7 @@
                       style: {
                         fontWeight: '700'
                       }
-                    }, '食品分类：'),
+                    }, '商品分类：'),
                     h('span', params.row.category_name)
                   ]),
                   h('Col', {
@@ -212,9 +212,9 @@
               ]);
             }
           },
-          {key: 'name', title: '食品名称', align: 'center', minWidth: 100},
+          {key: 'name', title: '商品名称', align: 'center', minWidth: 100},
           {key: 'rating', title: '评分', align: 'center', minWidth: 100},
-          {key: 'description', title: '食品介绍', align: 'center', minWidth: 100},
+          {key: 'description', title: '商品介绍', align: 'center', minWidth: 100},
           {key: 'action',
             title: '操作',
             width: 150,
@@ -270,15 +270,15 @@
         address: '',
         ruleValidate: {
           name: [
-            { required: true, message: '食品名称不能为空！', trigger: 'blur' },
-            { type: 'string', min: 1, max: 20, message: '食品名称字符长度必须小于20！', trigger: 'blur' }
+            { required: true, message: '商品名称不能为空！', trigger: 'blur' },
+            { type: 'string', min: 1, max: 20, message: '商品名称字符长度必须小于20！', trigger: 'blur' }
           ],
           address: [
-            { required: true, message: '食品地址不能为空！', trigger: 'blur' },
-            { type: 'string', min: 1, max: 100, message: '食品地址字符长度必须小于100！', trigger: 'change' }
+            { required: true, message: '商品地址不能为空！', trigger: 'blur' },
+            { type: 'string', min: 1, max: 100, message: '商品地址字符长度必须小于100！', trigger: 'change' }
           ],
           description: [
-            { type: 'string', min: 1, max: 100, message: '食品描述字符长度必须小于100！', trigger: 'blur' }
+            { type: 'string', min: 1, max: 100, message: '商品描述字符长度必须小于100！', trigger: 'blur' }
           ],
           phone: [
             { required: true, message: '联系方式不能为空！', trigger: 'blur' },
@@ -286,7 +286,7 @@
           ],
           category_id: [],
           image_path: [
-            { required: true, message: '食品图片不能为空！', trigger: 'change' }
+            { required: true, message: '商品图片不能为空！', trigger: 'change' }
           ]
         },
         restaurantId: '',
@@ -376,7 +376,7 @@
           }
         });
       },
-      // 获取食品类型
+      // 获取商品类型
       getMenu (rowData) {
         let params = this.setStrOfUrl({
           restaurant_id: rowData.restaurant_id,
@@ -388,7 +388,7 @@
           }
         });
       },
-      // 获取食品地址
+      // 获取商品地址
       getAddressData () {
         let params = this.setStrOfUrl({
           type: 'search',
@@ -432,7 +432,7 @@
         });
         this.modalShow = true;
       },
-      // 食品规格修改
+      // 商品规格修改
       editStandardTable (rowData) {
         console.log('editStandardTable', rowData);
         this.winStandardTitle = '修改';
@@ -443,7 +443,7 @@
         });
         this.modalStandardShow = true;
       },
-      // 食品规格删除
+      // 商品规格删除
       deleteStandardTable (index) {
         this.tableStandardData.splice(index, 1);
       },
@@ -542,7 +542,7 @@
           this.tableStandardData = arr;
         }
       },
-      // 构造食品种类数据
+      // 构造商品种类数据
       setfoodCategory (response) {
         let categories = [...response];
         this.categoryList = [];

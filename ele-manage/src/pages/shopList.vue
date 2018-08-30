@@ -182,7 +182,7 @@
                 h('action-button', {
                   props: {
                     type: 'primary',
-                    text: '新增食品'
+                    text: '新增商品'
                   },
                   on: {
                     click: () => {
