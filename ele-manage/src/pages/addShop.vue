@@ -47,7 +47,19 @@
               </div>
             </div>
           </FormItem>
-          <FormItem label="商铺图片" prop="image_path">
+          <FormItem label="配送费" prop="float_delivery_fee">
+            <InputNumber :min="0" :max="20" v-model="formValidate.float_delivery_fee"></InputNumber>
+          </FormItem>
+          <FormItem label="起送价" prop="price">
+            <InputNumber :min="0" :max="100" v-model="formValidate.float_minimum_order_amount"></InputNumber>
+          </FormItem>
+          <FormItem label="营业起始时间" prop="startTime">
+            <TimePicker type="time" v-model="formValidate.startTime"></TimePicker>
+          </FormItem>
+          <FormItem label="营业结束时间" prop="endTime">
+            <TimePicker type="time" v-model="formValidate.endTime"></TimePicker>
+          </FormItem>
+          <FormItem label="店铺头像" prop="image_path">
             <Upload
               :action="baseUrl + '/v1/addimg/shop'"
               :max-size="2000"
@@ -58,27 +70,80 @@
               <img-show-wrap :imgSrc="formValidate.image_path"></img-show-wrap>
             </Upload>
           </FormItem>
+          <FormItem label="营业执照" prop="image_path">
+            <Upload
+              :action="baseUrl + '/v1/addimg/shop'"
+              :max-size="2000"
+              :on-success="fileUploadSuccess"
+              :on-error="fileUploadError"
+              type="drag"
+              accept="image/*">
+              <img-show-wrap :imgSrc="formValidate.business_license_image"></img-show-wrap>
+            </Upload>
+          </FormItem>
+          <FormItem label="餐饮服务许可证" prop="image_path">
+            <Upload
+              :action="baseUrl + '/v1/addimg/shop'"
+              :max-size="2000"
+              :on-success="fileUploadSuccess"
+              :on-error="fileUploadError"
+              type="drag"
+              accept="image/*">
+              <img-show-wrap :imgSrc="formValidate.catering_service_license_image"></img-show-wrap>
+            </Upload>
+          </FormItem>
+          <FormItem label="优惠活动" prop="activityValue">
+            <Select v-model="formValidate.activityValue" @on-change="selectActive">
+              <Option v-for="(item, index) in activityValueList" :value="item.value" :key="index">{{ item.label }}</Option>
+            </Select>
+          </FormItem>
         </Form>
+        <data-table
+          :columns="tableactivityColumns"
+          :data="tableactivityData"
+          :pageShow="false"
+          ref="pnsActivityTable">
+        </data-table>
+        <div slot="footer">
+          <action-button type="primary" text="添加" @click="addShop"></action-button>
+        </div>
       </div>
     </div>
 </template>
 <script>
-    export default {
+  import { baseUrl, baseImgPath } from '../../config/env';
+  export default {
         components: {},
         computed: {},
         data () {
             return {
+              baseUrl,
+              baseImgPath,
               formValidate: {
                 name: '',
                 address: '',
-                description: '',
                 phone: '',
-                category: [],
-                image_path: ''
+                description: '',
+                promotion_info: '',
+                category: '',
+                is_premium: true,
+                delivery_mode: true,
+                new: true,
+                zhun: true,
+                piao: true,
+                float_delivery_fee: '',
+                float_minimum_order_amount: '',
+                startTime: '',
+                endTime: '',
+                image_path: '',
+                business_license_image: '',
+                catering_service_license_image: '',
+                activityValue: ''
               },
               categoryList: [],
               addressData: [],
               address: '',
+              activityValueList: [],
               ruleValidate: {
                 name: [
                   { required: true, message: '商铺名称不能为空！', trigger: 'blur' },
@@ -101,11 +166,77 @@
                 ],
                 image_path: [
                   { required: true, message: '商铺图片不能为空！', trigger: 'change' }
+                ],
+                is_premium: [
+
+                ],
+                delivery_mode: [
+
+                ],
+                new: [
+                ],
+                bao: [
+
+                ],
+                zhun: [
+
+                ],
+                piao: [
+                ],
+                float_delivery_fee: [
+
+                ],
+                float_minimum_order_amount: [
+
+                ],
+                startTime: [
+                ],
+                endTime: [
+
+                ],
+                business_license_image: [
+
+                ],
+                catering_service_license_image: [
                 ]
-              }
+              },
+              tableactivityColumns: [
+                {key: 'icon_name', title: '活动标题', align: 'center', minWidth: 100},
+                {key: 'name', title: '活动名称', align: 'center', minWidth: 100},
+                {key: 'description', title: '活动详情', align: 'center', minWidth: 100},
+                {key: 'action',
+                  title: '操作',
+                  width: 140,
+                  align: 'center',
+                  render: (h, params) => {
+                    return h('div', {
+                      attrs: {
+                        class: 'table-cell-actions-wrap'
+                      }
+                    }, [
+                      h('action-button', {
+                        props: {
+                          type: 'error',
+                          text: '删除'
+                        },
+                        on: {
+                          click: () => {
+                            this.deleteactivityTable(params.row._index);
+                          }
+                        }
+                      })
+                    ]);
+                  }
+                }
+              ],
+              tableactivityData: []
             };
         },
-        methods: {},
+        methods: {
+          addShop () {},
+          selectActive () {},
+          deleteactivityTable (row, index) {}
+        },
         mounted () {
         },
         watch: {}
