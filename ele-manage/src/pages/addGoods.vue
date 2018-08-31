@@ -139,6 +139,37 @@
           attributes: '',
           foodSpecs: 'one'
         },
+        categoryList: [],
+        addressData: [],
+        address: '',
+        city: {},
+        ruleValidate: {
+          name: [
+            { required: true, message: '商品名称不能为空！', trigger: 'blur' },
+            { type: 'string', min: 1, max: 20, message: '商品名称字符长度必须小于20！', trigger: 'blur' }
+          ],
+          activity: [
+            { required: true, message: '商品活动不能为空！', trigger: 'blur' },
+            { type: 'string', min: 1, max: 100, message: '商品活动字符长度必须小于100！', trigger: 'blur' }
+          ],
+          description: [
+            { type: 'string', min: 1, max: 100, message: '商品描述字符长度必须小于100！', trigger: 'blur' }
+          ],
+          category: [
+            { required: true, type: 'array',  message: '商品分类不能为空！', trigger: 'change' },
+            { type: 'array', min: 1, max: 10, message: '商品分类字符长度必须小于10！', trigger: 'change' }
+          ],
+          attributes: [
+            { required: true, message: '商品特点不能为空！', trigger: 'blur' }
+          ],
+          foodSpecs: [],
+          packing_fee: [
+            { type: 'number', required: true, message: '包装费不能为空！', trigger: 'change' }
+          ],
+          price: [
+            { type: 'number', required: true, message: '价格不能为空！', trigger: 'change' }
+          ]
+        },
         categoryForm: {
           name: '',
           description: ''
@@ -150,50 +181,7 @@
           ],
           description: [
             { type: 'string', min: 1, max: 100, message: '种类描述字符长度必须小于100！', trigger: 'blur' }
-          ],
-        },
-        categoryList: [],
-        addressData: [],
-        address: '',
-        city: {},
-        activityValueList: [{
-          value: '满减优惠',
-          label: '满减优惠'
-        }, {
-          value: '优惠大酬宾',
-          label: '优惠大酬宾'
-        }, {
-          value: '新用户立减',
-          label: '新用户立减'
-        }, {
-          value: '进店领券',
-          label: '进店领券'
-        }],
-        ruleValidate: {
-          name: [
-            { required: true, message: '商品名称不能为空！', trigger: 'blur' },
-            { type: 'string', min: 1, max: 20, message: '商品名称字符长度必须小于20！', trigger: 'blur' }
-          ],
-          address: [
-            { required: true, message: '商品地址不能为空！', trigger: 'blur' },
-            { type: 'string', min: 1, max: 100, message: '商品地址字符长度必须小于100！', trigger: 'change' }
-          ],
-          description: [
-            { type: 'string', min: 1, max: 100, message: '商品描述字符长度必须小于100！', trigger: 'blur' }
-          ],
-          activity: [
-            { required: true, message: '联系电话不能为空！', trigger: 'blur' },
-            { validator: this.validatePhone, trigger: 'blur' }
-          ],
-          category: [
-            { required: true, type: 'array',  message: '商品分类不能为空！', trigger: 'change' },
-            { type: 'array', min: 1, max: 10, message: '商品分类字符长度必须小于10！', trigger: 'change' }
-          ],
-          endTime: [
-            { validator: this.validateTime, trigger: 'change' }
-          ],
-          business_license_image: [],
-          catering_service_license_image: []
+          ]
         },
         tableStandardColumns: [
           {key: 'specs', title: '规格', align: 'center', minWidth: 100},
