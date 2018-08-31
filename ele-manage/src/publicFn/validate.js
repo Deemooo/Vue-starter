@@ -13,6 +13,12 @@ export default {
     validatePhone (rule, value, callback) {
       (this._isTelephone(value) || this._isCellPhone(value)) ? callback() : this._erroTip(callback, '联系方式');
     },
+    validateTime (rule, value, callback) {
+      if (value) {
+        this._dateCheck(this.formValidate.startTime, value) ? callback() : this._erroTip(callback, '结束时间');
+      }
+      (this._isTelephone(value) || this._isCellPhone(value)) ? callback() : this._erroTip(callback, '联系方式');
+    },
     // 名称验证
     _nameTest (val) {
       let reg = /^[a-zA-Z][a-zA-Z0-9_]{3,15}$/;
@@ -32,6 +38,17 @@ export default {
     _isTelephone (val) {
       let reg = /^[-0-9+()]{1,20}$/;
       return val === '' || reg.test(val);
+    },
+    /**
+     * 时间校验
+     * 用于判断结束时间大于开始时间，支持Date与字符串类型
+     * starttime 开始时间
+     * endtime 结束时间
+     **/
+    _dateCheck (starttime, endtime) {
+      if (this._typeCheck(starttime) === this._typeCheck(endtime)) {
+        return starttime < endtime;
+      }
     },
     // 错误提示
     _erroTip (callback, label) {
