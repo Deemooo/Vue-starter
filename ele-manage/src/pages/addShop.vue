@@ -51,7 +51,7 @@
           <FormItem label="配送费" prop="float_delivery_fee">
             <InputNumber :min="0" :max="20" v-model="formValidate.float_delivery_fee"></InputNumber>
           </FormItem>
-          <FormItem label="起送价" prop="price">
+          <FormItem label="起送价" prop="float_minimum_order_amount">
             <InputNumber :min="0" :max="100" v-model="formValidate.float_minimum_order_amount"></InputNumber>
           </FormItem>
           <FormItem label="营业起始时间" prop="startTime">
@@ -64,6 +64,7 @@
             <Upload
               :action="baseUrl + '/v1/addimg/shop'"
               :max-size="2000"
+              :show-upload-list="false"
               :on-success="fileUploadSuccess"
               :on-error="fileUploadError"
               type="drag"
@@ -75,6 +76,7 @@
             <Upload
               :action="baseUrl + '/v1/addimg/shop'"
               :max-size="2000"
+              :show-upload-list="false"
               :on-success="fileUploadSuccess"
               :on-error="fileUploadError"
               type="drag"
@@ -86,6 +88,7 @@
             <Upload
               :action="baseUrl + '/v1/addimg/shop'"
               :max-size="2000"
+              :show-upload-list="false"
               :on-success="fileUploadSuccess"
               :on-error="fileUploadError"
               type="drag"
@@ -317,7 +320,39 @@
             });
           },
           // 商铺保存
-          saveFn () {},
+          saveFn () {
+            this.$refs.formValidate.validate((valid) => {
+              if (valid) {
+                let params = {...this.formValidate};
+                params['category'] = this.formValidate.category.join('/');
+                params['activities'] = this.tableActivityData;
+                params['latitude'] = this.address.latitude || '';
+                params['longitude'] = this.address.longitude || '';
+                console.log('params', params);
+                this.https({url: '/shopping/addShop', method: 'post', params}, (response) => {
+                  if (response.status === 1) {
+                    this.$Message.success(response.sussess);
+                    this.closeFn();
+                  } else {
+                    this.$Message.error(response.message);
+                  }
+                });
+              } else {
+                this.$Message.error('验证失败！');
+              }
+            });
+          },
+          // 商铺关闭
+          closeFn () {
+            this.formValidate.float_delivery_fee = 5;
+            this.formValidate.float_minimum_order_amount = 20;
+            this.formValidate.image_path = '';
+            this.formValidate.business_license_image = '';
+            this.formValidate.catering_service_license_image = '';
+
+            this.tableActivityData = [];
+            this.$refs.formValidate.resetFields();
+          },
           // 优惠活动保存
           saveActivityFn () {
             this.$refs.formActivityValidate.validate((valid) => {
@@ -379,13 +414,13 @@
           },
           // 文件上传相关方法
           fileUploadSuccess (tyep, response) {
-            let image_path = response.response.image_path;
+            let imagePath = response.response.image_path;
             if (this.uploadType === 'catering_service_license_image') {
-              this.formValidate.catering_service_license_image = baseImgPath + image_path;
+              this.formValidate.catering_service_license_image = baseImgPath + imagePath;
             } else if (this.uploadType === 'business_license_image') {
-              this.formValidate.business_license_image = baseImgPath + image_path;
+              this.formValidate.business_license_image = baseImgPath + imagePath;
             } else if (this.uploadType === 'image_path') {
-              this.formValidate.image_path = baseImgPath + image_path;
+              this.formValidate.image_path = baseImgPath + imagePath;
             }
           },
           fileUploadError (error) {

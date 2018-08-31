@@ -186,7 +186,7 @@
                   },
                   on: {
                     click: () => {
-                      this.addTable(params.row);
+                      this.addGoods(params.row);
                     }
                   }
                 }),
@@ -320,7 +320,7 @@
         });
       },
       // 新增
-      addTable (rowData) {
+      addGoods (rowData) {
         this.$router.push({path: 'addGoods', query: { restaurant_id: rowData.id }});
       },
       // 删除

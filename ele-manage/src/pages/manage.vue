@@ -84,12 +84,6 @@
                   icon: 'md-home',
                   name: 'addShop',
                   path: '/addShop'
-                },
-                {
-                  title: '添加商品',
-                  icon: 'md-beer',
-                  name: 'addGoods',
-                  path: '/addGoods'
                 }
               ]
             },
