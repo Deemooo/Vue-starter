@@ -11,7 +11,7 @@
         </FormItem>
         <FormItem label="商品图片" prop="image_path" >
           <Upload
-            :action="baseUrl + '/v1/addimg/shop'"
+            :action="baseUrl + '/v1/addimg/food'"
             :max-size="2000"
             :show-upload-list="false"
             :on-success="fileUploadSuccess"
@@ -24,9 +24,9 @@
         <FormItem label="商品详情" prop="description">
           <Input v-model="formValidate.description"></Input>
         </FormItem>
-        <FormItem label="商品种类" prop="category">
-          <Select v-model="formValidate.category">
-            <Option v-for="(item, index) in categoryList" :value="item.value" :key="index">{{ item.label }}</Option>
+        <FormItem label="商品种类" prop="category_id">
+          <Select v-model="formValidate.category_id">
+            <Option v-for="(item, index) in categoryList" :value="item.id" :key="index">{{ item.label }}</Option>
           </Select>
         </FormItem>
         <FormItem>
@@ -52,12 +52,12 @@
           </Collapse>
         </FormItem>
         <FormItem label="商品特点">
-          <Select v-model="formValidate.attributes">
-            <Option v-for="(item, index) in categoryList" :value="item.value" :key="index">{{ item.label }}</Option>
+          <Select v-model="formValidate.attribute" multiple>
+            <Option v-for="(item, index) in attributeList" :value="item.value" :key="index">{{ item.label }}</Option>
           </Select>
         </FormItem>
         <FormItem label="商品规格">
-          <RadioGroup v-model="formValidate.foodSpecs">
+          <RadioGroup v-model="foodSpecs">
             <Radio label="one">
               <span>单规格</span>
             </Radio>
@@ -66,12 +66,12 @@
             </Radio>
           </RadioGroup>
         </FormItem>
-        <div v-if="formValidate.foodSpecs === 'one'">
+        <div v-if="foodSpecs === 'one'">
           <FormItem label="包装费" prop="packing_fee">
-            <InputNumber :min="1" :max="100" v-model="formValidate.packing_fee"></InputNumber>
+            <InputNumber :min="1" :max="100" v-model="tableStandardData[0].packing_fee"></InputNumber>
           </FormItem>
           <FormItem label="价格" prop="price">
-            <InputNumber :min="1" :max="100" v-model="formValidate.price"></InputNumber>
+            <InputNumber :min="1" :max="100" v-model="tableStandardData[0].price"></InputNumber>
           </FormItem>
         </div>
         <div v-else>
@@ -102,8 +102,8 @@
       @on-cancel="closeStandardFn"
       scrollable>
       <Form ref="formStandardValidate" :model="formStandardValidate" :rules="ruleStandardValidate" :label-width="80">
-        <FormItem label="规格" prop="specs_name">
-          <Input v-model="formStandardValidate.specs_name"></Input>
+        <FormItem label="规格" prop="specs">
+          <Input v-model="formStandardValidate.specs"></Input>
         </FormItem>
         <FormItem label="包装费" prop="packing_fee">
           <InputNumber :min="1" :max="100" v-model="formStandardValidate.packing_fee"></InputNumber>
@@ -112,7 +112,7 @@
           <InputNumber :min="1" :max="100" v-model="formStandardValidate.price"></InputNumber>
         </FormItem>
       </Form>
-      <div slot="footer">
+      <div class="footer">
         <action-button text="取消" @click="closeStandardFn"></action-button>
         <action-button type="primary" text="保存" @click="saveStandardFn"></action-button>
       </div>
@@ -133,16 +133,21 @@
           activity: '',
           image_path: '',
           description: '',
-          category: [],
-          packing_fee: 5,
-          price: 20,
-          attributes: '',
-          foodSpecs: 'one'
+          category_id: '',
+          attribute: []
         },
+        foodSpecs: 'one',
         categoryList: [],
+        attributeList: [
+          {
+            value: '新',
+            label: '新品'
+          }, {
+            value: '招牌',
+            label: '招牌'
+          }
+        ],
         addressData: [],
-        address: '',
-        city: {},
         ruleValidate: {
           name: [
             { required: true, message: '商品名称不能为空！', trigger: 'blur' },
@@ -155,19 +160,11 @@
           description: [
             { type: 'string', min: 1, max: 100, message: '商品描述字符长度必须小于100！', trigger: 'blur' }
           ],
-          category: [
-            { required: true, type: 'array',  message: '商品分类不能为空！', trigger: 'change' },
-            { type: 'array', min: 1, max: 10, message: '商品分类字符长度必须小于10！', trigger: 'change' }
+          category_id: [
+            { required: true, type: 'number', message: '商品分类不能为空！', trigger: 'change' }
           ],
-          attributes: [
+          attribute: [
             { required: true, message: '商品特点不能为空！', trigger: 'blur' }
-          ],
-          foodSpecs: [],
-          packing_fee: [
-            { type: 'number', required: true, message: '包装费不能为空！', trigger: 'change' }
-          ],
-          price: [
-            { type: 'number', required: true, message: '价格不能为空！', trigger: 'change' }
           ]
         },
         categoryForm: {
@@ -199,17 +196,6 @@
               }, [
                 h('action-button', {
                   props: {
-                    type: 'warning',
-                    text: '修改'
-                  },
-                  on: {
-                    click: () => {
-                      this.editStandardTable(params.row);
-                    }
-                  }
-                }),
-                h('action-button', {
-                  props: {
                     type: 'error',
                     text: '删除'
                   },
@@ -223,15 +209,21 @@
             }
           }
         ],
-        tableStandardData: [],
+        tableStandardData: [
+          {
+            specs: '默认',
+            packing_fee: 0,
+            price: 20
+          }
+        ],
         modalStandardShow: false,
         formStandardValidate: {
-          specs_name: '',
+          specs: '',
           packing_fee: 0,
           price: 20
         },
         ruleStandardValidate: {
-          specs_name: [
+          specs: [
             { required: true, message: '规格不能为空！', trigger: 'blur' },
             { type: 'string', min: 1, max: 20, message: '规格字符长度必须小于20！', trigger: 'blur' }
           ],
@@ -267,12 +259,10 @@
         this.$refs.formValidate.validate((valid) => {
           if (valid) {
             let params = {...this.formValidate};
-            params['category'] = this.formValidate.category.join('/');
-            params['activities'] = this.tableStandardData;
-            params['latitude'] = this.address.latitude || '';
-            params['longitude'] = this.address.longitude || '';
+            params['specs'] = this.tableStandardData;
+            params['restaurant_id'] = this.restaurantId || '';
             console.log('params', params);
-            this.https({url: '/shopping/addShop', method: 'post', params}, (response) => {
+            this.https({url: '/shopping/addfood', method: 'post', params}, (response) => {
               if (response.status === 1) {
                 this.$Message.success(response.sussess);
                 this.closeFn();
@@ -320,40 +310,36 @@
       closeCategoryFn () {
         this.$refs.categoryForm.resetFields();
       },
-      // 优惠活动保存
+      // 新增规格
+      addStandard () {
+        this.modalStandardShow = true;
+      },
+      // 规格保存
       saveStandardFn () {
         this.$refs.formStandardValidate.validate((valid) => {
           if (valid) {
-            let params = {
-              icon_name: this.iconName,
-              name: this.formStandardValidate.name,
-              description: this.formStandardValidate.description
-            };
-            this.tableStandardData.push(params);
+            this.tableStandardData.push({...this.formStandardValidate});
             this.closeStandardFn();
           } else {
             this.$Message.error('验证失败！');
           }
         });
       },
-      // 优惠活动关闭
+      // 规格关闭
       closeStandardFn () {
         this.$refs.formStandardValidate.resetFields();
         this.modalStandardShow = false;
       },
-      // 优惠活动列表删除
+      // 规格列表删除
       deleteStandardTable (index) {
         this.tableStandardData.splice(index, 1);
       },
       // 构造商品种类数据
       setfoodCategory (response) {
-        this.categoryList = [];
-        [...response].forEach((item, index) => {
-          this.categoryList.push({
-            value: index,
-            label: item.name
-          });
-        })
+        [...response].map((item, index) => {
+          item.label = item.name;
+        });
+        this.categoryList = [...response];
       },
       // 文件上传相关方法
       fileUploadSuccess (response) {
