@@ -262,7 +262,7 @@
             params['specs'] = this.tableStandardData;
             params['restaurant_id'] = this.restaurantId || '';
             console.log('params', params);
-            this.https({url: '/shopping/addfood', method: 'post', params}, (response) => {
+            this.https({url: '/shopping/addfood', method: 'POST', params}, (response) => {
               if (response.status === 1) {
                 this.$Message.success(response.sussess);
                 this.closeFn();
