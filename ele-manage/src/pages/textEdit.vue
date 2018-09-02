@@ -11,7 +11,9 @@
         <div class="content-wrap" v-html="content"></div>
       </div>
     </div>
-    <action-button @click="textAction" class="button" type="primary" :text="editFlag ? '保存' :  '返回'"></action-button>
+    <div class="button-wrap">
+      <action-button @click="textAction" class="button" type="primary" :text="editFlag ? '保存' :  '返回'"></action-button>
+    </div>
   </div>
 </template>
 <script>
@@ -42,24 +44,19 @@
 </script>
 <style lang="less" scoped>
   .main-right-content-wrap {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
     height: 100%;
+    text-align: center;
     .quill-editor {
-      width: 100%;
-      height: 90%;
-      box-sizing: border-box;
-      margin: 10px 0;
-      .ql-container {
-        height: 90%;
-      }
+      height: 85%;
+      margin-bottom: 60px;
+    }
+    .button-wrap {
+      text-align: center;
     }
     .ql-container {
       width: 100%;
       height: 90%;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
       .content-wrap {
         width: 100%;
         height: 90%;
