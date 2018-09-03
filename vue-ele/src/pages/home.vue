@@ -11,7 +11,7 @@
         </div>
         <router-link :to="'/city/' + guessCityid" class="guess-city">
           <span>{{ guessCity }}</span>
-          <svg class="arrow_right">
+          <svg class="arrow-right">
             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
           </svg>
         </router-link>
@@ -88,6 +88,13 @@
         font-size: 0.75rem;
         text-decoration: none;
         border-bottom: 1px solid #e4e4e4;
+        .arrow-right {
+          position: absolute;
+          right: .4rem;
+          width: .6rem;
+          height: .6rem;
+          fill: #999;
+        }
       }
     }
   }
