@@ -2,12 +2,12 @@
 import { baseUrl } from '../../config/env';
 export default {
   install (Vue) {
-    Vue.prototype.https = async (config, successCallBack) => {
+    Vue.prototype.https = async (config) => {
       let url = baseUrl + config.url || '';
       let params = config.params || {};
       let requestConfig = {
         credentials: 'include',
-        method: config.method || 'get',
+        method: config.method.toUpperCase() || 'GET',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
@@ -15,7 +15,7 @@ export default {
         mode: 'cors',
         cache: 'force-cache'
       };
-      if (config.method === 'post') {
+      if (config.method === 'POST') {
         Object.defineProperty(requestConfig, 'body', {
           value: JSON.stringify(params)
         });
@@ -23,7 +23,7 @@ export default {
       try {
         const response = await fetch(url, requestConfig);
         const responseJson = await response.json();
-        successCallBack(responseJson);
+        return responseJson;
       } catch (error) {
         throw new Error(error);
       }

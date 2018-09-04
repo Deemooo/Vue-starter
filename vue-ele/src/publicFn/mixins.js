@@ -4,30 +4,6 @@ export default {
     return {};
   },
   methods: {
-    // 修改主题颜色
-    changeThemeColor (color) {
-      require(`../assets/style/myTheme/${color}.less`);
-    },
-    /**
-     * 表单回填
-     * beFilledData 需要回填的表单数据
-     * orginData 原数据
-    **/
-    backfillForm (beFilledData, orginData) {
-      Object.keys(beFilledData).forEach((key) => {
-        let value = (typeof orginData[key] !== 'undefined' && orginData[key] !== null) ? orginData[key] : '';
-        this.$set(beFilledData, key, value);
-      });
-    },
-    // 分页相关
-    pageChange (page) {
-      this.pageIndex = page;
-      this.getTableData();
-    },
-    pageSizeChange (size) {
-      this.pageSize = size;
-      this.getTableData();
-    },
     // 将数据写入sessionStorage
     setListData (key, data) {
       if (data && data.length !== 0) {
@@ -53,7 +29,7 @@ export default {
         Object.keys(data).forEach(key => {
           dataStr += key + '=' + data[key] + '&';
         });
-        return dataStr.substr(0, dataStr.lastIndexOf('&'));
+        return `?${dataStr.substr(0, dataStr.lastIndexOf('&'))}`;
       }
     },
     // 生成UUID

@@ -16,6 +16,14 @@
           </svg>
         </router-link>
       </nav>
+      <section class="hot-cities">
+        <div class="title">热门城市</div>
+        <div class="city-list">
+          <router-link  tag="span" v-for="item in hotcity" :to="'/city/' + item.id" :key="item.id">
+            {{item.name}}
+          </router-link>
+        </div>
+      </section>
     </div>
 </template>
 <script>
@@ -25,15 +33,27 @@
         data () {
             return {
               guessCityid: '',
-              guessCity: '北京'
+              guessCity: '北京',
+              hotcity: [],
+              groupcity: {}
             };
         },
         methods: {
           reload () {
             window.location.reload();
+          },
+          getHotcity () {
+            let params = this.setStrOfUrl({
+              type: 'hot'
+            });
+            this.https({url: '/v1/cities' + params, method: 'get'}).then(
+              (res) => {
+                this.hotcity = res;
+              });
           }
         },
         mounted () {
+          this.getHotcity();
         },
         watch: {}
     };
@@ -94,6 +114,36 @@
           width: .6rem;
           height: .6rem;
           fill: #999;
+        }
+      }
+    }
+    .hot-cities {
+      background-color: #fff;
+      margin-bottom: .4rem;
+      .title {
+        color: #666;
+        font-weight: 400;
+        padding-left: .4rem;
+        border-top: 1px solid #e4e4e4;
+        border-bottom: 1px solid #e4e4e4;
+        font: .55rem/1.45rem Helvetica Neue;
+      }
+      .city-list {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        flex-wrap: wrap;
+        width: 100%;
+        span {
+          flex: 0 0 25%;
+          box-sizing: border-box;
+          text-align: center;
+          color: #3190e8;
+          border-bottom: .025rem solid #e4e4e4;
+          border-right: .025rem solid #e4e4e4;
+          height: 1.75rem;
+          font: .6rem/1.75rem Microsoft YaHei;
         }
       }
     }
