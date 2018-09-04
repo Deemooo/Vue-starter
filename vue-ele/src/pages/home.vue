@@ -20,8 +20,23 @@
         <div class="title">热门城市</div>
         <div class="city-list">
           <router-link  tag="span" v-for="item in hotcity" :to="'/city/' + item.id" :key="item.id">
-            {{item.name}}
+            {{ item.name }}
           </router-link>
+        </div>
+      </section>
+      <section class="hot-cities cities-list">
+        <div v-for="(value, key) in sortgroupcity" :key="key">
+          <div class="title">{{ key }}</div>
+          <div class="city-list">
+            <router-link
+              tag="span"
+              v-for="item in value" :to="'/city/' + item.id"
+              :key="item.id"
+              :title="item.name"
+              class="city">
+              {{ item.name }}
+            </router-link>
+          </div>
         </div>
       </section>
     </div>
@@ -29,7 +44,17 @@
 <script>
     export default {
         components: {},
-        computed: {},
+        computed: {
+          sortgroupcity () {
+            let sortobj = {};
+            for (let i = 65; i <= 90; i++) {
+              if (this.groupcity[String.fromCharCode(i)]) {
+                sortobj[String.fromCharCode(i)] = this.groupcity[String.fromCharCode(i)];
+              }
+            }
+            return sortobj
+          }
+        },
         data () {
             return {
               guessCityid: '',
@@ -50,10 +75,20 @@
               (res) => {
                 this.hotcity = res;
               });
+          },
+          getGroupcity () {
+            let params = this.setStrOfUrl({
+              type: 'group'
+            });
+            this.https({url: '/v1/cities' + params, method: 'get'}).then(
+              (res) => {
+                this.groupcity = res;
+              });
           }
         },
         mounted () {
           this.getHotcity();
+          this.getGroupcity();
         },
         watch: {}
     };
@@ -95,6 +130,7 @@
           color: #666;
         }
         span:last-child {
+          margin-left: 3rem;
           font-weight: 900;
           font-size: .475rem;
           color: #9f9f9f;
@@ -107,6 +143,7 @@
         padding-left: .4rem;
         font-size: 0.75rem;
         text-decoration: none;
+        color: #3190e8;
         border-bottom: 1px solid #e4e4e4;
         .arrow-right {
           position: absolute;
@@ -144,6 +181,16 @@
           border-right: .025rem solid #e4e4e4;
           height: 1.75rem;
           font: .6rem/1.75rem Microsoft YaHei;
+        }
+      }
+    }
+    .cities-list {
+      .city-list {
+        .city {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          color: #666;
         }
       }
     }
