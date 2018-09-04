@@ -24,8 +24,8 @@
           </router-link>
         </div>
       </section>
-      <section class="hot-cities cities-list">
-        <div v-for="(value, key) in sortgroupcity" :key="key">
+      <section>
+        <div v-for="(value, key) in sortgroupcity" :key="key" class="hot-cities group-city">
           <div class="title">{{ key }}</div>
           <div class="city-list">
             <router-link
@@ -184,15 +184,17 @@
         }
       }
     }
-    .cities-list {
-      .city-list {
-        .city {
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          color: #666;
+    .group-city {
+        .cities-list {
+          .city-list {
+            .city {
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              color: #666;
+            }
+          }
         }
       }
-    }
   }
 </style>
