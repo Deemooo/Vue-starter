@@ -185,14 +185,12 @@
       }
     }
     .group-city {
-        .cities-list {
-          .city-list {
-            .city {
-              overflow: hidden;
-              text-overflow: ellipsis;
-              white-space: nowrap;
-              color: #666;
-            }
+        .city-list {
+          .city {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: #666;
           }
         }
       }

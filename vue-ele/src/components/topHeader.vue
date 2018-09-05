@@ -4,11 +4,12 @@
   </header>
 </template>
 <script>
-    export default {
+  export default {
         components: {},
         computed: {},
         data () {
-            return {};
+            return {
+            };
         },
         methods: {},
         mounted () {
