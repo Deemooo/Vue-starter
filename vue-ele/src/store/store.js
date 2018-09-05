@@ -10,7 +10,7 @@ export default new Vuex.Store({
   mutations: {
     updateCityInfo (state, data) {
       Object.keys(data).forEach((key) => {
-        state.cityInfo[key] = data[key];
+        Vue.set(state.cityInfo, key, data[key]);
       });
     }
   },

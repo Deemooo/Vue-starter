@@ -2,11 +2,11 @@
     <div class="city">
       <top-header>
         <template>
-          <svg class="arrow-left" xmlns="http://www.w3.org/2000/svg" version="1.1">
+          <svg class="arrow-left" xmlns="http://www.w3.org/2000/svg" version="1.1" @click="$router.go(-1)">
             <polyline points="12,18 4,9 12,0" style="fill:none;stroke:rgb(255,255,255);stroke-width:2"/>
           </svg>
           <span class="city-name">{{ cityInfo.name }}</span>
-          <span class="change-city">切换城市</span>
+          <span class="change-city" @click="$router.push('/')">切换城市</span>
         </template>
       </top-header>
       <form class="city-form" v-on:submit.prevent>
@@ -14,10 +14,10 @@
           <input type="search" name="city" placeholder="输入学校、商务楼、地址" class="search-input" required v-model='inputVaule'>
         </div>
         <div>
-          <input type="submit" name="submit" class="search-submit" @click='postpois' value="提交">
+          <input type="submit" name="submit" class="search-submit" @click='getPois' value="提交">
         </div>
       </form>
-      <div class="search-history">
+      <div v-if="placeList.length === 0" class="search-history">
         <div class="title">搜索历史</div>
         <div class="history-list">
           <div class="list-item">
@@ -27,6 +27,12 @@
         </div>
         <div class="clear-all">清空所有</div>
       </div>
+      <div v-else class="search-result">
+        <div v-for="(item, index) in placeList" :key="index" @click='selectPlace(index, item.geohash)' class="list-item">
+          <div class="local">{{ item.name }}</div>
+          <div class="content">{{ item.address }}</div>
+        </div>
+      </div>
     </div>
 </template>
 <script>
@@ -35,12 +41,15 @@
       components: {},
       computed: {
         ...mapState([
-          'cityInfo'
+          'cityInfo',
+          'cityName'
         ])
       },
       data () {
           return {
-            cityId: ''
+            cityId: '',
+            inputVaule: '',
+            placeList: []
           };
       },
       methods: {
@@ -52,6 +61,24 @@
             (res) => {
               this.updateCityInfo(res);
             });
+        },
+        getPois () {
+          if (this.inputVaule) {
+            let params = this.setStrOfUrl({
+              type: 'search',
+              city_id: this.cityId,
+              keyword: this.inputVaule
+            });
+            this.https({url: '/v1/pois' + params, method: 'get'}).then(
+              (res) => {
+                this.placeList = res;
+              });
+          } else {
+            alert('请输入学校、商务楼、地址进行搜索！');
+          }
+        },
+        selectPlace (index, geohash) {
+
         }
       },
       mounted () {
@@ -64,7 +91,6 @@
 <style lang="less" scoped>
   .city {
     width: 100%;
-    height: 100%;
     overflow-y: auto;
     position: relative;
     svg, span {
@@ -156,6 +182,27 @@
         text-align: center;
         font-size: .65rem;
         color: #333;
+      }
+    }
+    .search-result {
+      background-color: #fff;
+      border-top: 1px solid #e4e4e4;
+      .list-item {
+        margin: 0 auto;
+        border-top: 1px solid #e4e4e4;
+        border-bottom: 1px solid #e4e4e4;
+        .local, .content {
+          width: 90%;
+          padding: .3rem;
+          margin-left: .35rem;
+          font-size: .65rem;
+          color: #333;
+        }
+        .content {
+          padding-top: 0;
+          font-size: .45rem;
+          color: #999;
+        }
       }
     }
   }
