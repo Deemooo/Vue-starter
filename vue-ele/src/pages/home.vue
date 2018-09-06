@@ -9,7 +9,7 @@
           <span>当前定位城市：</span>
           <span>定位不准时，请在城市列表中选择</span>
         </div>
-        <router-link :to="'/city/' + guessCityid" class="guess-city">
+        <router-link :to="'/city/' + guessCityId" class="guess-city">
           <span>{{ guessCity }}</span>
           <svg class="arrow-right">
             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
@@ -57,8 +57,8 @@
         },
         data () {
             return {
-              guessCityid: '',
-              guessCity: '北京',
+              guessCityId: '',
+              guessCity: '',
               hotcity: [],
               groupcity: {}
             };
@@ -67,7 +67,19 @@
           reload () {
             window.location.reload();
           },
-          getHotcity () {
+          // 获取热门城市
+          getCurrentCity () {
+            let params = this.setStrOfUrl({
+              type: 'guess'
+            });
+            this.https({url: '/v1/cities' + params, method: 'get'}).then(
+              (res) => {
+                this.guessCity = res.name || '';
+                this.guessCityId = res.id || '';
+              });
+          },
+          // 获取热门城市
+          getHotCity () {
             let params = this.setStrOfUrl({
               type: 'hot'
             });
@@ -76,7 +88,8 @@
                 this.hotcity = res;
               });
           },
-          getGroupcity () {
+          // 获取所有城市
+          getGroupCity () {
             let params = this.setStrOfUrl({
               type: 'group'
             });
@@ -87,8 +100,9 @@
           }
         },
         mounted () {
-          this.getHotcity();
-          this.getGroupcity();
+          this.getCurrentCity();
+          this.getHotCity();
+          this.getGroupCity();
         },
         watch: {}
     };

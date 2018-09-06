@@ -17,15 +17,15 @@
           <input type="submit" name="submit" class="search-submit" @click='getPois' value="提交">
         </div>
       </form>
-      <div v-if="placeList.length === 0" class="search-history">
+      <div v-if="showFlag && placeHistory.length !== 0" class="search-history">
         <div class="title">搜索历史</div>
         <div class="history-list">
-          <div class="list-item">
-            <div class="local">大雁塔</div>
-            <div class="content">陕西省西安市雁塔区雁塔路</div>
+          <div v-for="(item, index) in placeHistory" :key="index" @click='selectHistoryItem(item.geohash)' class="list-item">
+            <div class="local">{{ item.name }}</div>
+            <div class="content">{{ item.address }}</div>
           </div>
         </div>
-        <div class="clear-all">清空所有</div>
+        <div @click="clearAll" class="clear-all">清空所有</div>
       </div>
       <div v-else class="search-result">
         <div v-for="(item, index) in placeList" :key="index" @click='selectPlace(index, item.geohash)' class="list-item">
@@ -49,7 +49,10 @@
           return {
             cityId: '',
             inputVaule: '',
-            placeList: []
+            placeList: [],
+            placeHistory: [],
+            historyArr: [],
+            showFlag: true
           };
       },
       methods: {
@@ -72,18 +75,45 @@
             this.https({url: '/v1/pois' + params, method: 'get'}).then(
               (res) => {
                 this.placeList = res;
+                this.showFlag = false;
               });
           } else {
             alert('请输入学校、商务楼、地址进行搜索！');
           }
         },
+        selectHistoryItem (geohash) {
+          this.$router.push(
+            {
+            path: '/msite',
+            query: {geohash}
+            });
+        },
         selectPlace (index, geohash) {
-
+          let history = this.getListData('searchHistory');
+          if (!history) {
+            this.historyArr.push(this.placeList[index]);
+          } else {
+            let res = history.every((item) => {
+              return item.geohash !== geohash;
+            });
+            if (res) {
+              this.historyArr.push(this.placeList[index]);
+            }
+          }
+          // this.selectHistoryItem(geohash);
+          this.setListData('searchHistory', this.historyArr);
+        },
+        clearAll () {
+          this.placeHistory = [];
+          this.removeListData('searchHistory');
+          this.showFlag = false;
         }
       },
       mounted () {
         this.cityId = this.$route.params.cityid || '';
         this.getCurrentcity();
+        this.placeHistory = this.getListData('searchHistory') || [];
+        this.historyArr = this.getListData('searchHistory') || [];
       },
       watch: {}
     };
@@ -181,7 +211,9 @@
         padding: .4rem 0;
         text-align: center;
         font-size: .65rem;
+        font-weight: 700;
         color: #333;
+        border-bottom: 1px solid #e4e4e4;
       }
     }
     .search-result {
