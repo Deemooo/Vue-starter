@@ -119,6 +119,7 @@
     };
 </script>
 <style lang="less" scoped>
+  @import (reference) "../assets/style/dynamic";
   .city {
     width: 100%;
     overflow-y: auto;
@@ -150,8 +151,8 @@
     }
     .city-form {
       background-color: #fff;
-      border-top: 1px solid #e4e4e4;
-      border-bottom: 1px solid #e4e4e4;
+      border-top: 1px solid @gray;
+      border-bottom: 1px solid @gray;
       margin-top: 1.95rem;
       padding-top: .4rem;
       div {
@@ -159,10 +160,10 @@
         margin: 0 auto;
         text-align: center;
         input {
-          border: 1px solid #e4e4e4;
+          border: 1px solid @gray;
           padding: 0 .3rem;
           font-size: .65rem;
-          color: #333;
+          color: @fontColor;
           outline: none;
         }
         .search-input, .search-submit {
@@ -172,7 +173,7 @@
           height: 1.4rem;
         }
         .search-submit {
-          background-color: #3190e8;
+          background-color: @blue;
           font-size: .65rem;
           color: #fff;
         }
@@ -181,18 +182,18 @@
     .search-history {
       margin-top: .4rem;
       background-color: #fff;
-      border-top: 1px solid #e4e4e4;
+      border-top: 1px solid @gray;
       .history-list {
         .list-item {
           margin: 0 auto;
-          border-top: 1px solid #e4e4e4;
-          border-bottom: 1px solid #e4e4e4;
+          border-top: 1px solid @gray;
+          border-bottom: 1px solid @gray;
           .local, .content {
             width: 90%;
             padding: .3rem;
             margin-left: .35rem;
             font-size: .65rem;
-            color: #333;
+            color: @fontColor;
           }
           .content {
             padding-top: 0;
@@ -212,23 +213,23 @@
         text-align: center;
         font-size: .65rem;
         font-weight: 700;
-        color: #333;
-        border-bottom: 1px solid #e4e4e4;
+        color: @fontColor;
+        border-bottom: 1px solid @gray;
       }
     }
     .search-result {
       background-color: #fff;
-      border-top: 1px solid #e4e4e4;
+      border-top: 1px solid @gray;
       .list-item {
         margin: 0 auto;
-        border-top: 1px solid #e4e4e4;
-        border-bottom: 1px solid #e4e4e4;
+        border-top: 1px solid @gray;
+        border-bottom: 1px solid @gray;
         .local, .content {
           width: 90%;
           padding: .3rem;
           margin-left: .35rem;
           font-size: .65rem;
-          color: #333;
+          color: @fontColor;
         }
         .content {
           padding-top: 0;

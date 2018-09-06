@@ -2,7 +2,7 @@
     <div class="home">
       <top-header>
         <span class="head-logo" @click="reload">ele.me</span>
-        <span class="head-login">登录 | 注册</span>
+        <span class="head-login" @click="$router.push('login')">登录 | 注册</span>
       </top-header>
       <nav class="city-nav">
         <div class="tip">
@@ -108,6 +108,7 @@
     };
 </script>
 <style lang="less" scoped>
+  @import (reference) "../assets/style/dynamic";
   .home {
     width: 100%;
     height: 100%;
@@ -130,18 +131,18 @@
     }
     .city-nav {
       padding-top: 2.35rem;
-      border-top: 1px solid #e4e4e4;
+      border-top: 1px solid @gray;
       background-color: #fff;
       margin-bottom: .4rem;
       .tip {
         display: flex;
         align-items: center;
         line-height: 1.45rem;
-        border-bottom: 1px solid #e4e4e4;
+        border-bottom: 1px solid @gray;
         span:first-child {
           margin-left: .4rem;
           font-size: .55rem;
-          color: #666;
+          color: @fontColor1;
         }
         span:last-child {
           margin-left: 3rem;
@@ -157,8 +158,8 @@
         padding-left: .4rem;
         font-size: 0.75rem;
         text-decoration: none;
-        color: #3190e8;
-        border-bottom: 1px solid #e4e4e4;
+        color: @blue;
+        border-bottom: 1px solid @gray;
         .arrow-right {
           position: absolute;
           right: .4rem;
@@ -172,11 +173,11 @@
       background-color: #fff;
       margin-bottom: .4rem;
       .title {
-        color: #666;
+        color: @fontColor1;
         font-weight: 400;
         padding-left: .4rem;
-        border-top: 1px solid #e4e4e4;
-        border-bottom: 1px solid #e4e4e4;
+        border-top: 1px solid @gray;
+        border-bottom: 1px solid @gray;
         font: .55rem/1.45rem Helvetica Neue;
       }
       .city-list {
@@ -190,9 +191,9 @@
           flex: 0 0 25%;
           box-sizing: border-box;
           text-align: center;
-          color: #3190e8;
-          border-bottom: .025rem solid #e4e4e4;
-          border-right: .025rem solid #e4e4e4;
+          color: @blue;
+          border-bottom: .025rem solid @gray;
+          border-right: .025rem solid @gray;
           height: 1.75rem;
           font: .6rem/1.75rem Microsoft YaHei;
         }
@@ -204,7 +205,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            color: #666;
+            color: @fontColor1;
           }
         }
       }
