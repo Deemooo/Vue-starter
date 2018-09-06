@@ -10,10 +10,14 @@
       </top-header>
       <form class="login-form">
         <div>
-          <input type="text" name="count" placeholder="账号" class="search-input" required v-model='userAccount'>
+          <input type="text" name="count" placeholder="账号" class="count" required v-model='userAccount'>
         </div>
         <div>
-          <input type="password" name="password" placeholder="密码" class="search-input" required v-model='password'>
+          <input type="password" name="password" placeholder="密码" class="password" required v-model='password'>
+        </div>
+        <div class="code-wrap">
+          <input type="text" name="codeNumber" placeholder="验证码" class="code" maxlength="4" v-model="codeNumber">
+          <img v-show="captchaCodeImg" :src="captchaCodeImg" alt="验证码" @click="getCaptchaCode">
         </div>
       </form>
     </div>
@@ -25,11 +29,22 @@
         data () {
             return {
               userAccount: '',
-              password: ''
+              password: '',
+              codeNumber: '',
+              captchaCodeImg: ''
             };
         },
-        methods: {},
+        methods: {
+          getCaptchaCode () {
+            let params = {};
+            this.https({url: '/v1/captchas', params, method: 'post'}).then(
+              (res) => {
+                this.captchaCodeImg = res.code;
+              });
+          }
+        },
         mounted () {
+          this.getCaptchaCode();
         },
         watch: {}
     };
@@ -64,21 +79,29 @@
         margin: 0 auto;
         text-align: left;
         input {
-          border: 1px solid @gray;
+          height: 1.4rem;
+          width: 60%;
+          border-radius: .1rem;
           padding: 0 .3rem;
+          margin-bottom: .4rem;
+          border: 1px solid @gray;
           font-size: .65rem;
           color: @fontColor;
           outline: none;
-        }
-        .search-input, .search-submit {
-          border-radius: .1rem;
-          margin-bottom: .4rem;
-          height: 1.4rem;
         }
         .search-submit {
           background-color: @blue;
           font-size: .65rem;
           color: #fff;
+        }
+      }
+      .code-wrap {
+        display: flex;
+        align-items: center;
+        img {
+          margin-bottom: .4rem;
+          margin-left: 1.2rem;
+          background-color: @gray;
         }
       }
     }
