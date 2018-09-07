@@ -5,13 +5,19 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    cityInfo: {}
+    cityInfo: {},
+    userInfo: {}
   },
   mutations: {
     updateCityInfo (state, data) {
-      Object.keys(data).forEach((key) => {
-        Vue.set(state.cityInfo, key, data[key]);
-      });
+      if (data) {
+        state.cityInfo = data;
+      }
+    },
+    updateUserInfo (state, data) {
+      if (data) {
+        state.userInfo = data;
+      }
     }
   },
   actions: {

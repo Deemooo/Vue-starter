@@ -15,7 +15,7 @@ export default {
         mode: 'cors',
         cache: 'force-cache'
       };
-      if (config.method === 'POST') {
+      if (requestConfig.method === 'POST') {
         Object.defineProperty(requestConfig, 'body', {
           value: JSON.stringify(params)
         });

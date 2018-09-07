@@ -41,8 +41,7 @@
       components: {},
       computed: {
         ...mapState([
-          'cityInfo',
-          'cityName'
+          'cityInfo'
         ])
       },
       data () {
@@ -128,7 +127,6 @@
       box-sizing: border-box;
     }
     .city-name {
-      flex: 0 0 86%;
       font-size: .8rem;
       color: #fff;
       text-align: center;
@@ -141,9 +139,7 @@
       text-align: left;
     }
     .change-city {
-      position: absolute;
-      right: .4rem;
-      display: inline-block;
+      margin-right: .4rem;
       font-weight: 400;
       font-size: .7rem;
       color: #fff;

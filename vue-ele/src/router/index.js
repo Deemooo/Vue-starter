@@ -21,6 +21,11 @@ export default new Router({
       path: '/profile',
       component: resolve => require(['../pages/profile.vue'], resolve)
     },
+    // 重置密码页
+    {
+      path: '/forget',
+      component: resolve => require(['../pages/forget.vue'], resolve)
+    },
     // 当前选择城市页
     {
       path: '/city/:cityid',
