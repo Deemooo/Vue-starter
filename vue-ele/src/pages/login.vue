@@ -9,7 +9,8 @@
           <span class="change-login-way" @click="changeLoginWay">登录方式</span>
         </template>
       </top-header>
-      <form class="login-form" v-on:submit.prevent>
+      <!--密码登陆-->
+      <form class="login-form" v-on:submit.prevent v-if="loginWay">
         <div>
           <input type="text" name="count" placeholder="账号" class="count" required v-model='userAccount'>
         </div>
@@ -29,6 +30,21 @@
         </div>
         <div class="reset-btn" @click="$router.push('forget')">重置密码？</div>
       </form>
+      <!--手机号登陆-->
+      <form class="login-form" v-on:submit.prevent v-else>
+        <div>
+          <input type="text" placeholder="手机号码" name="phone" maxlength="11" required v-model='phoneNumber'>
+          <span class="get-code-btn" :class="{'sended': !sendFlag}" @click.self="getVerifyCode" v-if="!sendFlag">获取验证码</span>
+          <span class="get-code-btn" v-else>已发送 ({{ computeTime }}s)</span>
+        </div>
+        <div class="code-wrap">
+          <input type="text" placeholder="验证码" name="mobileCode" maxlength="6" v-model="mobileCode">
+        </div>
+        <div class="login-btn">
+          <input @click="login" type="submit" name="submit" class="login-submit" value="登陆">
+        </div>
+        <div class="reset-btn" @click="$router.push('forget')">重置密码？</div>
+      </form>
     </div>
 </template>
 <script>
@@ -44,19 +60,37 @@
               captchaCodeImg: '',
               showPassword: false,
               loginWay: true,
-              userInfo: {}
+              userInfo: {},
+              phoneNumber: '',
+              mobileCode: '',
+              sendFlag: false,
+              computeTime: 60
             };
         },
         methods: {
           ...mapMutations([
             'updateUserInfo'
           ]),
+          // 获取验证码
           getCaptchaCode () {
             let params = {};
             this.https({url: '/v1/captchas', params, method: 'post'}).then(
               (res) => {
                 this.captchaCodeImg = res.code;
               });
+          },
+          // 获取短信验证码
+          getVerifyCode () {
+            this.sendFlag = true;
+            let clock = setInterval(() => {
+              if (this.computeTime <= 0) {
+                clearInterval(clock);
+                this.sendFlag = false;
+                this.computeTime = 60;
+              } else {
+                --this.computeTime;
+              }
+            }, 1000);
           },
           // 登陆
           login () {
@@ -67,7 +101,7 @@
               alert('请输入密码！');
               return;
             } else if (!this.codeNumber) {
-              alert('验证码！');
+              alert('请输入验证码！');
               return;
             }
             let params = {
@@ -108,6 +142,7 @@
     overflow-y: auto;
     position: relative;
     .login-way, .change-login-way {
+      flex: 0 0 33.333%;
       font-size: .8rem;
       line-height: .8rem;
       color: #fff;
@@ -115,12 +150,15 @@
       font-weight: 700;
     }
     .change-login-way {
-      margin-right: .4rem;
+      position: relative;
+      left: .4rem;
+      flex: 0 0 33.333%;
       font-size: .6rem;
       font-weight: 400;
       line-height: .6rem;
     }
     .arrow-left {
+      flex: 0 0 33.333%;
       margin-left: .4rem;
       width: .6rem;
       height: .8rem;
@@ -129,23 +167,36 @@
     .login-form {
       background-color: #fff;
       border-top: 1px solid @gray;
-      border-bottom: 1px solid @gray;
       margin-top: 1.95rem;
-      padding-top: .4rem;
       div {
-        width: 90%;
-        margin: 0 auto;
+        width: 100%;
+        padding: .2rem 0;
+        border-top: 1px solid @gray;
         text-align: left;
         input {
           height: 1.4rem;
           width: 60%;
+          margin-left: .4rem;
           border-radius: .1rem;
           padding: 0 .3rem;
-          margin-bottom: .4rem;
           border: none;
           font-size: .65rem;
           color: @fontColor;
           outline: none;
+        }
+        input[type=submit] {
+          margin-left: 0;
+        }
+        .get-code-btn {
+          height: 1rem;
+          padding: .28rem .4rem;
+          border-radius: 0.15rem;
+          background-color: @gray;
+          font-size: .65rem;
+          color: #fff;
+        }
+        .sended {
+          background-color: @blue;
         }
       }
       .password-wrap {
@@ -156,17 +207,17 @@
           width: 2rem;
           height: 1rem;
           padding: 0 .2rem;
-          margin-bottom: .4rem;
           margin-left: 1.2rem;
           border: 1px;
           border-radius: .5rem;
           background-color: @backColor;
           .switch-button {
             position: absolute;
-            top: 0;
+            top: -.1rem;
             left: 0;
             width: 1.2rem;
-            height: 100%;
+            height: 1.2rem;
+            padding: 0;
             box-shadow: 0 0.02667rem 0.05333rem 0 rgba(0,0,0,.1);
             background-color: @gray;
             border-radius: 50%;
@@ -177,32 +228,33 @@
           }
         }
         .password-show {
-          background-color: #4cd964;
+          background-color: @blue;
         }
       }
       .code-wrap {
         display: flex;
         align-items: center;
         img {
-          margin-bottom: .4rem;
-          margin-left: 1.2rem;
+          margin-left: 1.4rem;
           background-color: @gray;
         }
       }
       .login-btn {
         position: relative;
-        width: 90%;
+        width: 100%;
         text-align: center;
         .login-submit {
-          width: 100%;
+          width: 90%;
+          margin-top: .4rem;
           background-color: @blue;
           font-size: .65rem;
           color: #fff;
         }
       }
       .reset-btn {
-        margin: 0 .4rem .4rem .41rem;
-        padding-left: .3rem;
+        box-sizing: border-box;
+        padding-right: .6rem;
+        border: none;
         font-size: .6rem;
         color: #3b95e9;
         text-align: right;

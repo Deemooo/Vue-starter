@@ -24,7 +24,6 @@
     left: 0;
     top: 0;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     width: 100%;
     height: 1.95rem;
