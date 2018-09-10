@@ -125,24 +125,28 @@
     position: relative;
     svg, span {
       box-sizing: border-box;
+      color: #fff;
     }
     .city-name {
+      flex: 0 0 33.333%;
       font-size: .8rem;
-      color: #fff;
       text-align: center;
       font-weight: 700;
     }
     .arrow-left {
       margin-left: .4rem;
-      width: .6rem;
+      flex: 0 0 33.333%;
       height: .8rem;
-      text-align: left;
     }
     .change-city {
-      margin-right: .4rem;
+      position: relative;
+      left: .4rem;
+      -webkit-box-flex: 0;
+      -ms-flex: 0 0 33.333%;
+      flex: 0 0 33.333%;
+      font-size: .6rem;
       font-weight: 400;
-      font-size: .7rem;
-      color: #fff;
+      line-height: .6rem;
       text-align: center;
     }
     .city-form {
