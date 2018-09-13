@@ -99,7 +99,7 @@
               this.historyArr.push(this.placeList[index]);
             }
           }
-          // this.selectHistoryItem(geohash);
+          this.selectHistoryItem(geohash);
           this.setListData('searchHistory', this.historyArr);
         },
         clearAll () {
