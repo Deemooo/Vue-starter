@@ -14,6 +14,7 @@
           <span class="head-login" @click="$router.push('login')">登录 | 注册</span>
         </template>
       </top-header>
+      <bottom-footer></bottom-footer>
     </div>
 </template>
 <script>

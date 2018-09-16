@@ -10,6 +10,8 @@ import mixins from  './publicFn/mixins';
 
 // 顶栏
 import topHeader from './components/topHeader.vue';
+// 顶栏
+import bottomFooter from './components/bottomFooter.vue';
 
 Vue.config.productionTip = false;
 
@@ -17,6 +19,7 @@ Vue.use(https);
 Vue.mixin(mixins);
 
 Vue.component('top-header', topHeader);
+Vue.component('bottom-footer', bottomFooter);
 
 /* eslint-disable no-new */
 new Vue({
