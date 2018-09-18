@@ -6,7 +6,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     cityInfo: {},
-    userInfo: {}
+    userInfo: {},
+    geohash: ''
   },
   mutations: {
     updateCityInfo (state, data) {
@@ -17,6 +18,11 @@ export default new Vuex.Store({
     updateUserInfo (state, data) {
       if (data) {
         state.userInfo = data;
+      }
+    },
+    saveGeohash (state, data) {
+      if (data) {
+        state.geohash = data;
       }
     }
   },

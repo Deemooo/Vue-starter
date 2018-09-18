@@ -130,6 +130,7 @@
     .city-name {
       flex: 0 0 33.333%;
       font-size: .8rem;
+      line-height: .8rem;
       text-align: center;
       font-weight: 700;
     }

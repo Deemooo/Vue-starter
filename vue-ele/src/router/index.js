@@ -36,10 +36,15 @@ export default new Router({
       path: '/msite',
       component: resolve => require(['../pages/msite.vue'], resolve)
     },
-    //搜索页
+    // 搜索页
     {
       path: '/search/:geohash',
       component: resolve => require(['../pages/search.vue'], resolve)
+    },
+    // 订单页
+    {
+      path: '/order',
+      component: resolve => require(['../pages/order.vue'], resolve)
     }
   ]
 });

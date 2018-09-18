@@ -14,10 +14,13 @@
           <span class="head-login" @click="$router.push('login')">登录 | 注册</span>
         </template>
       </top-header>
+      <nav class="nav"></nav>
+      <div class="shop-list"></div>
       <bottom-footer></bottom-footer>
     </div>
 </template>
 <script>
+    import { mapMutations } from 'vuex';
     export default {
         components: {},
         computed: {},
@@ -28,6 +31,9 @@
             };
         },
         methods: {
+          ...mapMutations([
+            'saveGeohash'
+          ]),
           getMsiteAddress () {
             this.https({url: '/v2/pois/' + this.geohash, method: 'get'}).then(
               (res) => {
@@ -48,6 +54,7 @@
             this.geohash = this.$route.query.geohash;
           }
           this.getMsiteAddress();
+          this.saveGeohash(this.geohash);
         },
         watch: {}
     };
@@ -80,6 +87,15 @@
       font-weight: 400;
       font-size: .7rem;
       color: #fff;
+    }
+    .nav {
+      height: 10.6rem;
+      margin-top: 1.95rem;
+      background-color: #fff;
+    }
+    .shop-list {
+      border-top: .025rem solid #e4e4e4;
+      background-color: #fff;
     }
   }
 </style>
