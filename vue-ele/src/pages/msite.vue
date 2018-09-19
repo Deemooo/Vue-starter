@@ -14,7 +14,22 @@
           <span class="head-login" @click="$router.push('login')">登录 | 注册</span>
         </template>
       </top-header>
-      <nav class="nav"></nav>
+      <nav class="nav" v-if="foodTypes.length">
+        <div class="swiper-slide" v-for="(item, index) in foodTypes" :key="index" v-show="index === 0">
+          <router-link tag="span" :to="{path: '/food', query: {geohash, title: foodItem.title, restaurant_category_id: getCategoryId(foodItem.link)}}" v-for="foodItem in item" :key="foodItem.id" class="link_to_food">
+            <figure>
+              <img :src="imgBaseUrl + foodItem.image_url">
+              <figcaption>{{ foodItem.title }}</figcaption>
+            </figure>
+          </router-link>
+        </div>
+        <Swiper :options="swiperOption" ref="mySwiper">
+          <div class="swiper-pagination"  slot="pagination"></div>
+          <div class="swiper-button-prev" slot="button-prev"></div>
+          <div class="swiper-button-next" slot="button-next"></div>
+          <div class="swiper-scrollbar"   slot="scrollbar"></div>
+        </Swiper>
+      </nav>
       <div class="shop-list"></div>
       <bottom-footer></bottom-footer>
     </div>
@@ -27,7 +42,14 @@
         data () {
             return {
               geohash: '',
-              msiteTitle: ''
+              msiteTitle: '',
+              foodTypes: [],
+              imgBaseUrl: 'https://fuss10.elemecdn.com',
+              swiperOption: {
+                // some swiper options/callbacks
+                // 所有的参数同 swiper 官方 api 参数
+                // ...
+              }
             };
         },
         methods: {
@@ -39,6 +61,28 @@
               (res) => {
                 this.msiteTitle = res.name;
               });
+          },
+          getFoodTypes () {
+            let params = {
+              geohash: this.geohash,
+              group_type: '1',
+              'flags[]': 'F'
+            };
+            this.https({url: '/v2/index_entry', params, method: 'get'}).then(
+              (res) => {
+                this.foodTypes = [];
+                for (let i = 0, len = res.length; i < len; i += 8) {
+                  this.foodTypes.push(res.slice(i, i + 8));
+                }
+                console.log(res);
+              }).then(() => {
+              //初始化swiper
+
+            });
+          },
+          getCategoryId () {},
+          setSwiper () {
+
           }
         },
        async mounted () {
@@ -54,12 +98,14 @@
             this.geohash = this.$route.query.geohash;
           }
           this.getMsiteAddress();
+          this.getFoodTypes();
           this.saveGeohash(this.geohash);
         },
         watch: {}
     };
 </script>
 <style lang="less" scoped>
+  @import (reference) "../assets/style/dynamic";
   .msite {
     width: 100%;
     overflow-y: auto;
@@ -92,6 +138,33 @@
       height: 10.6rem;
       margin-top: 1.95rem;
       background-color: #fff;
+      .swiper-slide {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        align-items: center;
+        border-bottom: 1px solid @gray;
+        span {
+          flex: 0 0 25%;
+          padding: .3rem 0;
+          figure {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            img {
+              margin-bottom: .3rem;
+              width: 1.8rem;
+              height: 1.8rem;
+            }
+            figcaption {
+              text-align: center;
+              font-size: .55rem;
+              color: @fontColor1;
+            }
+          }
+        }
+      }
     }
     .shop-list {
       border-top: .025rem solid #e4e4e4;
