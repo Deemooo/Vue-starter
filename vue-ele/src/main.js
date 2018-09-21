@@ -14,7 +14,8 @@ import topHeader from './components/topHeader.vue';
 import bottomFooter from './components/bottomFooter.vue';
 // 触摸滑动组件
 import Swiper from 'vue-awesome-swiper';
-import 'swiper/dist/css/swiper.css'
+import 'swiper/dist/css/swiper.css';
+
 Vue.config.productionTip = false;
 
 Vue.use(https);

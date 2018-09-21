@@ -14,23 +14,26 @@
           <span class="head-login" @click="$router.push('login')">登录 | 注册</span>
         </template>
       </top-header>
-      <nav class="nav" v-if="foodTypes.length">
-        <div class="swiper-slide" v-for="(item, index) in foodTypes" :key="index" v-show="index === 0">
+      <swiper :options="swiperOption" class="nav" v-if="foodTypes.length">
+        <div class="swiper-slide" v-for="(item, index) in foodTypes" :key="index">
           <router-link tag="span" :to="{path: '/food', query: {geohash, title: foodItem.title, restaurant_category_id: getCategoryId(foodItem.link)}}" v-for="foodItem in item" :key="foodItem.id" class="link_to_food">
             <figure>
               <img :src="imgBaseUrl + foodItem.image_url">
               <figcaption>{{ foodItem.title }}</figcaption>
             </figure>
           </router-link>
+          <div class="swiper-pagination" slot="pagination"></div>
         </div>
-        <Swiper :options="swiperOption" ref="mySwiper">
-          <div class="swiper-pagination"  slot="pagination"></div>
-          <div class="swiper-button-prev" slot="button-prev"></div>
-          <div class="swiper-button-next" slot="button-next"></div>
-          <div class="swiper-scrollbar"   slot="scrollbar"></div>
-        </Swiper>
-      </nav>
-      <div class="shop-list"></div>
+      </swiper>
+      <img src="../assets/images/fl.svg" class="no-food-types" v-else>
+      <div class="shop-list">
+        <div class="shop-list-title">
+          <svg class="shop-icon">
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#shop"></use>
+          </svg>
+          <span class="title-text">附近商家</span>
+        </div>
+      </div>
       <bottom-footer></bottom-footer>
     </div>
 </template>
@@ -46,9 +49,10 @@
               foodTypes: [],
               imgBaseUrl: 'https://fuss10.elemecdn.com',
               swiperOption: {
-                // some swiper options/callbacks
-                // 所有的参数同 swiper 官方 api 参数
-                // ...
+                pagination: {
+                  el: '.swiper-pagination',
+                  dynamicBullets: true
+                }
               }
             };
         },
@@ -119,6 +123,7 @@
     .msite-title {
       flex: 0 0 64%;
       font-size: .8rem;
+      line-height: .8rem;
       text-align: center;
       text-decoration: none;
       color: #fff;
@@ -131,11 +136,10 @@
     .head-login {
       flex: 0 0 33.333%;
       font-weight: 400;
-      font-size: .7rem;
+      font-size: .6rem;
       color: #fff;
     }
     .nav {
-      height: 10.6rem;
       margin-top: 1.95rem;
       background-color: #fff;
       .swiper-slide {
@@ -143,7 +147,7 @@
         flex-wrap: wrap;
         justify-content: space-around;
         align-items: center;
-        border-bottom: 1px solid @gray;
+        margin: .4rem 0;
         span {
           flex: 0 0 25%;
           padding: .3rem 0;
@@ -165,8 +169,31 @@
           }
         }
       }
+      .swiper-pagination {
+        bottom: -.25rem;
+      }
+    }
+    .no-food-types {
+      width: 100%;
+      height: 100%;
+      margin-top: 1.95rem;
     }
     .shop-list {
+      display: flex;
+      align-items: center;
+      .shop-list-title {
+        .shop-icon {
+          fill: #999;
+          margin: 0 .2rem 0 .4rem;
+          vertical-align: middle;
+          width: .6rem;
+          height: .6rem;
+        }
+        .title-text {
+          color: #999;
+          font: .55rem/1.6rem Microsoft YaHei;
+        }
+      }
       border-top: .025rem solid #e4e4e4;
       background-color: #fff;
     }
