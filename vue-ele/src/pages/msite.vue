@@ -26,21 +26,25 @@
         </div>
       </swiper>
       <img src="../assets/images/fl.svg" class="no-food-types" v-else>
-      <div class="shop-list">
+      <div class="shop-list-wrap">
         <div class="shop-list-title">
           <svg class="shop-icon">
             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#shop"></use>
           </svg>
           <span class="title-text">附近商家</span>
         </div>
+        <shop-list></shop-list>
       </div>
       <bottom-footer></bottom-footer>
     </div>
 </template>
 <script>
     import { mapMutations } from 'vuex';
+    import shopList from '../components/shopList';
     export default {
-        components: {},
+        components: {
+          shopList
+        },
         computed: {},
         data () {
             return {
@@ -178,10 +182,11 @@
       height: 100%;
       margin-top: 1.95rem;
     }
-    .shop-list {
-      display: flex;
-      align-items: center;
+    .shop-list-wrap {
       .shop-list-title {
+        display: flex;
+        align-items: center;
+        margin-top: .5rem;
         .shop-icon {
           fill: #999;
           margin: 0 .2rem 0 .4rem;

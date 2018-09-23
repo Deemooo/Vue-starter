@@ -25,4 +25,4 @@ export {
 	baseUrl,
 	routerMode,
 	imgBaseUrl,
-}
+};
