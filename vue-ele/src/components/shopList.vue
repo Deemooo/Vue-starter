@@ -120,7 +120,7 @@
         }
       }
       .shop-info {
-        flex: 0 0 70%;
+        flex: 1 0 70%;
         .header {
           display: flex;
           justify-content: space-between;
