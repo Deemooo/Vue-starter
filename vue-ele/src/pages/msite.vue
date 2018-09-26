@@ -35,11 +35,6 @@
         </div>
         <shop-list></shop-list>
       </div>
-      <div class="back-top-btn" @click="backTop" v-if="showBackBtn">
-        <svg class="back-top-btn-svg">
-          <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#backtop"></use>
-        </svg>
-      </div>
       <bottom-footer></bottom-footer>
     </div>
 </template>
@@ -62,8 +57,7 @@
                   el: '.swiper-pagination',
                   dynamicBullets: true
                 }
-              },
-              showBackBtn: false
+              }
             };
         },
         methods: {
@@ -94,21 +88,7 @@
 
             });
           },
-          getCategoryId () {},
-          // scroll事件监听
-          listenScroll () {
-            document.addEventListener('scroll', () => {
-              let top = document.documentElement.scrollTop || document.body.scrollTop || window.pageYOffset;
-              this.showBackBtn = top > 500;
-            });
-          },
-          backTop () {
-            if (document.documentElement.scrollTop) {
-              document.documentElement.scrollTop = 0;
-            } else if (document.body.scrollTop) {
-              document.body.scrollTop = 0;
-            }
-          }
+          getCategoryId () {}
         },
        async mounted () {
           if (!this.$route.query.geohash) {
@@ -125,7 +105,6 @@
           this.getMsiteAddress();
           this.getFoodTypes();
           this.saveGeohash(this.geohash);
-          this.listenScroll();
         },
         watch: {}
     };

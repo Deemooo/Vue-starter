@@ -48,6 +48,11 @@
           <img src="../assets/images/shopback.svg">
         </div>
       </div>
+      <div class="back-top-btn" @click="backTop" v-if="showBackBtn">
+        <svg class="back-top-btn-svg">
+          <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#backtop"></use>
+        </svg>
+      </div>
     </div>
 </template>
 <script>
@@ -68,7 +73,8 @@
             imgBaseUrl,
             shopListArr: [],
             offset: 0,
-            restaurantCategoryId: ''
+            restaurantCategoryId: '',
+            showBackBtn: false
           };
       },
       methods: {
@@ -94,10 +100,26 @@
           return supports.some((item) => {
             return item.icon_name === '准';
           });
+        },
+        // scroll事件监听
+        listenScroll () {
+          document.addEventListener('scroll', () => {
+            let top = document.documentElement.scrollTop || document.body.scrollTop || window.pageYOffset;
+            this.showBackBtn = top > 500;
+          });
+        },
+        // 返回顶部
+        backTop () {
+          if (document.documentElement.scrollTop) {
+            document.documentElement.scrollTop = 0;
+          } else if (document.body.scrollTop) {
+            document.body.scrollTop = 0;
+          }
         }
       },
       mounted () {
         this.getShopList();
+        this.listenScroll();
       },
       watch: {}
   };
@@ -220,6 +242,15 @@
             }
           }
         }
+      }
+    }
+    .back-top-btn {
+      position: fixed;
+      bottom: 3rem;
+      right: 1rem;
+      .back-top-btn-svg {
+        width: 2rem;
+        height: 2rem;
       }
     }
   }

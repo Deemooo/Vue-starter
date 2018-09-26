@@ -36,10 +36,10 @@ export default new Router({
       path: '/msite',
       component: resolve => require(['../pages/msite.vue'], resolve)
     },
-    // 商铺详情页
+    // 特色商铺列表页
     {
-      path: '/shop',
-      component: resolve => require(['../pages/shop.vue'], resolve)
+      path: '/food',
+      component: resolve => require(['../pages/food.vue'], resolve)
     },
     // 搜索页
     {
