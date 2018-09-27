@@ -9,9 +9,24 @@
         </template>
       </top-header>
       <div class="food-sort-wrap">
-        <div class="food-sort-title">{{ headTitle }}</div>
-        <div class="food-sort-title">排序</div>
-        <div class="food-sort-title">筛选</div>
+        <div class="food-sort-title">
+          <span>{{ headTitle }}</span>
+          <svg width="10" height="10" xmlns="http://www.w3.org/2000/svg" version="1.1" class="sort-icon">
+            <polygon points="0,3 10,3 5,8"/>
+          </svg>
+        </div>
+        <div class="food-sort-title">
+          <span>排序</span>
+          <svg width="10" height="10" xmlns="http://www.w3.org/2000/svg" version="1.1" class="sort-icon">
+            <polygon points="0,3 10,3 5,8"/>
+          </svg>
+        </div>
+        <div class="food-sort-title">
+          <span>筛选</span>
+          <svg width="10" height="10" xmlns="http://www.w3.org/2000/svg" version="1.1" class="sort-icon">
+            <polygon points="0,3 10,3 5,8"/>
+          </svg>
+        </div>
       </div>
       <shop-list></shop-list>
     </div>
@@ -70,12 +85,21 @@
       border-bottom: .025rem solid @gray;
       .food-sort-title {
         flex: 0 0 33.333%;
-        text-align: center;
-        font-size: .55rem;
-        color: #444;
-        width: 33.3%;
-        height: 1.6rem;
-        line-height: 1.6rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        span {
+          height: 1.6rem;
+          margin-right: 0.1rem;
+          line-height: 1.6rem;
+          font-size: .55rem;
+          color: #444;
+        }
+        .sort-icon {
+          vertical-align: middle;
+          transition: all .3s;
+          fill: #666;
+        }
       }
       .food-sort-title:nth-child(2) {
         border-left: .025rem solid @gray;
