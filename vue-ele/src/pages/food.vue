@@ -20,14 +20,22 @@
         </div>
       </div>
       <shop-list class="food-shop-list"></shop-list>
-      <div v-show="sortListShow" class="food-sort-list-wrap">
-        <div v-show="sortType === 0">
+      <div v-show="filterListShow" class="food-filter-list-wrap">
+        <div v-show="filterType === 0">
           headTitle
         </div>
-        <div v-show="sortType === 1">
-          排序
+        <div v-show="filterType === 1">
+          <div v-for="(item, index) in sortTypeList" :key="index" class="sort-list-item">
+            <svg>
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" :xlink:href="item.id"></use>
+            </svg>
+            <span>{{ item.name }}</span>
+            <svg>
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#selected"></use>
+            </svg>
+          </div>
         </div>
-        <div v-show="sortType === 2">
+        <div v-show="filterType === 2">
           筛选
         </div>
       </div>
@@ -45,15 +53,41 @@
             geohash: '',
             headTitle: '',
             foodSort: [],
-            sortListShow: false,
-            sortType: ''
+            filterListShow: false,
+            filterType: '',
+            sortTypeList: [
+              {
+                id: '#default',
+                name: '智能排序'
+              },
+              {
+                id: '#distance',
+                name: '距离最近'
+              },
+              {
+                id: '#hot',
+                name: '销量最高'
+              },
+              {
+                id: '#price',
+                name: '起送价最低'
+              },
+              {
+                id: '#speed',
+                name: '配送速度最快'
+              },
+              {
+                id: '#rating',
+                name: '评分最高'
+              }
+            ]
           };
       },
       methods: {
         // 排序方式选择
         chooseSortType (index) {
-          this.sortListShow = !this.sortListShow;
-          this.sortType = index;
+          this.filterListShow = !this.filterListShow;
+          this.filterType = index;
         }
       },
       mounted () {
@@ -69,6 +103,7 @@
     width: 100%;
     overflow-y: auto;
     position: relative;
+    font-size: .55rem;
     svg, span {
       box-sizing: border-box;
       color: #fff;
@@ -109,7 +144,6 @@
           height: 1.6rem;
           margin-right: 0.2rem;
           line-height: 1.6rem;
-          font-size: .55rem;
           color: #444;
         }
         .sort-icon {
@@ -127,12 +161,29 @@
       margin-top: 3.55rem;
       background-color: #fff;
     }
-    .food-sort-list-wrap {
+    .food-filter-list-wrap {
       position: fixed;
       top: 3.55rem;
       left: 0;
+      width: 100%;
       background-color: #fff;
       z-index: 99999;
+      .sort-list-item {
+        display: flex;
+        align-items: center;
+        height: 2.5rem;
+        border-bottom: .025rem solid @gray;
+        svg {
+          width: .7rem;
+          height: .7rem;
+          margin: 0 .8rem;
+        }
+        span {
+          flex: 0 0 70%;
+          color: @fontColor1;
+          text-align: left;
+        }
+      }
     }
   }
 </style>
