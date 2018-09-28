@@ -134,15 +134,15 @@
       border-bottom: .025rem solid #f1f1f1;
       padding: .7rem .4rem;
       .img-wrap {
-        flex: 0 0 20%;
+        flex: 0 0 25%;
         .shop-img {
           display: block;
-          width: 2.7rem;
-          height: 2.7rem;
+          width: 3rem;
+          height: 3rem;
         }
       }
       .shop-info {
-        flex: 1 0 70%;
+        flex: 1 0 65%;
         .header {
           display: flex;
           justify-content: space-between;

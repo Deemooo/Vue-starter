@@ -9,26 +9,28 @@
         </template>
       </top-header>
       <div class="food-sort-wrap">
-        <div class="food-sort-title">
-          <span>{{ headTitle }}</span>
-          <svg width="10" height="10" xmlns="http://www.w3.org/2000/svg" version="1.1" class="sort-icon">
-            <polygon points="0,3 10,3 5,8"/>
-          </svg>
-        </div>
-        <div class="food-sort-title">
-          <span>排序</span>
-          <svg width="10" height="10" xmlns="http://www.w3.org/2000/svg" version="1.1" class="sort-icon">
-            <polygon points="0,3 10,3 5,8"/>
-          </svg>
-        </div>
-        <div class="food-sort-title">
-          <span>筛选</span>
+        <div class="food-sort-title"
+          v-for="(item, index) in [headTitle, '排序', '筛选']"
+          :key="index"
+          @click="chooseSortType(index)">
+          <span>{{ item }}</span>
           <svg width="10" height="10" xmlns="http://www.w3.org/2000/svg" version="1.1" class="sort-icon">
             <polygon points="0,3 10,3 5,8"/>
           </svg>
         </div>
       </div>
-      <shop-list></shop-list>
+      <shop-list class="food-shop-list"></shop-list>
+      <div v-show="sortListShow" class="food-sort-list-wrap">
+        <div v-show="sortType === 0">
+          headTitle
+        </div>
+        <div v-show="sortType === 1">
+          排序
+        </div>
+        <div v-show="sortType === 2">
+          筛选
+        </div>
+      </div>
     </div>
 </template>
 <script>
@@ -41,10 +43,19 @@
       data () {
           return {
             geohash: '',
-            headTitle: ''
+            headTitle: '',
+            foodSort: [],
+            sortListShow: false,
+            sortType: ''
           };
       },
-      methods: {},
+      methods: {
+        // 排序方式选择
+        chooseSortType (index) {
+          this.sortListShow = !this.sortListShow;
+          this.sortType = index;
+        }
+      },
       mounted () {
         this.geohash = this.$route.query.geohash;
         this.headTitle = this.$route.query.title;
@@ -75,22 +86,28 @@
       font-weight: 700;
     }
     .food-sort-wrap {
+      position: fixed;
+      top: 1.95rem;
+      left: 0;
       display: flex;
       justify-content: center;
       align-items: center;
-      margin-top: 1.95rem;
       box-sizing: border-box;
+      height: 1.6rem;
       width: 100%;
       background-color: #fff;
-      border-bottom: .025rem solid @gray;
+      border-bottom: .025rem solid #f1f1f1;
       .food-sort-title {
         flex: 0 0 33.333%;
         display: flex;
         justify-content: center;
         align-items: center;
+        box-sizing: border-box;
+        height: 1rem;
+        margin: 0.3rem 0;
         span {
           height: 1.6rem;
-          margin-right: 0.1rem;
+          margin-right: 0.2rem;
           line-height: 1.6rem;
           font-size: .55rem;
           color: #444;
@@ -105,6 +122,17 @@
         border-left: .025rem solid @gray;
         border-right: .025rem solid @gray;
       }
+    }
+    .food-shop-list {
+      margin-top: 3.55rem;
+      background-color: #fff;
+    }
+    .food-sort-list-wrap {
+      position: fixed;
+      top: 3.55rem;
+      left: 0;
+      background-color: #fff;
+      z-index: 99999;
     }
   }
 </style>
