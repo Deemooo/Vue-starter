@@ -25,11 +25,56 @@
           headTitle
         </div>
         <div v-show="filterType === 1">
-          <div v-for="(item, index) in sortTypeList" :key="index" class="sort-list-item">
+          <div @click="clickSortType" class="sort-list-item">
             <svg>
-              <use xmlns:xlink="http://www.w3.org/1999/xlink" :xlink:href="item.id"></use>
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#default"></use>
             </svg>
-            <span>{{ item.name }}</span>
+            <span>智能排序</span>
+            <svg>
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#selected"></use>
+            </svg>
+          </div>
+          <div @click="clickSortType" class="sort-list-item">
+            <svg>
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#distance"></use>
+            </svg>
+            <span>距离最近</span>
+            <svg>
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#selected"></use>
+            </svg>
+          </div>
+          <div @click="clickSortType" class="sort-list-item">
+            <svg>
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#hot"></use>
+            </svg>
+            <span>销量最高</span>
+            <svg>
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#selected"></use>
+            </svg>
+          </div>
+          <div @click="clickSortType" class="sort-list-item">
+            <svg>
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#price"></use>
+            </svg>
+            <span>起送价最低</span>
+            <svg>
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#selected"></use>
+            </svg>
+          </div>
+          <div @click="clickSortType" class="sort-list-item">
+          <svg>
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#speed"></use>
+          </svg>
+          <span>配送速度最快</span>
+          <svg>
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#selected"></use>
+          </svg>
+        </div>
+          <div @click="clickSortType" class="sort-list-item">
+            <svg>
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#rating"></use>
+            </svg>
+            <span>评分最高</span>
             <svg>
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#selected"></use>
             </svg>
@@ -80,14 +125,19 @@
                 id: '#rating',
                 name: '评分最高'
               }
-            ]
+            ],
+            sortTypeSelected: false
           };
       },
       methods: {
-        // 排序方式选择
+        // 筛选方式选择
         chooseSortType (index) {
           this.filterListShow = !this.filterListShow;
           this.filterType = index;
+        },
+        // 排序方式选择
+        clickSortType () {
+          this.sortTypeSelected = true;
         }
       },
       mounted () {
