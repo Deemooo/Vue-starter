@@ -22,10 +22,6 @@
       <shop-list class="food-shop-list"></shop-list>
       <div v-show="filterListShow" class="food-filter-list-wrap">
         <div v-show="filterType === 0">
-          <header class="screen-title">配送方式</header>
-          <div class="screen-distribution-list">
-
-          </div>
         </div>
         <div v-show="filterType === 1">
           <div @click="clickSortType('default')" class="sort-list-item">
@@ -83,8 +79,14 @@
             </svg>
           </div>
         </div>
-        <div v-show="filterType === 2">
-          筛选
+        <div v-show="filterType === 2" class="screen-wrap">
+          <header class="screen-title">配送方式</header>
+          <div v-for="item in Delivery" :key="item.id" class="screen-distribution-list">
+            <svg class="screen-svg">
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#fengniao"></use>
+            </svg>
+            <span>{{ item.text }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -129,10 +131,25 @@
                 name: '评分最高'
               }
             ],
-            sortTypeSelected: ''
+            sortTypeSelected: '',
+            Delivery: []
           };
       },
       methods: {
+        // 获取food页面的配送方式
+        getFoodDelivery () {
+          let params = this.setStrOfUrl({
+            latitude: this.geohash.split(',')[0],
+            longitude: this.geohash.split(',')[1],
+            kw: ''
+          });
+          this.https({url: '/shopping/v1/restaurants/delivery_modes' + params, method: 'get'}).then(
+            (res) => {
+              if (res) {
+                this.Delivery = res;
+              }
+            });
+        },
         // 筛选方式选择
         chooseSortType (index) {
           this.filterListShow = !this.filterListShow;
@@ -147,6 +164,7 @@
       mounted () {
         this.geohash = this.$route.query.geohash;
         this.headTitle = this.$route.query.title;
+        this.getFoodDelivery();
       },
       watch: {}
   };
@@ -236,6 +254,36 @@
           flex: 0 0 70%;
           color: @fontColor1;
           text-align: left;
+        }
+      }
+      .screen-wrap {
+        .screen-title {
+          font-size: .4rem;
+          color: #333;
+          line-height: 1.5rem;
+          height: 1.5rem;
+          text-align: left;
+          margin-left: .5rem;
+          background-color: #fff;
+        }
+        .screen-distribution-list {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 4.7rem;
+          height: 1.4rem;
+          margin-left: .5rem;
+          padding: 0 .25rem;
+          border-radius: .125rem;
+          background-color: #fafafa;
+          .screen-svg {
+            width: .8rem;
+            height: .8rem;
+            margin-right: .125rem;
+          }
+          span {
+            color: @fontColor;
+          }
         }
       }
     }

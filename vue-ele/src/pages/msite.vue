@@ -83,10 +83,7 @@
                   this.foodTypes.push(res.slice(i, i + 8));
                 }
                 console.log(res);
-              }).then(() => {
-              //初始化swiper
-
-            });
+              });
           },
           getCategoryId () {}
         },
