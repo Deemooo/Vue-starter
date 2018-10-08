@@ -22,60 +22,63 @@
       <shop-list class="food-shop-list"></shop-list>
       <div v-show="filterListShow" class="food-filter-list-wrap">
         <div v-show="filterType === 0">
-          headTitle
+          <header class="screen-title">配送方式</header>
+          <div class="screen-distribution-list">
+
+          </div>
         </div>
         <div v-show="filterType === 1">
-          <div @click="clickSortType" class="sort-list-item">
+          <div @click="clickSortType('default')" class="sort-list-item">
             <svg>
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#default"></use>
             </svg>
             <span>智能排序</span>
-            <svg>
+            <svg v-show="sortTypeSelected === 'default'">
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#selected"></use>
             </svg>
           </div>
-          <div @click="clickSortType" class="sort-list-item">
+          <div @click="clickSortType('distance')" class="sort-list-item">
             <svg>
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#distance"></use>
             </svg>
             <span>距离最近</span>
-            <svg>
+            <svg v-show="sortTypeSelected === 'distance'">
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#selected"></use>
             </svg>
           </div>
-          <div @click="clickSortType" class="sort-list-item">
+          <div @click="clickSortType('hot')" class="sort-list-item">
             <svg>
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#hot"></use>
             </svg>
             <span>销量最高</span>
-            <svg>
+            <svg v-show="sortTypeSelected === 'hot'">
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#selected"></use>
             </svg>
           </div>
-          <div @click="clickSortType" class="sort-list-item">
+          <div @click="clickSortType('price')" class="sort-list-item">
             <svg>
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#price"></use>
             </svg>
             <span>起送价最低</span>
-            <svg>
+            <svg v-show="sortTypeSelected === 'price'">
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#selected"></use>
             </svg>
           </div>
-          <div @click="clickSortType" class="sort-list-item">
+          <div @click="clickSortType('speed')" class="sort-list-item">
           <svg>
             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#speed"></use>
           </svg>
           <span>配送速度最快</span>
-          <svg>
+          <svg v-show="sortTypeSelected === 'speed'">
             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#selected"></use>
           </svg>
         </div>
-          <div @click="clickSortType" class="sort-list-item">
+          <div @click="clickSortType('rating')" class="sort-list-item">
             <svg>
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#rating"></use>
             </svg>
             <span>评分最高</span>
-            <svg>
+            <svg v-show="sortTypeSelected === 'rating'">
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#selected"></use>
             </svg>
           </div>
@@ -126,7 +129,7 @@
                 name: '评分最高'
               }
             ],
-            sortTypeSelected: false
+            sortTypeSelected: ''
           };
       },
       methods: {
@@ -136,8 +139,9 @@
           this.filterType = index;
         },
         // 排序方式选择
-        clickSortType () {
-          this.sortTypeSelected = true;
+        clickSortType (sortType) {
+          this.sortTypeSelected = sortType;
+          this.filterListShow = false;
         }
       },
       mounted () {
