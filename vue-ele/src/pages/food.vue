@@ -21,9 +21,16 @@
       </div>
       <shop-list class="food-shop-list"></shop-list>
       <div v-show="filterListShow" class="food-filter-list-wrap">
-        <div v-show="filterType === 0">
+        <div v-show="filterType === 0" class="classify-wrap">
+          <div class="classify-item-list">
+            <div v-for="(item, index) in Category" :key="index" class="classify-list-item">
+                <img :src="getImgPath(item.image_url)" v-if="index" class="classify-list-item-icon">
+                <span class="classify-list-item-text">{{ item.name }}</span>
+            </div>
+          </div>
+          <div class="classify-item-list">2</div>
         </div>
-        <div v-show="filterType === 1">
+        <div v-show="filterType === 1" class="sort-wrap">
           <div @click="clickSortType('default')" class="sort-list-item">
             <svg>
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#default"></use>
@@ -81,11 +88,24 @@
         </div>
         <div v-show="filterType === 2" class="screen-wrap">
           <header class="screen-title">配送方式</header>
-          <div v-for="item in Delivery" :key="item.id" class="screen-distribution-list">
-            <svg class="screen-svg">
-              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#fengniao"></use>
-            </svg>
-            <span>{{ item.text }}</span>
+          <div class="screen-distribution-wrap">
+            <div v-for="item in Delivery" :key="item.id" class="screen-distribution-list">
+              <svg class="screen-svg">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#fengniao"></use>
+              </svg>
+              <span>{{ item.text }}</span>
+            </div>
+          </div>
+          <header class="screen-title">商家属性(可多选)</header>
+          <div class="screen-distribution-wrap">
+            <div v-for="item in Activity" :key="item.id" class="screen-distribution-list">
+              <span class="screen-distribution-item-icon" :style="{color: '#' + item.icon_color, borderColor: '#' + item.icon_color}">{{ item.icon_name }}</span>
+              <span>{{ item.name }}</span>
+            </div>
+          </div>
+          <div class="screen-action-wrap">
+            <span class="screen-action">清空</span>
+            <span class="screen-action confirm-btn">确定</span>
           </div>
         </div>
       </div>
@@ -105,34 +125,10 @@
             foodSort: [],
             filterListShow: false,
             filterType: '',
-            sortTypeList: [
-              {
-                id: '#default',
-                name: '智能排序'
-              },
-              {
-                id: '#distance',
-                name: '距离最近'
-              },
-              {
-                id: '#hot',
-                name: '销量最高'
-              },
-              {
-                id: '#price',
-                name: '起送价最低'
-              },
-              {
-                id: '#speed',
-                name: '配送速度最快'
-              },
-              {
-                id: '#rating',
-                name: '评分最高'
-              }
-            ],
             sortTypeSelected: '',
-            Delivery: []
+            Delivery: [],
+            Activity: [],
+            Category: []
           };
       },
       methods: {
@@ -147,6 +143,33 @@
             (res) => {
               if (res) {
                 this.Delivery = res;
+              }
+            });
+        },
+        // 获取food页面的配送方式
+        getFoodActivity () {
+          let params = this.setStrOfUrl({
+            latitude: this.geohash.split(',')[0],
+            longitude: this.geohash.split(',')[1],
+            kw: ''
+          });
+          this.https({url: '/shopping/v1/restaurants/activity_attributes' + params, method: 'get'}).then(
+            (res) => {
+              if (res) {
+                this.Activity = res;
+              }
+            });
+        },
+        // 获取food页面的配送方式
+        getFoodCategory () {
+          let params = this.setStrOfUrl({
+            latitude: this.geohash.split(',')[0],
+            longitude: this.geohash.split(',')[1]
+          });
+          this.https({url: '/shopping/v2/restaurant/category' + params, method: 'get'}).then(
+            (res) => {
+              if (res) {
+                this.Category = res;
               }
             });
         },
@@ -165,6 +188,8 @@
         this.geohash = this.$route.query.geohash;
         this.headTitle = this.$route.query.title;
         this.getFoodDelivery();
+        this.getFoodActivity();
+        this.getFoodCategory();
       },
       watch: {}
   };
@@ -240,49 +265,108 @@
       width: 100%;
       background-color: #fff;
       z-index: 99999;
-      .sort-list-item {
+      .classify-wrap {
         display: flex;
         align-items: center;
-        height: 2.5rem;
-        border-bottom: .025rem solid @gray;
-        svg {
-          width: .7rem;
-          height: .7rem;
-          margin: 0 .8rem;
+        .classify-item-list {
+          flex: 0 0 50%;
+          .classify-list-item {
+            display: flex;
+            align-items: center;
+            .classify-list-item-icon {
+              width: .8rem;
+              height: .8rem;
+              margin: 0 .5rem;
+            }
+            .classify-list-item-text {
+              font-size: .5rem;
+              color: @fontColor1;
+              line-height: 1.8rem;
+            }
+          }
         }
-        span {
-          flex: 0 0 70%;
-          color: @fontColor1;
-          text-align: left;
+      }
+      .sort-wrap {
+        .sort-list-item {
+          display: flex;
+          align-items: center;
+          height: 2.5rem;
+          border-bottom: .025rem solid @gray;
+          svg {
+            width: .7rem;
+            height: .7rem;
+            margin: 0 .8rem;
+          }
+          span {
+            flex: 0 0 70%;
+            color: @fontColor1;
+            text-align: left;
+          }
         }
       }
       .screen-wrap {
         .screen-title {
-          font-size: .4rem;
-          color: #333;
+          font-size: .5rem;
+          color: @fontColor1;
           line-height: 1.5rem;
           height: 1.5rem;
           text-align: left;
           margin-left: .5rem;
           background-color: #fff;
         }
-        .screen-distribution-list {
+        .screen-distribution-wrap {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          margin: .2rem;
+          .screen-distribution-list {
+            flex: 0 0 30%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 4.7rem;
+            height: 1.4rem;
+            margin: .25rem;
+            border-radius: .125rem;
+            background-color: #fafafa;
+            .screen-svg {
+              width: .8rem;
+              height: .8rem;
+              margin-right: .125rem;
+            }
+            span {
+              color: @fontColor;
+            }
+            .screen-distribution-item-icon {
+              width: .8rem;
+              height: .8rem;
+              font-size: .5rem;
+              border: .025rem solid #e4e4e4;
+              border-radius: .15rem;
+              margin-right: .25rem;
+              line-height: .8rem;
+              text-align: center;
+            }
+          }
+        }
+        .screen-action-wrap {
           display: flex;
           justify-content: center;
           align-items: center;
-          width: 4.7rem;
-          height: 1.4rem;
-          margin-left: .5rem;
-          padding: 0 .25rem;
-          border-radius: .125rem;
-          background-color: #fafafa;
-          .screen-svg {
-            width: .8rem;
-            height: .8rem;
-            margin-right: .125rem;
+          width: 100%;
+          .screen-action {
+            flex: 0 0 50%;
+            height: 1.8rem;
+            font-size: .8rem;
+            line-height: 1.8rem;
+            border-radius: .2rem;
+            background-color: #fff;
+            color: #ddd;
+            text-align: center;
           }
-          span {
-            color: @fontColor;
+          .confirm-btn {
+            color: #fff;
+            background-color: #00d762;
           }
         }
       }
