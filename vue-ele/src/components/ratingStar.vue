@@ -1,4 +1,5 @@
- <template>
+<!--商家评分-->
+<template>
    <div class="rating_container">
      <section class="star_container">
        <svg class="grey_fill" v-for="num in 5" :key="num">

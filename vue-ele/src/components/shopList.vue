@@ -1,3 +1,4 @@
+<!--商家列表-->
 <template>
     <div class="shop-list">
       <div v-if="shopListArr.length">
@@ -43,10 +44,8 @@
           </div>
         </router-link>
       </div>
-      <div v-else>
-        <div v-for="key in 10" :key="key">
-          <img src="../assets/images/shopback.svg">
-        </div>
+      <div v-else class="no-shop-list">
+        更多商家接入中，敬请期待~
       </div>
       <div class="back-top-btn" @click="backTop" v-if="showBackBtn">
         <svg class="back-top-btn-svg">
@@ -60,7 +59,8 @@
   import { mapState } from 'vuex';
   import ratingStar from '../components/ratingStar';
   export default {
-      components: {
+    props: ['restaurantCategoryId', 'restaurantCategoryId1', 'sortByType', 'deliveryMode', 'supportIds', 'confirmSelect'],
+    components: {
         ratingStar
       },
       computed: {
@@ -73,7 +73,6 @@
             imgBaseUrl,
             shopListArr: [],
             offset: 0,
-            restaurantCategoryId: '',
             showBackBtn: false
           };
       },
@@ -87,7 +86,7 @@
             'extras[]': 'activities',
             keyword: '',
             restaurant_category_id: this.restaurantCategoryId,
-            'restaurant_category_ids[]': '',
+            'restaurant_category_ids[]': this.restaurantCategoryId1,
             order_by: '',
             'delivery_mode[]': ''
           });
@@ -121,7 +120,11 @@
         this.getShopList();
         this.listenScroll();
       },
-      watch: {}
+      watch: {
+        restaurantCategoryId1 () {
+          this.getShopList();
+        }
+      }
   };
 </script>
 <style lang="less" scoped>
@@ -253,5 +256,11 @@
         height: 2rem;
       }
     }
+  }
+  .no-shop-list {
+    padding-top: .5rem;
+    border-top: .025rem solid @gray;
+    text-align: center;
+    color: @fontColor1;
   }
 </style>

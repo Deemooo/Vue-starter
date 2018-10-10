@@ -8,28 +8,55 @@
           <span class="head-title">{{ headTitle }}</span>
         </template>
       </top-header>
+      <!--条件-->
       <div class="food-sort-wrap">
-        <div class="food-sort-title"
-          v-for="(item, index) in [headTitle, '排序', '筛选']"
-          :key="index"
-          @click="chooseSortType(index)">
-          <span>{{ item }}</span>
-          <svg width="10" height="10" xmlns="http://www.w3.org/2000/svg" version="1.1" class="sort-icon">
+        <div class="food-sort-title" @click="chooseSortType(0)">
+          <span :class="{'sort-selected': filterListShow && filterType === 0}">{{ headTitle }}</span>
+          <svg :class="{'sort-icon-selected': filterListShow && filterType === 0 }" width="10" height="10" xmlns="http://www.w3.org/2000/svg" version="1.1" class="sort-icon">
+            <polygon points="0,3 10,3 5,8"/>
+          </svg>
+        </div>
+        <div class="food-sort-title" @click="chooseSortType(1)">
+          <span :class="{'sort-selected': filterListShow && filterType === 1}">排序</span>
+          <svg :class="{'sort-icon-selected': filterListShow && filterType === 1 }" width="10" height="10" xmlns="http://www.w3.org/2000/svg" version="1.1" class="sort-icon">
+            <polygon points="0,3 10,3 5,8"/>
+          </svg>
+        </div>
+        <div class="food-sort-title" @click="chooseSortType(2)">
+          <span :class="{'sort-selected': filterListShow && filterType === 2}">筛选</span>
+          <svg :class="{'sort-icon-selected': filterListShow && filterType === 2 }" width="10" height="10" xmlns="http://www.w3.org/2000/svg" version="1.1" class="sort-icon">
             <polygon points="0,3 10,3 5,8"/>
           </svg>
         </div>
       </div>
-      <shop-list class="food-shop-list"></shop-list>
+      <!--条件面板-->
       <div v-show="filterListShow" class="food-filter-list-wrap">
+        <!--分类-->
         <div v-show="filterType === 0" class="classify-wrap">
+          <!--左侧分类-->
           <div class="classify-item-list">
-            <div v-for="(item, index) in Category" :key="index" class="classify-list-item">
-                <img :src="getImgPath(item.image_url)" v-if="index" class="classify-list-item-icon">
+            <div v-for="(item, index) in Category" :key="index" @click="selectCategoryDetail(item.id, index)" class="classify-list-item">
+              <span>
+                <img :src="getImgPath(item.image_url)" class="classify-list-item-icon">
                 <span class="classify-list-item-text">{{ item.name }}</span>
+              </span>
+              <span>
+                <span class="classify-list-item-count">{{ item.count }}</span>
+                <svg width="8" height="8" xmlns="http://www.w3.org/2000/svg" version="1.1" class="classify-list-item-arrow" >
+                  <path d="M0 0 L6 4 L0 8"  stroke="#bbb" stroke-width="1" fill="none"/>
+                </svg>
+              </span>
             </div>
           </div>
-          <div class="classify-item-list">2</div>
+          <!--右侧子类-->
+          <div class="classify-item-list">
+            <div v-for="(item, index) in CategoryDetail" v-if="index" :key="item.id" @click="classifyShopLIst(item.id, item.name)" class="classify-item-subitem">
+              <span>{{ item.name }}</span>
+              <span>{{ item.count }}</span>
+            </div>
+          </div>
         </div>
+        <!--排序-->
         <div v-show="filterType === 1" class="sort-wrap">
           <div @click="clickSortType('default')" class="sort-list-item">
             <svg>
@@ -68,14 +95,14 @@
             </svg>
           </div>
           <div @click="clickSortType('speed')" class="sort-list-item">
-          <svg>
-            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#speed"></use>
-          </svg>
-          <span>配送速度最快</span>
-          <svg v-show="sortTypeSelected === 'speed'">
-            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#selected"></use>
-          </svg>
-        </div>
+            <svg>
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#speed"></use>
+            </svg>
+            <span>配送速度最快</span>
+            <svg v-show="sortTypeSelected === 'speed'">
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#selected"></use>
+            </svg>
+          </div>
           <div @click="clickSortType('rating')" class="sort-list-item">
             <svg>
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#rating"></use>
@@ -86,6 +113,7 @@
             </svg>
           </div>
         </div>
+        <!--筛选-->
         <div v-show="filterType === 2" class="screen-wrap">
           <header class="screen-title">配送方式</header>
           <div class="screen-distribution-wrap">
@@ -109,6 +137,12 @@
           </div>
         </div>
       </div>
+      <!--商家列表-->
+      <shop-list class="food-shop-list" :restaurantCategoryId1="restaurantCategoryId1"></shop-list>
+      <!--遮罩-->
+      <transition name="showcover">
+        <div class="back-cover" v-show="filterListShow"></div>
+      </transition>
     </div>
 </template>
 <script>
@@ -122,21 +156,26 @@
           return {
             geohash: '',
             headTitle: '',
+            restaurantCategoryId: '',
+            restaurantCategoryId1: '',
+            latitude: '',
+            longitude: '',
             foodSort: [],
             filterListShow: false,
             filterType: '',
             sortTypeSelected: '',
             Delivery: [],
             Activity: [],
-            Category: []
+            Category: [],
+            CategoryDetail: []
           };
       },
       methods: {
-        // 获取food页面的配送方式
+        // 获取筛选的配送方式
         getFoodDelivery () {
           let params = this.setStrOfUrl({
-            latitude: this.geohash.split(',')[0],
-            longitude: this.geohash.split(',')[1],
+            latitude: this.latitude,
+            longitude: this.longitude,
             kw: ''
           });
           this.https({url: '/shopping/v1/restaurants/delivery_modes' + params, method: 'get'}).then(
@@ -146,11 +185,11 @@
               }
             });
         },
-        // 获取food页面的配送方式
+        // 获取筛选的商家活动
         getFoodActivity () {
           let params = this.setStrOfUrl({
-            latitude: this.geohash.split(',')[0],
-            longitude: this.geohash.split(',')[1],
+            latitude: this.latitude,
+            longitude: this.longitude,
             kw: ''
           });
           this.https({url: '/shopping/v1/restaurants/activity_attributes' + params, method: 'get'}).then(
@@ -160,36 +199,60 @@
               }
             });
         },
-        // 获取food页面的配送方式
+        // 获取分类的商品种类
         getFoodCategory () {
           let params = this.setStrOfUrl({
-            latitude: this.geohash.split(',')[0],
-            longitude: this.geohash.split(',')[1]
+            latitude: this.latitude,
+            longitude: this.longitude
           });
           this.https({url: '/shopping/v2/restaurant/category' + params, method: 'get'}).then(
             (res) => {
               if (res) {
-                this.Category = res;
+                this.Category = res.slice(1);
+                // 设置默认子类
+                this.Category.forEach(item => {
+                  if (this.restaurantCategoryId === item.id) {
+                    this.CategoryDetail = item.sub_categories || [];
+                  }
+                });
               }
             });
         },
-        // 筛选方式选择
+        // 条件选择
         chooseSortType (index) {
           this.filterListShow = !this.filterListShow;
           this.filterType = index;
+          if (index === 0) {
+            this.headTitle = this.headTitle === '分类' ? this.$route.query.title : '分类';
+          }
         },
         // 排序方式选择
         clickSortType (sortType) {
           this.sortTypeSelected = sortType;
           this.filterListShow = false;
+        },
+        // 子类选择
+        selectCategoryDetail (id, index) {
+          this.restaurantCategoryId = id;
+          this.CategoryDetail = this.Category[index].sub_categories;
+        },
+        classifyShopLIst (id, name) {
+          this.restaurantCategoryId1 = id;
+          this.headTitle = name;
+          this.filterListShow = false;
         }
       },
       mounted () {
-        this.geohash = this.$route.query.geohash;
-        this.headTitle = this.$route.query.title;
-        this.getFoodDelivery();
-        this.getFoodActivity();
-        this.getFoodCategory();
+        this.geohash = this.$route.query.geohash || '';
+        this.headTitle = this.$route.query.title || '';
+        this.restaurantCategoryId = this.$route.query.restaurant_category_id || '';
+        if (this.geohash) {
+          this.latitude = this.geohash.split(',')[0];
+          this.longitude = this.geohash.split(',')[1];
+          this.getFoodDelivery();
+          this.getFoodActivity();
+          this.getFoodCategory();
+        }
       },
       watch: {}
   };
@@ -229,6 +292,7 @@
       width: 100%;
       background-color: #fff;
       border-bottom: .025rem solid #f1f1f1;
+      z-index: 99999;
       .food-sort-title {
         flex: 0 0 33.333%;
         display: flex;
@@ -247,6 +311,13 @@
           vertical-align: middle;
           transition: all .3s;
           fill: #666;
+        }
+        .sort-selected {
+          color: @blue;
+        }
+        .sort-icon-selected {
+          transform: rotate(180deg);
+          fill: @blue;
         }
       }
       .food-sort-title:nth-child(2) {
@@ -267,21 +338,46 @@
       z-index: 99999;
       .classify-wrap {
         display: flex;
-        align-items: center;
         .classify-item-list {
           flex: 0 0 50%;
+          overflow-y: auto;
           .classify-list-item {
             display: flex;
+            justify-content: space-around;
             align-items: center;
+            span {
+              display: flex;
+              align-items: center;
+            }
             .classify-list-item-icon {
               width: .8rem;
               height: .8rem;
-              margin: 0 .5rem;
+              margin: 0 .4rem;
             }
             .classify-list-item-text {
               font-size: .5rem;
               color: @fontColor1;
               line-height: 1.8rem;
+            }
+            .classify-list-item-count {
+              margin: 0 .4rem;
+              padding: 0 .1rem;
+              border: .025rem solid #ccc;
+              border-radius: .8rem;
+              background-color: #ccc;
+              font-size: .4rem;
+              color: #fff;
+            }
+          }
+          .classify-item-subitem {
+            display: flex;
+            justify-content: space-between;
+            height: 1.8rem;
+            line-height: 1.8rem;
+            padding-right: .5rem;
+            border-bottom: .025rem solid @gray;
+            span {
+              color: @fontColor1;
             }
           }
         }
@@ -359,7 +455,6 @@
             height: 1.8rem;
             font-size: .8rem;
             line-height: 1.8rem;
-            border-radius: .2rem;
             background-color: #fff;
             color: #ddd;
             text-align: center;
@@ -370,6 +465,20 @@
           }
         }
       }
+    }
+    .showcover-enter-active, .showcover-leave-active {
+      transition: opacity .3s
+    }
+    .showcover-enter, .showcover-leave-active {
+      opacity: 0
+    }
+    .back-cover {
+      position: fixed;
+      top: 1.95rem;
+      width: 100%;
+      height: 100%;
+      z-index: 100;
+      background-color: rgba(0,0,0,0.3);
     }
   }
 </style>
