@@ -87,7 +87,7 @@
             keyword: '',
             restaurant_category_id: this.restaurantCategoryId,
             'restaurant_category_ids[]': this.restaurantCategoryId1,
-            order_by: '',
+            order_by: this.sortByType,
             'delivery_mode[]': ''
           });
           this.https({url: '/shopping/restaurants' + params, method: 'get'}).then(
@@ -122,6 +122,9 @@
       },
       watch: {
         restaurantCategoryId1 () {
+          this.getShopList();
+        },
+        sortByType () {
           this.getShopList();
         }
       }

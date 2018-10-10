@@ -35,7 +35,11 @@
         <div v-show="filterType === 0" class="classify-wrap">
           <!--左侧分类-->
           <div class="classify-item-list">
-            <div v-for="(item, index) in Category" :key="index" @click="selectCategoryDetail(item.id, index)" class="classify-list-item">
+            <div v-for="(item, index) in Category"
+              :key="index"
+              @click="selectCategoryDetail(item.id, index)"
+              :class="{'classify-list-item-selected': restaurantCategoryId === item.id}"
+              class="classify-list-item">
               <span>
                 <img :src="getImgPath(item.image_url)" class="classify-list-item-icon">
                 <span class="classify-list-item-text">{{ item.name }}</span>
@@ -58,57 +62,12 @@
         </div>
         <!--排序-->
         <div v-show="filterType === 1" class="sort-wrap">
-          <div @click="clickSortType('default')" class="sort-list-item">
+          <div v-for="(item, index) in sortTypeList" :key="index" @click="clickSortType(item.id, item.value)" class="sort-list-item">
             <svg>
-              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#default"></use>
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" :xlink:href="item.id"></use>
             </svg>
-            <span>智能排序</span>
-            <svg v-show="sortTypeSelected === 'default'">
-              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#selected"></use>
-            </svg>
-          </div>
-          <div @click="clickSortType('distance')" class="sort-list-item">
-            <svg>
-              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#distance"></use>
-            </svg>
-            <span>距离最近</span>
-            <svg v-show="sortTypeSelected === 'distance'">
-              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#selected"></use>
-            </svg>
-          </div>
-          <div @click="clickSortType('hot')" class="sort-list-item">
-            <svg>
-              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#hot"></use>
-            </svg>
-            <span>销量最高</span>
-            <svg v-show="sortTypeSelected === 'hot'">
-              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#selected"></use>
-            </svg>
-          </div>
-          <div @click="clickSortType('price')" class="sort-list-item">
-            <svg>
-              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#price"></use>
-            </svg>
-            <span>起送价最低</span>
-            <svg v-show="sortTypeSelected === 'price'">
-              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#selected"></use>
-            </svg>
-          </div>
-          <div @click="clickSortType('speed')" class="sort-list-item">
-            <svg>
-              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#speed"></use>
-            </svg>
-            <span>配送速度最快</span>
-            <svg v-show="sortTypeSelected === 'speed'">
-              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#selected"></use>
-            </svg>
-          </div>
-          <div @click="clickSortType('rating')" class="sort-list-item">
-            <svg>
-              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#rating"></use>
-            </svg>
-            <span>评分最高</span>
-            <svg v-show="sortTypeSelected === 'rating'">
+            <span :class="{'sort-list-item-selected': sortTypeSelected === item.id}">{{ item.name }}</span>
+            <svg v-show="sortTypeSelected === item.id">
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#selected"></use>
             </svg>
           </div>
@@ -138,7 +97,7 @@
         </div>
       </div>
       <!--商家列表-->
-      <shop-list class="food-shop-list" :restaurantCategoryId1="restaurantCategoryId1"></shop-list>
+      <shop-list class="food-shop-list" :restaurantCategoryId1="restaurantCategoryId1" :sortByType="sortByType"></shop-list>
       <!--遮罩-->
       <transition name="showcover">
         <div class="back-cover" v-show="filterListShow"></div>
@@ -163,7 +122,40 @@
             foodSort: [],
             filterListShow: false,
             filterType: '',
+            sortTypeList: [
+              {
+                id: '#default',
+                value: '0',
+                name: '智能排序'
+              },
+              {
+                id: '#distance',
+                value: '5',
+                name: '距离最近'
+              },
+              {
+                id: '#hot',
+                value: '6',
+                name: '销量最高'
+              },
+              {
+                id: '#price',
+                value: '1',
+                name: '起送价最低'
+              },
+              {
+                id: '#speed',
+                value: '2',
+                name: '配送速度最快'
+              },
+              {
+                id: '#rating',
+                value: '3',
+                name: '评分最高'
+              }
+            ],
             sortTypeSelected: '',
+            sortByType: '',
             Delivery: [],
             Activity: [],
             Category: [],
@@ -227,8 +219,9 @@
           }
         },
         // 排序方式选择
-        clickSortType (sortType) {
-          this.sortTypeSelected = sortType;
+        clickSortType (id, value) {
+          this.sortTypeSelected = id;
+          this.sortByType = value;
           this.filterListShow = false;
         },
         // 子类选择
@@ -369,6 +362,9 @@
               color: #fff;
             }
           }
+          .classify-list-item-selected {
+            border-left: .1rem solid @blue;
+          }
           .classify-item-subitem {
             display: flex;
             justify-content: space-between;
@@ -397,6 +393,9 @@
             flex: 0 0 70%;
             color: @fontColor1;
             text-align: left;
+          }
+          .sort-list-item-selected {
+            color: @blue;
           }
         }
       }
