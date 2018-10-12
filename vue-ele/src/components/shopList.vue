@@ -59,7 +59,7 @@
   import { mapState } from 'vuex';
   import ratingStar from '../components/ratingStar';
   export default {
-    props: ['restaurantCategoryId', 'restaurantCategoryId1', 'sortByType', 'deliveryMode', 'supportIds', 'confirmSelect'],
+    props: ['restaurantCategoryId', 'restaurantCategoryId1', 'sortByType', 'deliveryMode', 'supportIds', 'confirmStatus'],
     components: {
         ratingStar
       },
@@ -78,6 +78,14 @@
       },
       methods: {
         getShopList () {
+          let supportStr = '';
+          if (this.supportIds) {
+            this.supportIds.forEach(item => {
+              if (item.status) {
+                supportStr += '&support_ids[]=' + item.id;
+              }
+            });
+          }
           let params = this.setStrOfUrl({
             latitude: this.latitude,
             longitude: this.longitude,
@@ -88,7 +96,7 @@
             restaurant_category_id: this.restaurantCategoryId,
             'restaurant_category_ids[]': this.restaurantCategoryId1,
             order_by: this.sortByType,
-            'delivery_mode[]': ''
+            'delivery_mode[]': this.deliveryMode + supportStr
           });
           this.https({url: '/shopping/restaurants' + params, method: 'get'}).then(
             (res) => {
@@ -125,6 +133,9 @@
           this.getShopList();
         },
         sortByType () {
+          this.getShopList();
+        },
+        confirmStatus () {
           this.getShopList();
         }
       }

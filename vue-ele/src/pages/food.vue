@@ -76,7 +76,10 @@
         <div v-show="filterType === 2" class="screen-wrap">
           <header class="screen-title">配送方式</header>
           <div class="screen-distribution-wrap">
-            <div v-for="item in Delivery" :key="item.id" class="screen-distribution-list">
+            <div v-for="item in Delivery"
+                 :key="item.id" @click="screenDeliverySelect(item.id)"
+                 :class="{'screen-distribution-list-selected': screenDeliverySelected === item.id}"
+                 class="screen-distribution-list">
               <svg class="screen-svg">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#fengniao"></use>
               </svg>
@@ -85,19 +88,33 @@
           </div>
           <header class="screen-title">商家属性(可多选)</header>
           <div class="screen-distribution-wrap">
-            <div v-for="item in Activity" :key="item.id" class="screen-distribution-list">
-              <span class="screen-distribution-item-icon" :style="{color: '#' + item.icon_color, borderColor: '#' + item.icon_color}">{{ item.icon_name }}</span>
+            <div v-for="(item, index) in Activity"
+                 :key="item.id" @click="screenActivitySelect(index, item.id)"
+                 :class="{'screen-distribution-list-selected': screenActivitySelectStatus[index].status}"
+                 class="screen-distribution-list">
+              <span class="screen-distribution-item-icon"
+                    :style="{color: '#' + item.icon_color, borderColor: '#' + item.icon_color}">
+                {{ item.icon_name }}
+              </span>
               <span>{{ item.name }}</span>
             </div>
           </div>
           <div class="screen-action-wrap">
-            <span class="screen-action">清空</span>
-            <span class="screen-action confirm-btn">确定</span>
+            <span :class="{'clear-btn-selected': clearBtnSelected}" @click="screenClear" class="screen-action">清空</span>
+            <span @click="screenConfirm" class="screen-action confirm-btn">确定</span>
           </div>
         </div>
       </div>
       <!--商家列表-->
-      <shop-list class="food-shop-list" :restaurantCategoryId1="restaurantCategoryId1" :sortByType="sortByType"></shop-list>
+      <shop-list
+        :restaurantCategoryId="restaurantCategoryId"
+        :restaurantCategoryId1="restaurantCategoryId1"
+        :sortByType="sortByType"
+        :deliveryMode="screenDeliverySelected"
+        :supportIds="screenActivitySelectStatus"
+        :confirmStatus="confirmStatus"
+        class="food-shop-list">
+      </shop-list>
       <!--遮罩-->
       <transition name="showcover">
         <div class="back-cover" v-show="filterListShow"></div>
@@ -110,7 +127,15 @@
       components: {
         shopList
       },
-      computed: {},
+      computed: {
+        // 筛选面板中的清空按钮状态
+        clearBtnSelected () {
+          let res = this.screenActivitySelectStatus.some((item) => {
+            return item.status;
+          });
+          return res || this.screenDeliverySelected;
+        }
+      },
       data () {
           return {
             geohash: '',
@@ -159,7 +184,10 @@
             Delivery: [],
             Activity: [],
             Category: [],
-            CategoryDetail: []
+            CategoryDetail: [],
+            screenActivitySelectStatus: [],
+            screenDeliverySelected: '',
+            confirmStatus: false
           };
       },
       methods: {
@@ -188,6 +216,10 @@
             (res) => {
               if (res) {
                 this.Activity = res;
+                //记录商家活动选中的状态，默认不选中
+                this.Activity.forEach((item, index) => {
+                  this.screenActivitySelectStatus.push({status: false, id: item.id});
+                })
               }
             });
         },
@@ -224,14 +256,35 @@
           this.sortByType = value;
           this.filterListShow = false;
         },
-        // 子类选择
+        // 分类选择
         selectCategoryDetail (id, index) {
           this.restaurantCategoryId = id;
           this.CategoryDetail = this.Category[index].sub_categories;
         },
+        // 右侧子类选择
         classifyShopLIst (id, name) {
           this.restaurantCategoryId1 = id;
           this.headTitle = name;
+          this.filterListShow = false;
+        },
+        // 配送方式选择
+        screenDeliverySelect (id) {
+          this.screenDeliverySelected = this.screenDeliverySelected === '' ? id : '';
+        },
+        // 商家活动选择
+        screenActivitySelect (index, id) {
+          this.screenActivitySelectStatus.splice(index, 1, {status: !this.screenActivitySelectStatus[index].status, id});
+        },
+        // 筛选条件清空
+        screenClear () {
+          this.screenActivitySelectStatus.map((item) => {
+            item.status = false;
+          });
+          this.screenDeliverySelected = '';
+        },
+        // 筛选条件确认
+        screenConfirm () {
+          this.confirmStatus = !this.confirmStatus;
           this.filterListShow = false;
         }
       },
@@ -443,6 +496,11 @@
               text-align: center;
             }
           }
+          .screen-distribution-list-selected {
+            font-weight: 700;
+            color: @blue;
+            background-color: #edf5ff;
+          }
         }
         .screen-action-wrap {
           display: flex;
@@ -461,6 +519,9 @@
           .confirm-btn {
             color: #fff;
             background-color: #00d762;
+          }
+          .clear-btn-selected {
+            color: @fontColor;
           }
         }
       }
