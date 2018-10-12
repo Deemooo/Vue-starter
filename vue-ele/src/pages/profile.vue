@@ -8,6 +8,7 @@
           <span class="profile-title">我的</span>
         </template>
       </top-header>
+      <!--账户信息-->
       <router-link :to="userInfo.user_id ? '/profile/info' : '/login'" tag="div" class="profile-info">
         <img :src="imgBaseUrl + userInfo.avatar" class="avatar-default" v-if="userInfo.user_id">
         <svg v-else class="avatar-default">
@@ -28,6 +29,7 @@
           </svg>
         </div>
       </router-link>
+      <!--账户余额、优惠信息-->
       <div class="profile-wallet">
         <router-link to="/balance" tag="div" class="profile-wallet-item">
           <div class="profile-wallet-item-name">
@@ -51,6 +53,56 @@
           <div class="profile-wallet-item-value">我的积分</div>
         </router-link>
       </div>
+      <div class="profile-order">
+        <router-link tag="div" to='/order' class="user-order">
+          <svg class="icon" fill="#4aa5f0">
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#order"></use>
+          </svg>
+          <span class="text">我的订单</span>
+          <svg class="arrow" fill="#bbb">
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
+          </svg>
+        </router-link>
+        <a href='https://home.m.duiba.com.cn/#/chome/index' class="user-order">
+          <svg class="icon" fill="#fc7b53">
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#point"></use>
+          </svg>
+          <span class="text">积分商城</span>
+          <svg class="arrow" fill="#bbb">
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
+          </svg>
+        </a>
+        <router-link tag="div" to='/vipcard' class="user-order">
+          <svg class="icon" fill="#ffc636">
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#vip"></use>
+          </svg>
+          <span class="text">饿了么会员卡</span>
+          <svg class="arrow" fill="#bbb">
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
+          </svg>
+        </router-link>
+      </div>
+      <div class="profile-order">
+        <router-link tag="div" to='/service' class="user-order">
+          <svg class="icon" fill="#4aa5f0">
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#service"></use>
+          </svg>
+          <span class="text">服务中心</span>
+          <svg class="arrow" fill="#bbb">
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
+          </svg>
+        </router-link>
+        <router-link tag="div" to='/vipcard' class="user-order">
+          <svg class="icon" fill="#3cabff">
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#download"></use>
+          </svg>
+          <span class="text">下载饿了么APP</span>
+          <svg class="arrow" fill="#bbb">
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
+          </svg>
+        </router-link>
+      </div>
+      <div class="profile-service"></div>
     </div>
 </template>
 <script>
@@ -168,7 +220,7 @@
       background-color: #fff;
       .profile-wallet-item {
         flex: 0 0 33.33%;
-        border-right: 1px solid @gray;
+        border-right: .025rem solid @gray;
         text-align: center;
         .profile-wallet-item-name {
           text-align: center;
@@ -197,6 +249,33 @@
           color: @fontColor1;
           font-weight: 400;
         }
+      }
+    }
+    .profile-order {
+      margin: .4rem 0;
+      background-color: #fff;
+      .user-order {
+        display: flex;
+        align-items: center;
+        padding: .6rem;
+        border-bottom: .025rem solid @gray;
+        .icon {
+          width: .8rem;
+          height: .8rem;
+          margin-right: .2rem;
+        }
+        .text {
+          flex: 1 0 60%;
+          font-size: .7rem;
+          color: @fontColor;
+        }
+        .arrow {
+          width: .46667rem;
+          height: .46667rem;
+        }
+      }
+      .user-order:last-child {
+        border-bottom: none;
       }
     }
   }

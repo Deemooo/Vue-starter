@@ -133,6 +133,8 @@
       text-decoration: none;
       color: #fff;
       .msite-title-text {
+        font-size: .8rem;
+        color: #fff;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
