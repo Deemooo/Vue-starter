@@ -19,7 +19,13 @@ export default new Router({
     // 个人信息页
     {
       path: '/profile',
-      component: resolve => require(['../pages/profile.vue'], resolve)
+      component: resolve => require(['../pages/profile.vue'], resolve),
+      children: [
+        {
+          path: 'profileInfo',
+          component: resolve => require(['../pages/profileInfo.vue'], resolve)
+        }
+      ]
     },
     // 重置密码页
     {

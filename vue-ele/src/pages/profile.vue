@@ -9,7 +9,7 @@
         </template>
       </top-header>
       <!--账户信息-->
-      <router-link :to="userInfo.user_id ? '/profile/info' : '/login'" tag="div" class="profile-info">
+      <router-link :to="userInfo.user_id ? '/profile/profileInfo' : '/login'" tag="div" class="profile-info">
         <img :src="imgBaseUrl + userInfo.avatar" class="avatar-default" v-if="userInfo.user_id">
         <svg v-else class="avatar-default">
           <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#avatar-default"></use>
@@ -102,7 +102,6 @@
           </svg>
         </router-link>
       </div>
-      <div class="profile-service"></div>
     </div>
 </template>
 <script>
