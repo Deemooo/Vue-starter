@@ -11,7 +11,7 @@
       </top-header>
       <form class="city-form" v-on:submit.prevent>
         <div>
-          <input type="search" name="city" placeholder="输入学校、商务楼、地址" class="search-input" required v-model='inputVaule'>
+          <input type="search" name="city" placeholder="输入学校、商务楼、地址" class="search-input" required v-model='inputValue'>
         </div>
         <div>
           <input type="submit" name="submit" class="search-submit" @click='getPois' value="提交">
@@ -47,7 +47,7 @@
       data () {
           return {
             cityId: '',
-            inputVaule: '',
+            inputValue: '',
             placeList: [],
             placeHistory: [],
             historyArr: [],
@@ -56,7 +56,8 @@
       },
       methods: {
         ...mapMutations([
-          'updateCityInfo'
+          'updateCityInfo',
+          'saveGeohash'
         ]),
         getCurrentcity () {
           this.https({url: '/v1/cities/' + this.cityId, method: 'get'}).then(
@@ -65,11 +66,11 @@
             });
         },
         getPois () {
-          if (this.inputVaule) {
+          if (this.inputValue) {
             let params = this.setStrOfUrl({
               type: 'search',
               city_id: this.cityId,
-              keyword: this.inputVaule
+              keyword: this.inputValue
             });
             this.https({url: '/v1/pois' + params, method: 'get'}).then(
               (res) => {
@@ -83,9 +84,9 @@
         selectHistoryItem (geohash) {
           this.$router.push(
             {
-            path: '/msite',
-            query: {geohash}
+            path: '/msite'
             });
+          this.saveGeohash(geohash);
         },
         selectPlace (index, geohash) {
           let history = this.getListData('searchHistory');
@@ -99,6 +100,7 @@
               this.historyArr.push(this.placeList[index]);
             }
           }
+          this.saveGeohash(geohash);
           this.selectHistoryItem(geohash);
           this.setListData('searchHistory', this.historyArr);
         },

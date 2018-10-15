@@ -157,9 +157,10 @@
         height: 1.8rem;
         padding-left: .4rem;
         font-size: 0.75rem;
-        text-decoration: none;
-        color: @blue;
         border-bottom: 1px solid @gray;
+        span {
+          color: @blue;
+        }
         .arrow-right {
           position: absolute;
           right: .4rem;
