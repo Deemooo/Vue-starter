@@ -49,7 +49,7 @@ export default new Router({
     },
     // 搜索页
     {
-      path: '/search/:geohash',
+      path: '/search',
       component: resolve => require(['../pages/search.vue'], resolve)
     },
     // 订单页

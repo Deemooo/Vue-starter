@@ -39,16 +39,19 @@
     </div>
 </template>
 <script>
-    import { mapMutations } from 'vuex';
+    import { mapMutations, mapState } from 'vuex';
     import shopList from '../components/shopList';
     export default {
         components: {
           shopList
         },
-        computed: {},
+        computed: {
+          ...mapState([
+            'geohash'
+          ])
+        },
         data () {
             return {
-              geohash: '',
               msiteTitle: '',
               foodTypes: [],
               imgBaseUrl: 'https://fuss10.elemecdn.com',
@@ -95,20 +98,18 @@
           }
         },
        async mounted () {
-          if (!this.$route.query.geohash) {
+          if (!this.geohash) {
             let params = this.setStrOfUrl({
               type: 'guess'
             });
             this.https({url: '/v1/cities' + params, method: 'get'}).then(
               (res) => {
                 this.geohash = res.latitude + ',' + res.longitude;
+                this.saveGeohash(this.geohash);
               });
-          } else {
-            this.geohash = this.$route.query.geohash;
           }
           this.getMsiteAddress();
           this.getFoodTypes();
-          this.saveGeohash(this.geohash);
         },
         watch: {}
     };
