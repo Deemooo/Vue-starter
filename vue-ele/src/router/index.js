@@ -19,10 +19,14 @@ export default new Router({
     // 个人信息页
     {
       path: '/profile',
+      name: 'profile',
+      meta: '我的',
       component: resolve => require(['../pages/profile.vue'], resolve),
       children: [
         {
-          path: 'profileInfo',
+          path: '/profileInfo',
+          name: 'profileInfo',
+          meta: '账户信息',
           component: resolve => require(['../pages/profileInfo.vue'], resolve)
         }
       ]

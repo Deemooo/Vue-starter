@@ -1,13 +1,5 @@
 <template>
     <div class="profile-info">
-      <top-header>
-        <template>
-          <svg class="arrow-left" xmlns="http://www.w3.org/2000/svg" version="1.1" @click="$router.go(-1)">
-            <polyline points="12,18 4,9 12,0" style="fill:none;stroke:rgb(255,255,255);stroke-width:2"/>
-          </svg>
-          <span class="profile-title">账户信息</span>
-        </template>
-      </top-header>
       <div class="profile-info-list">
         <router-link tag="div" to='/service' class="user-order">
           <svg class="icon" fill="#4aa5f0">

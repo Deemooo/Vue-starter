@@ -5,103 +5,107 @@
           <svg class="arrow-left" xmlns="http://www.w3.org/2000/svg" version="1.1" @click="$router.go(-1)">
             <polyline points="12,18 4,9 12,0" style="fill:none;stroke:rgb(255,255,255);stroke-width:2"/>
           </svg>
-          <span class="profile-title">我的</span>
+          <span class="profile-title">{{ profileTitle }}</span>
         </template>
       </top-header>
-      <!--账户信息-->
-      <router-link :to="userInfo.user_id ? '/profile/profileInfo' : '/login'" tag="div" class="profile-info">
-        <img :src="imgBaseUrl + userInfo.avatar" class="avatar-default" v-if="userInfo.user_id">
-        <svg v-else class="avatar-default">
-          <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#avatar-default"></use>
-        </svg>
-        <div class="user-info">
-          <div class="user-info-item">
-            <div class="user-login">{{ username }}</div>
-            <div class="user-phone">
-              <svg class="user-phone-icon" fill="#fff">
-                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#mobile"></use>
-              </svg>
-              <span class="icon-mobile-number">{{ mobile }}</span>
+      <div v-show="userOption === 'profile'">
+        <!--账户信息-->
+        <router-link :to="userInfo.user_id ? '/profileInfo' : '/login'" tag="div" class="profile-info">
+          <img :src="imgBaseUrl + userInfo.avatar" class="avatar-default" v-if="userInfo.user_id">
+          <svg v-else class="avatar-default">
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#avatar-default"></use>
+          </svg>
+          <div class="user-info">
+            <div class="user-info-item">
+              <div class="user-login">{{ username }}</div>
+              <div class="user-phone">
+                <svg class="user-phone-icon" fill="#fff">
+                  <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#mobile"></use>
+                </svg>
+                <span class="icon-mobile-number">{{ mobile }}</span>
+              </div>
             </div>
+            <svg class="arrow-svg" fill="#fff">
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
+            </svg>
           </div>
-          <svg class="arrow-svg" fill="#fff">
-            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
-          </svg>
+        </router-link>
+        <!--账户余额、优惠信息-->
+        <div class="profile-wallet">
+          <router-link to="/balance" tag="div" class="profile-wallet-item">
+            <div class="profile-wallet-item-name">
+              <span class="profile-wallet-item-name-count balance">{{ balance }}</span>
+              <span class="profile-wallet-item-name-unit">元</span>
+            </div>
+            <div class="profile-wallet-item-value">我的余额</div>
+          </router-link>
+          <router-link to="/benefit" tag="div" class="profile-wallet-item">
+            <div class="profile-wallet-item-name">
+              <span class="profile-wallet-item-name-count count">{{ count }}</span>
+              <span class="profile-wallet-item-name-unit">个</span>
+            </div>
+            <div class="profile-wallet-item-value">我的优惠</div>
+          </router-link>
+          <router-link to="/points" tag="div" class="profile-wallet-item">
+            <div class="profile-wallet-item-name">
+              <span class="profile-wallet-item-name-count point">{{ pointNumber }}</span>
+              <span class="profile-wallet-item-name-unit">分</span>
+            </div>
+            <div class="profile-wallet-item-value">我的积分</div>
+          </router-link>
         </div>
-      </router-link>
-      <!--账户余额、优惠信息-->
-      <div class="profile-wallet">
-        <router-link to="/balance" tag="div" class="profile-wallet-item">
-          <div class="profile-wallet-item-name">
-            <span class="profile-wallet-item-name-count balance">{{ balance }}</span>
-            <span class="profile-wallet-item-name-unit">元</span>
-          </div>
-          <div class="profile-wallet-item-value">我的余额</div>
-        </router-link>
-        <router-link to="/benefit" tag="div" class="profile-wallet-item">
-          <div class="profile-wallet-item-name">
-            <span class="profile-wallet-item-name-count count">{{ count }}</span>
-            <span class="profile-wallet-item-name-unit">个</span>
-          </div>
-          <div class="profile-wallet-item-value">我的优惠</div>
-        </router-link>
-        <router-link to="/points" tag="div" class="profile-wallet-item">
-          <div class="profile-wallet-item-name">
-            <span class="profile-wallet-item-name-count point">{{ pointNumber }}</span>
-            <span class="profile-wallet-item-name-unit">分</span>
-          </div>
-          <div class="profile-wallet-item-value">我的积分</div>
-        </router-link>
+        <div class="profile-order">
+          <router-link tag="div" to='/order' class="user-order">
+            <svg class="icon" fill="#4aa5f0">
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#order"></use>
+            </svg>
+            <span class="text">我的订单</span>
+            <svg class="arrow" fill="#bbb">
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
+            </svg>
+          </router-link>
+          <a href='https://home.m.duiba.com.cn/#/chome/index' class="user-order">
+            <svg class="icon" fill="#fc7b53">
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#point"></use>
+            </svg>
+            <span class="text">积分商城</span>
+            <svg class="arrow" fill="#bbb">
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
+            </svg>
+          </a>
+          <router-link tag="div" to='/vipcard' class="user-order">
+            <svg class="icon" fill="#ffc636">
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#vip"></use>
+            </svg>
+            <span class="text">饿了么会员卡</span>
+            <svg class="arrow" fill="#bbb">
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
+            </svg>
+          </router-link>
+        </div>
+        <div class="profile-order">
+          <router-link tag="div" to='/service' class="user-order">
+            <svg class="icon" fill="#4aa5f0">
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#service"></use>
+            </svg>
+            <span class="text">服务中心</span>
+            <svg class="arrow" fill="#bbb">
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
+            </svg>
+          </router-link>
+          <router-link tag="div" to='/download' class="user-order">
+            <svg class="icon" fill="#3cabff">
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#download"></use>
+            </svg>
+            <span class="text">下载饿了么APP</span>
+            <svg class="arrow" fill="#bbb">
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
+            </svg>
+          </router-link>
+        </div>
       </div>
-      <div class="profile-order">
-        <router-link tag="div" to='/order' class="user-order">
-          <svg class="icon" fill="#4aa5f0">
-            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#order"></use>
-          </svg>
-          <span class="text">我的订单</span>
-          <svg class="arrow" fill="#bbb">
-            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
-          </svg>
-        </router-link>
-        <a href='https://home.m.duiba.com.cn/#/chome/index' class="user-order">
-          <svg class="icon" fill="#fc7b53">
-            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#point"></use>
-          </svg>
-          <span class="text">积分商城</span>
-          <svg class="arrow" fill="#bbb">
-            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
-          </svg>
-        </a>
-        <router-link tag="div" to='/vipcard' class="user-order">
-          <svg class="icon" fill="#ffc636">
-            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#vip"></use>
-          </svg>
-          <span class="text">饿了么会员卡</span>
-          <svg class="arrow" fill="#bbb">
-            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
-          </svg>
-        </router-link>
-      </div>
-      <div class="profile-order">
-        <router-link tag="div" to='/service' class="user-order">
-          <svg class="icon" fill="#4aa5f0">
-            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#service"></use>
-          </svg>
-          <span class="text">服务中心</span>
-          <svg class="arrow" fill="#bbb">
-            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
-          </svg>
-        </router-link>
-        <router-link tag="div" to='/vipcard' class="user-order">
-          <svg class="icon" fill="#3cabff">
-            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#download"></use>
-          </svg>
-          <span class="text">下载饿了么APP</span>
-          <svg class="arrow" fill="#bbb">
-            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
-          </svg>
-        </router-link>
-      </div>
+      <router-view></router-view>
+      <bottom-footer></bottom-footer>
     </div>
 </template>
 <script>
@@ -122,7 +126,9 @@
             balance: 0,
             count: 0,
             pointNumber: 0,
-            avatar: ''
+            avatar: '',
+            userOption: 'profile',
+            profileTitle: '我的'
           };
       },
       methods: {},
@@ -136,7 +142,12 @@
           this.pointNumber = this.userInfo.point;
         }
       },
-      watch: {}
+      watch: {},
+      beforeRouteUpdate (to, from, next) {
+        this.userOption = to.name;
+        this.profileTitle = to.meta;
+        next();
+     }
   };
 </script>
 <style lang="less" scoped>
