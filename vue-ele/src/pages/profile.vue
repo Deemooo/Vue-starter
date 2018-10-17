@@ -5,10 +5,10 @@
           <svg class="arrow-left" xmlns="http://www.w3.org/2000/svg" version="1.1" @click="$router.go(-1)">
             <polyline points="12,18 4,9 12,0" style="fill:none;stroke:rgb(255,255,255);stroke-width:2"/>
           </svg>
-          <span class="profile-title">{{ profileTitle }}</span>
+          <span class="profile-title">我的</span>
         </template>
       </top-header>
-      <div v-show="userOption === 'profile'">
+      <div>
         <!--账户信息-->
         <router-link :to="userInfo.user_id ? '/profileInfo' : '/login'" tag="div" class="profile-info">
           <img :src="imgBaseUrl + userInfo.avatar" class="avatar-default" v-if="userInfo.user_id">
@@ -104,7 +104,6 @@
           </router-link>
         </div>
       </div>
-      <router-view></router-view>
       <bottom-footer></bottom-footer>
     </div>
 </template>
@@ -126,9 +125,7 @@
             balance: 0,
             count: 0,
             pointNumber: 0,
-            avatar: '',
-            userOption: 'profile',
-            profileTitle: '我的'
+            avatar: ''
           };
       },
       methods: {},
@@ -142,12 +139,7 @@
           this.pointNumber = this.userInfo.point;
         }
       },
-      watch: {},
-      beforeRouteUpdate (to, from, next) {
-        this.userOption = to.name;
-        this.profileTitle = to.meta;
-        next();
-     }
+      watch: {}
   };
 </script>
 <style lang="less" scoped>

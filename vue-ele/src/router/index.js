@@ -19,17 +19,17 @@ export default new Router({
     // 个人信息页
     {
       path: '/profile',
-      name: 'profile',
-      meta: '我的',
-      component: resolve => require(['../pages/profile.vue'], resolve),
-      children: [
-        {
-          path: '/profileInfo',
-          name: 'profileInfo',
-          meta: '账户信息',
-          component: resolve => require(['../pages/profileInfo.vue'], resolve)
-        }
-      ]
+      component: resolve => require(['../pages/profile.vue'], resolve)
+    },
+    // 账户信息
+    {
+      path: '/profileInfo',
+      component: resolve => require(['../pages/profileInfo.vue'], resolve)
+    },
+    // 设置用户名
+    {
+      path: '/setUsername',
+      component: resolve => require(['../pages/setUsername.vue'], resolve)
     },
     // 重置密码页
     {

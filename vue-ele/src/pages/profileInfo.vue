@@ -1,6 +1,14 @@
 <template>
     <div class="user-info">
-      <div class="user-info-list">
+      <top-header>
+        <template>
+          <svg class="arrow-left" xmlns="http://www.w3.org/2000/svg" version="1.1" @click="$router.go(-1)">
+            <polyline points="12,18 4,9 12,0" style="fill:none;stroke:rgb(255,255,255);stroke-width:2"/>
+          </svg>
+          <span class="profile-title">个人信息</span>
+        </template>
+      </top-header>
+      <div class="user-info-list first-list">
         <div class="user-info-list-item"  @click="uploadAvatar">
           <input type="file" accept="image/*" class="upload-avatar">
           <span class="text">头像</span>
@@ -12,7 +20,7 @@
             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
           </svg>
         </div>
-        <router-link tag="div" to='/setUsername' class="user-info-list-item">
+        <router-link tag="div" to='setUsername' class="user-info-list-item">
           <span class="text">用户名</span>
           <svg class="arrow" fill="#bbb">
             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
@@ -63,8 +71,25 @@
       },
       methods: {
         // 上传头像
-        async uploadAvatar () {
-          document.querySelector('.upload-avatar').click();
+        uploadAvatar () {
+          var uploadInput = document.querySelector('.upload-avatar');
+          uploadInput.click();
+          uploadInput.onload = (() =>  {
+            let data = new FormData();
+            data.append('file', uploadInput.files[0]);
+            try {
+              this.https({url: '/eus/v1/users/' + this.userInfo.user_id + '/avatar', data, method: 'post'}).then(
+                (res) => {
+                  if (res.status === 1) {
+                    this.$set(this.userInfo, 'avatar', res.image_path);
+                  } else {
+                    throw new Error('上传失败!');
+                  }
+                });
+            } catch (e) {
+              alert(e);
+            }
+          })();
         }
       },
       mounted () {
@@ -77,9 +102,24 @@
   .user-info {
     position: relative;
     width: 100%;
-    margin-top: 1.95rem;
     overflow-y: auto;
     background-color: #fff;
+    svg, span {
+      box-sizing: border-box;
+      color: #fff;
+    }
+    .arrow-left {
+      margin-left: .4rem;
+      flex: 0 0 33.333%;
+      height: .8rem;
+    }
+    .profile-title {
+      flex: 0 0 33.333%;
+      font-size: .8rem;
+      line-height: .8rem;
+      text-align: center;
+      font-weight: 700;
+    }
     .user-info-list {
       .user-info-list-item {
         display: flex;
@@ -107,6 +147,9 @@
           height: .46667rem;
         }
       }
+    }
+    .first-list {
+      margin-top: 1.95rem;
     }
     .division {
       padding: .4rem;
