@@ -56,7 +56,7 @@
 </template>
 <script>
   import { mapState } from 'vuex';
-  import { imgBaseUrl } from '../../config/env';
+  import { imgBaseUrl } from '../../../config/env';
   export default {
       components: {},
       computed: {
@@ -98,7 +98,7 @@
   };
 </script>
 <style lang="less" scoped>
-  @import (reference) "../assets/style/dynamic";
+  @import (reference) "../../assets/style/dynamic";
   .user-info {
     position: relative;
     width: 100%;

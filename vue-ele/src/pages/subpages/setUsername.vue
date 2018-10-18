@@ -10,8 +10,10 @@
       </top-header>
       <form class="set-username-form" v-on:submit.prevent>
         <div>
-          <input type="search" name="city" placeholder="输入用户名" class="search-input" required v-model='inputValue'>
+          <input type="search" v-model='inputValue' @input="checkInput" placeholder="输入用户名" :class="{'input-error': !effective}" class="search-input" required>
         </div>
+        <div v-if="effective" class="input-tips">用户名只能修改一次(5-24字符之间)</div>
+        <div v-else class="input-tips error">请输入5-24位的字符！</div>
         <div>
           <input type="submit" name="submit" class="search-submit" @click='setUsername' value="提交">
         </div>
@@ -29,15 +31,29 @@
       },
       data () {
           return {
-            inputValue: ''
+            inputValue: '',
+            effective: true
           };
       },
       methods: {
-        setUsername () {
-          if (this.inputValue) {
-
+        ...mapMutations([
+          'saveUserName'
+        ]),
+        // 输入检查
+        checkInput () {
+          if (this.inputValue.length < 5 || this.inputValue.length > 24) {
+            this.effective = false;
+            return false;
           } else {
-            alert('请输入商家或美食名称进行搜索！');
+            this.effective = true;
+            return true;
+          }
+        },
+        // 设置用户名
+        setUsername () {
+          if (this.checkInput) {
+            this.saveUserName(this.inputValue);
+            this.$router.go(-1);
           }
         }
       },
@@ -47,7 +63,7 @@
   };
 </script>
 <style lang="less" scoped>
-  @import (reference) "../assets/style/dynamic";
+  @import (reference) "../../assets/style/dynamic";
   .set-username {
     width: 100%;
     overflow-y: auto;
@@ -89,15 +105,28 @@
         }
         .search-input, .search-submit {
           border-radius: .1rem;
-          margin-bottom: .4rem;
           width: 100%;
           height: 1.4rem;
+        }
+        .input-error {
+          border-color: @fontColor3;
         }
         .search-submit {
           background-color: @blue;
           font-size: .65rem;
           color: #fff;
         }
+      }
+      .input-tips {
+        height: 0.58rem;
+        font-size: .4rem;
+        color: @fontColor1;
+        text-align: left;
+        padding: .4rem;
+      }
+      .error {
+        font-size: .58rem;
+        color: @fontColor3;
       }
     }
   }

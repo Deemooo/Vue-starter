@@ -24,12 +24,22 @@ export default new Router({
     // 账户信息
     {
       path: '/profileInfo',
-      component: resolve => require(['../pages/profileInfo.vue'], resolve)
+      component: resolve => require(['../pages/subpages/profileInfo.vue'], resolve)
     },
     // 设置用户名
     {
       path: '/setUsername',
-      component: resolve => require(['../pages/setUsername.vue'], resolve)
+      component: resolve => require(['../pages/subpages/setUsername.vue'], resolve)
+    },
+    // 收货地址
+    {
+      path: '/address',
+      component: resolve => require(['../pages/subpages/address.vue'], resolve)
+    },
+    // 收货地址
+    {
+      path: '/addAddress',
+      component: resolve => require(['../pages/subpages/addAddress.vue'], resolve)
     },
     // 重置密码页
     {
