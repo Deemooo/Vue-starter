@@ -121,17 +121,20 @@
     overflow-y: auto;
     position: relative;
     color: #fff;
+    a, span {
+      box-sizing: border-box;
+    }
     .link-search {
-      margin-left: .4rem;
-      flex: 0 0 10%;
+      flex: 0 0 22%;
       height: .9rem;
+      padding-left: .4rem;
+      text-align: left;
     }
     .msite-title {
-      flex: 0 0 64%;
+      flex: 0 0 56%;
       font-size: .8rem;
       line-height: .8rem;
       text-align: center;
-      text-decoration: none;
       color: #fff;
       .msite-title-text {
         font-size: .8rem;
@@ -142,7 +145,9 @@
       }
     }
     .head-login {
-      flex: 0 0 33.333%;
+      flex: 0 0 22%;
+      padding-right: .4rem;
+      text-align: right;
       font-weight: 400;
       font-size: .6rem;
       color: #fff;

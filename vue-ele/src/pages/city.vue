@@ -137,18 +137,17 @@
       font-weight: 700;
     }
     .arrow-left {
-      margin-left: .4rem;
+      padding-left: .4rem;
       flex: 0 0 33.333%;
       height: .8rem;
     }
     .change-city {
-      position: relative;
-      left: .4rem;
       flex: 0 0 33.333%;
+      padding-right: .4rem;
       font-size: .6rem;
       font-weight: 400;
       line-height: .6rem;
-      text-align: center;
+      text-align: right;
     }
     .city-form {
       background-color: #fff;

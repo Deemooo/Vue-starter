@@ -114,20 +114,21 @@
     height: 100%;
     overflow-y: auto;
     position: relative;
-    .head-logo {
-      display: inline-block;
-      margin-left: .4rem;
+    svg, span {
+      box-sizing: border-box;
+      color: #fff;
       font-weight: 400;
       font-size: .7rem;
-      color: #fff;
+    }
+    .head-logo {
+      flex: 0 0 50%;
+      padding-left: .4rem;
+      text-align: left;
     }
     .head-login {
-      position: absolute;
-      right: .4rem;
-      display: inline-block;
-      font-weight: 400;
-      font-size: .7rem;
-      color: #fff;
+      flex: 0 0 50%;
+      padding-right: .4rem;
+      text-align: right;
     }
     .city-nav {
       padding-top: 2.35rem;
