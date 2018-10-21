@@ -8,9 +8,9 @@
           <span class="search-title">搜索</span>
         </template>
       </top-header>
-      <form class="city-form" v-on:submit.prevent>
+      <form class="search-form" v-on:submit.prevent>
         <div>
-          <input type="search" name="city" placeholder="请输入商家或美食名称" class="search-input" required v-model='inputValue'>
+          <input type="search" placeholder="请输入商家或美食名称" class="search-input" required v-model='inputValue'>
         </div>
         <div>
           <input type="submit" name="submit" class="search-submit" @click='searchRestaurant' value="提交">
@@ -78,7 +78,7 @@
       text-align: center;
       font-weight: 700;
     }
-    .city-form {
+    .search-form {
       background-color: #fff;
       border-top: 1px solid @gray;
       border-bottom: 1px solid @gray;
