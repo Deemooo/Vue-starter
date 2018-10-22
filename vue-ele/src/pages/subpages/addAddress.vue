@@ -91,6 +91,9 @@
           color: @fontColor;
           outline: none;
         }
+        input::-webkit-input-placeholder {
+          font-size: .6rem;
+        }
         .add-address-input, .add-address-submit {
           border-radius: .1rem;
           margin-bottom: .4rem;
