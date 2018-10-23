@@ -7,7 +7,9 @@ export default new Vuex.Store({
   state: {
     cityInfo: {},
     userInfo: {},
-    geohash: ''
+    geohash: '',
+    specificSpaceName: '',
+    addressList: []
   },
   mutations: {
     // 更新城市信息
@@ -32,6 +34,12 @@ export default new Vuex.Store({
     saveUserName (state, name) {
       if (name) {
         Vue.set(state.userInfo, 'username', name);
+      }
+    },
+    // 添加新地址
+    addNewAddress (state, data) {
+      if (data) {
+        state.addressList.push(data);
       }
     }
   },

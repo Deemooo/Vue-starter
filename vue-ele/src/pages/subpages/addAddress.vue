@@ -10,46 +10,102 @@
       </top-header>
       <form class="add-address-form" v-on:submit.prevent>
         <div>
-          <input type="search" placeholder="请输入您的姓名" required v-model='inputName' @input="validateUser(inputName)" class="add-address-input">
-          <div v-if="checkName" class="input-error-tips">{{ this._erroTip('姓名') }}</div>
+          <input type="text" placeholder="请输入您的姓名" required v-model='inputName' class="add-address-input">
+          <div v-if="checkName" class="input-error-tips">{{ this.erroTip('姓名') }}</div>
+        </div>
+        <router-link tag="div" to='specificSpaceName' class="add-detail">
+          <input type="text" placeholder="请选择小区/写字楼/学校等" readonly="readonly" class="add-address-input" v-model='specificSpaceName'>
+          <div v-if="checkAddress" class="input-error-tips">{{ this.erroTip('小区/写字楼/学校名称') }}</div>
+        </router-link>
+        <div>
+          <input type="text" placeholder="请输入详细送餐地址" class="add-address-input" required v-model='inputDetailAddress'>
+          <div v-if="checkDetailAddress" class="input-error-tips">{{ this.erroTip('详细送餐地址') }}</div>
         </div>
         <div>
-          <input type="search" placeholder="请输入小区/写字楼/学校等" class="add-address-input" required v-model='inputAddress'>
+          <input type="text" placeholder="请输入您的手机号" class="add-address-input" required v-model='inputCellphoneNumber'>
+          <div v-if="checkCellphoneNumber" class="input-error-tips">{{ this.erroTip('手机号') }}</div>
         </div>
         <div>
-          <input type="search" placeholder="请输入详细送餐地址" class="add-address-input" required v-model='inputDetailAddress'>
+          <input type="text" placeholder="请输入备用联系电话(选填)" class="add-address-input" v-model='inputPhoneNumber'>
+          <div v-if="checkPhoneNumber" class="input-error-tips">{{ this.erroTip('备用联系电话') }}</div>
         </div>
         <div>
-          <input type="search" placeholder="请输入您的手机号" class="add-address-input" required v-model='inputCellphoneNumber'>
-        </div>
-        <div>
-          <input type="search" placeholder="请输入备用联系电话(选填)" class="add-address-input" required v-model='inputPhoneNumber'>
-        </div>
-        <div>
-          <input type="submit" name="submit" class="add-address-submit" @click='addAddress' value="提交">
+          <input type="submit" name="submit" class="add-address-submit" @click='asveAddress' value="提交">
         </div>
       </form>
     </div>
 </template>
 <script>
+  import { mapMutations, mapState } from 'vuex';
   export default {
       components: {},
       computed: {
+        ...mapState([
+          'userInfo',
+          'specificSpaceName',
+          'geohash'
+        ]),
         checkName () {
-          return this.validateUser(this.inputName);
+          return !(this.isNull(this.inputName) && this.validateUser(this.inputName));
+        },
+        checkAddress () {
+          return !(this.isNull(this.specificSpaceName) && this.validateUser(this.specificSpaceName));
+        },
+        checkDetailAddress () {
+          return !(this.isNull(this.inputDetailAddress) && this.validateUser(this.inputDetailAddress));
+        },
+        checkCellphoneNumber () {
+          return !(this.isNull(this.inputCellphoneNumber) && this.validateUser(this.inputCellphoneNumber));
+        },
+        checkPhoneNumber () {
+          return !this.validateUser(this.inputPhoneNumber);
         }
       },
       data () {
           return {
             inputName: '',
-            inputAddress: '',
             inputDetailAddress: '',
             inputCellphoneNumber: '',
             inputPhoneNumber: ''
           };
       },
       methods: {
-        addAddress () {}
+        ...mapMutations([
+          'addNewAddress'
+        ]),
+        asveAddress () {
+          if (!(this.checkName && this.checkAddress && this.checkDetailAddress && this.checkCellphoneNumber && this.checkPhoneNumber)) {
+            let params = {
+              address: this.specificSpaceName,
+              address_detail: this.inputDetailAddress,
+              geohash: this.geohash,
+              name: this.inputName,
+              phone: this.inputCellphoneNumber,
+              phone_bk: this.inputPhoneNumber,
+              poi_type: 0,
+              sex: 1,
+              tag: '公司',
+              tag_type: 4
+            };
+            this.https({url: '/v1/users/' + this.userInfo.userId + '/addresses', method: 'post'}).then(
+              (res) => {
+                if (res.message) {
+                  alert(res.message);
+                } else {
+                  this.addNewAddress({
+                    name: this.inputName,
+                    address: this.specificSpaceName,
+                    address_detail: this.inputDetailAddress,
+                    geohash: 'wtw37r7cxep4',
+                    phone: this.inputCellphoneNumber,
+                    phone_bk: this.inputPhoneNumber,
+                    poi: this.specificSpaceName,
+                    poi_type: 0
+                  });
+                }
+              });
+          }
+        }
       },
       mounted () {
       },

@@ -2,22 +2,25 @@
 export default {
   methods: {
     validateUser (value) {
-      this._nameTest(value);
+      return this._nameTest(value);
     },
     validatePassword (rule, value, callback) {
-      this._passwordTest(value) ? callback() : this._erroTip(callback, '密码');
+      return this._passwordTest(value);
     },
     validateShopName (rule, value, callback) {
-      this._nameTest(value) ? callback() : this._erroTip(callback, '店铺名称');
+      return this._nameTest(value);
     },
     validatePhone (rule, value, callback) {
-      (this._isTelephone(value) || this._isCellPhone(value)) ? callback() : this._erroTip(callback, '联系方式');
+      return (this._isTelephone(value) || this._isCellPhone(value));
     },
     validateTime (rule, value, callback) {
       if (value) {
-        this._dateCheck(this.formValidate.startTime, value) ? callback() : this._erroTip(callback, '结束时间');
+        return this._dateCheck(this.formValidate.startTime, value);
       }
-      (this._isTelephone(value) || this._isCellPhone(value)) ? callback() : this._erroTip(callback, '联系方式');
+    },
+    isNull (val) {
+      let reg = /\S/;
+      return reg.test(this.__Trim(val));
     },
     // 名称验证
     _nameTest (val) {
@@ -51,7 +54,7 @@ export default {
       }
     },
     // 错误提示
-    _erroTip (label) {
+    erroTip (label) {
       return `请填写正确的${label}！`;
     },
     // 去除字符串两端空格
