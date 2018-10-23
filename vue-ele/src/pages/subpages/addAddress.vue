@@ -10,7 +10,8 @@
       </top-header>
       <form class="add-address-form" v-on:submit.prevent>
         <div>
-          <input type="search" placeholder="请输入您的姓名" class="add-address-input" required v-model='inputName'>
+          <input type="search" placeholder="请输入您的姓名" required v-model='inputName' @input="validateUser(inputName)" class="add-address-input">
+          <div v-if="checkName" class="input-error-tips">{{ this._erroTip('姓名') }}</div>
         </div>
         <div>
           <input type="search" placeholder="请输入小区/写字楼/学校等" class="add-address-input" required v-model='inputAddress'>
@@ -33,7 +34,11 @@
 <script>
   export default {
       components: {},
-      computed: {},
+      computed: {
+        checkName () {
+          return this.validateUser(this.inputName);
+        }
+      },
       data () {
           return {
             inputName: '',
@@ -76,8 +81,7 @@
     }
     .add-address-form {
       background-color: #fff;
-      border-top: 1px solid @gray;
-      border-bottom: 1px solid @gray;
+      border-top: 0.25rem solid @gray;
       margin-top: 1.95rem;
       padding-top: .4rem;
       div {
@@ -85,7 +89,7 @@
         margin: 0 auto;
         text-align: center;
         input {
-          border: 1px solid @gray;
+          border: .025rem solid @gray;
           padding: 0 .3rem;
           font-size: .65rem;
           color: @fontColor;
@@ -96,14 +100,24 @@
         }
         .add-address-input, .add-address-submit {
           border-radius: .1rem;
-          margin-bottom: .4rem;
           width: 100%;
           height: 1.4rem;
+        }
+        .add-address-input:last-child {
+          margin-bottom: .4rem;
         }
         .add-address-submit {
           background-color: @blue;
           font-size: .65rem;
           color: #fff;
+        }
+        .input-error-tips {
+          width: 100%;
+          height: 0.58rem;
+          padding: .4rem;
+          font-size: .58rem;
+          color: @fontColor3;
+          text-align: left;
         }
       }
     }

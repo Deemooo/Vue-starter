@@ -7,6 +7,8 @@ import store from './store/store';
 import https from  './publicFn/https';
 // 全局混入
 import mixins from  './publicFn/mixins';
+// 表单验证
+import validate from  './publicFn/validate';
 
 // 顶栏
 import topHeader from './components/topHeader.vue';
@@ -20,6 +22,7 @@ Vue.config.productionTip = false;
 
 Vue.use(https);
 Vue.mixin(mixins);
+Vue.mixin(validate);
 Vue.use(Swiper);
 
 Vue.component('top-header', topHeader);

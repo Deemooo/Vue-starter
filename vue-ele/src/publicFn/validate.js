@@ -1,8 +1,8 @@
-// 表单验证方法（只针对特殊的验证，长度、非空验证使用组件自带验证）
+// 表单验证方法
 export default {
   methods: {
-    validateUser (rule, value, callback) {
-      this._nameTest(value) ? callback() : this._erroTip(callback, '用户名');
+    validateUser (value) {
+      this._nameTest(value);
     },
     validatePassword (rule, value, callback) {
       this._passwordTest(value) ? callback() : this._erroTip(callback, '密码');
@@ -51,8 +51,8 @@ export default {
       }
     },
     // 错误提示
-    _erroTip (callback, label) {
-      return callback(new Error(`请填写正确的${label}！`));
+    _erroTip (label) {
+      return `请填写正确的${label}！`;
     },
     // 去除字符串两端空格
     __Trim (str) {
