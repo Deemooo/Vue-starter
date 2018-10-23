@@ -15,13 +15,27 @@
             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
           </svg>
         </router-link>
+        <div v-for="(item, index) in addressList" :key="index" class="address-list-wrap">
+          <div class="item-name">
+            <span>{{ item.name }}</span>
+            <span class="item-name-phone">{{ item.phone }}</span>
+          </div>
+          <div class="item-address">
+            <span>{{ item.address }}</span>
+          </div>
+        </div>
       </div>
     </div>
 </template>
 <script>
+  import { mapMutations, mapState } from 'vuex';
   export default {
       components: {},
-      computed: {},
+      computed: {
+        ...mapState([
+          'addressList'
+        ])
+      },
       data () {
           return {};
       },
@@ -37,16 +51,15 @@
     width: 100%;
     overflow-y: auto;
     position: relative;
-    color: #fff;
     background-color: #fff;
     svg, span {
       box-sizing: border-box;
-      color: #fff;
     }
     .arrow-left {
       flex: 0 0 33.333%;
       margin-left: .4rem;
       height: .8rem;
+      color: #fff;
     }
     .address-title {
       flex: 0 0 33.333%;
@@ -54,6 +67,7 @@
       line-height: .8rem;
       text-align: center;
       font-weight: 700;
+      color: #fff;
     }
     .address-list {
       .address-list-item {
@@ -80,6 +94,27 @@
         .arrow {
           width: .46667rem;
           height: .46667rem;
+        }
+      }
+      .address-list-wrap {
+        padding: .4em .6rem;
+        border-bottom: .025rem solid @gray;
+        .item-name, .item-address{
+          margin: .1rem 0;
+          text-align: left;
+          color: @fontColor1;
+        }
+        .item-name {
+          font-size: .5rem;
+          .item-name-phone {
+            color: @fontColor;
+          }
+        }
+        .item-address {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          font-size: .7rem;
         }
       }
     }

@@ -4,16 +4,19 @@ export default {
     validateUser (value) {
       return this._nameTest(value);
     },
-    validatePassword (rule, value, callback) {
+    validatePassword (value) {
       return this._passwordTest(value);
     },
-    validateShopName (rule, value, callback) {
+    validateShopName (value) {
       return this._nameTest(value);
     },
-    validatePhone (rule, value, callback) {
+    validatePhone (value) {
       return (this._isTelephone(value) || this._isCellPhone(value));
     },
-    validateTime (rule, value, callback) {
+    validateCellPhone (value) {
+      return this._isCellPhone(value);
+    },
+    validateTime (value) {
       if (value) {
         return this._dateCheck(this.formValidate.startTime, value);
       }
@@ -24,7 +27,7 @@ export default {
     },
     // 名称验证
     _nameTest (val) {
-      let reg = /^[a-zA-Z][a-zA-Z0-9_]{3,15}$/;
+      let reg = /^[a-zA-Z][a-zA-Z0-9_]{2,15}$/;
       return val === '' || reg.test(val);
     },
     // 密码验证

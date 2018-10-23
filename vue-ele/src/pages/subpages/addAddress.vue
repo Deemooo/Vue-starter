@@ -49,16 +49,16 @@
           return !(this.isNull(this.inputName) && this.validateUser(this.inputName));
         },
         checkAddress () {
-          return !(this.isNull(this.specificSpaceName) && this.validateUser(this.specificSpaceName));
+          return !this.isNull(this.specificSpaceName);
         },
         checkDetailAddress () {
-          return !(this.isNull(this.inputDetailAddress) && this.validateUser(this.inputDetailAddress));
+          return !this.isNull(this.inputDetailAddress);
         },
         checkCellphoneNumber () {
-          return !(this.isNull(this.inputCellphoneNumber) && this.validateUser(this.inputCellphoneNumber));
+          return !(this.isNull(this.inputCellphoneNumber) && this.validateCellPhone(this.inputCellphoneNumber));
         },
         checkPhoneNumber () {
-          return !this.validateUser(this.inputPhoneNumber);
+          return !this.validatePhone(this.inputPhoneNumber);
         }
       },
       data () {
@@ -87,7 +87,7 @@
               tag: '公司',
               tag_type: 4
             };
-            this.https({url: '/v1/users/' + this.userInfo.userId + '/addresses', method: 'post'}).then(
+            this.https({url: '/v1/users/' + this.userInfo.user_id + '/addresses', params, method: 'post'}).then(
               (res) => {
                 if (res.message) {
                   alert(res.message);
@@ -102,6 +102,7 @@
                     poi: this.specificSpaceName,
                     poi_type: 0
                   });
+                  this.$router.go(-1);
                 }
               });
           }

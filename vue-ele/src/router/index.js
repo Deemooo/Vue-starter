@@ -36,10 +36,15 @@ export default new Router({
       path: '/address',
       component: resolve => require(['../pages/subpages/address.vue'], resolve)
     },
-    // 收货地址
+    // 新增收货地址
     {
       path: '/addAddress',
       component: resolve => require(['../pages/subpages/addAddress.vue'], resolve)
+    },
+    // 搜索特定地名
+    {
+      path: '/specificSpaceName',
+      component: resolve => require(['../pages/subpages/specificSpaceName.vue'], resolve)
     },
     // 重置密码页
     {

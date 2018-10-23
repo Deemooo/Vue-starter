@@ -41,6 +41,10 @@ export default new Vuex.Store({
       if (data) {
         state.addressList.push(data);
       }
+    },
+    // 保存特殊地名
+    saveSpecificSpaceName (state, name) {
+      state.specificSpaceName = name;
     }
   },
   actions: {
