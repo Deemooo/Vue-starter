@@ -35,12 +35,12 @@
       </div>
       <div class="division">账号绑定</div>
       <div class="user-info-list">
-        <router-link to="address" class="user-info-list-item">
+        <div @click="setCellPhoneNumber" class="user-info-list-item">
           <span class="text">手机</span>
           <svg class="arrow" fill="#bbb">
             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
           </svg>
-        </router-link>
+        </div>
       </div>
       <div class="division">安全设置</div>
       <div class="user-info-list">
@@ -90,6 +90,9 @@
               alert(e);
             }
           })();
+        },
+        setCellPhoneNumber () {
+          alert('请在APP中设置！');
         }
       },
       mounted () {

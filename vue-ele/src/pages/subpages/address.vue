@@ -48,7 +48,7 @@
           'removeAddress'
         ]),
         selectAddress (index) {
-          this.addressIndex = index;
+          this.addressIndex === index ? this.addressIndex = '' : this.addressIndex = index;
         },
         async deleteAddress (index, item) {
           if (this.userInfo && this.userInfo.user_id) {
