@@ -42,6 +42,12 @@ export default new Vuex.Store({
         state.addressList.push(data);
       }
     },
+    // 移除一条地址
+    removeAddress (state, index) {
+      if (typeof index !== 'undefined') {
+        state.addressList.splice(index, 1);
+      }
+    },
     // 保存特殊地名
     saveSpecificSpaceName (state, name) {
       state.specificSpaceName = name;

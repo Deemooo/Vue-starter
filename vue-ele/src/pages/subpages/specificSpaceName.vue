@@ -27,42 +27,45 @@
 <script>
   import { mapMutations } from 'vuex';
   export default {
-      components: {},
-      computed: {},
-      data () {
-          return {
-            inputValue: '',
-            placeList: []
-          };
-      },
-      methods: {
-        ...mapMutations([
-          'saveSpecificSpaceName'
-        ]),
-        // 获取地址列表
-        getPois () {
-          if (this.inputValue) {
-            let params = this.setStrOfUrl({
-              type: 'nearby',
-              keyword: this.inputValue
+    components: {},
+    computed: {},
+    data () {
+        return {
+          inputValue: '',
+          placeList: []
+        };
+    },
+    methods: {
+      ...mapMutations([
+        'saveSpecificSpaceName'
+      ]),
+      // 获取地址列表
+      getPois () {
+        if (this.inputValue) {
+          let params = this.setStrOfUrl({
+            type: 'nearby',
+            keyword: this.inputValue
+          });
+          this.https({url: '/v1/pois' + params, method: 'get'}).then(
+            (res) => {
+              this.placeList = res;
             });
-            this.https({url: '/v1/pois' + params, method: 'get'}).then(
-              (res) => {
-                this.placeList = res;
-              });
-          } else {
-            alert('请输入学校、商务楼、地址进行搜索！');
-          }
-        },
-        // 选择地名
-        selectPlace (index) {
-          this.saveSpecificSpaceName(this.placeList[index].name);
-          this.$router.go(-1);
+        } else {
+          alert('请输入学校、商务楼、地址进行搜索！');
         }
       },
-      mounted () {
-      },
-      watch: {}
+      // 选择地名
+      selectPlace (index) {
+        this.saveSpecificSpaceName(this.placeList[index].address);
+        this.$router.go(-1);
+      }
+    },
+    mounted () {},
+    deactivated () {
+      this.inputValue = '';
+      this.placeList = [];
+    },
+    watch: {}
   };
 </script>
 <style lang="less" scoped>

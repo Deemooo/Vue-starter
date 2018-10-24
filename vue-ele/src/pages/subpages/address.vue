@@ -15,7 +15,7 @@
             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
           </svg>
         </router-link>
-        <div v-for="(item, index) in addressList" :key="index" class="address-list-wrap">
+        <div v-for="(item, index) in addressList" :key="index" @click="selectAddress(index)" :class="{'address-list-selected': addressIndex === index}" class="address-list-wrap">
           <div class="item-name">
             <span>{{ item.name }}</span>
             <span class="item-name-phone">{{ item.phone }}</span>
@@ -23,6 +23,7 @@
           <div class="item-address">
             <span>{{ item.address }}</span>
           </div>
+          <div @click="deleteAddress(index, item)" :class="{'address-list-delete-selected': addressIndex === index}" class="address-list-delete">X</div>
         </div>
       </div>
     </div>
@@ -33,13 +34,32 @@
       components: {},
       computed: {
         ...mapState([
+          'userInfo',
           'addressList'
         ])
       },
       data () {
-          return {};
+          return {
+            addressIndex: ''
+          };
       },
-      methods: {},
+      methods: {
+        ...mapMutations([
+          'removeAddress'
+        ]),
+        selectAddress (index) {
+          this.addressIndex = index;
+        },
+        async deleteAddress (index, item) {
+          if (this.userInfo && this.userInfo.user_id) {
+            let params = {};
+            await this.https({url: '/v1/users/' + this.userInfo.user_id + '/addresses/' + item.id, params, method: 'delete'}).then(
+              (res) => {
+                this.removeAddress(index);
+              });
+          }
+        }
+      },
       mounted () {
       },
       watch: {}
@@ -97,6 +117,7 @@
         }
       }
       .address-list-wrap {
+        position: relative;
         padding: .4em .6rem;
         border-bottom: .025rem solid @gray;
         .item-name, .item-address{
@@ -107,15 +128,38 @@
         .item-name {
           font-size: .5rem;
           .item-name-phone {
-            color: @fontColor;
+            margin-left: .4rem;
+            color: @fontColor1;
           }
         }
         .item-address {
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          font-size: .7rem;
+          display: flex;
+          align-items: center;
+          width: 90%;
+          span {
+            display: inline-block;
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: .7rem;
+          }
         }
+        .address-list-delete {
+          position: absolute;
+          top: 50%;
+          right: .5rem;
+          display: none;
+          transform: translateY(-50%);
+          font-size: .7rem;
+          color: @fontColor3;
+        }
+        .address-list-delete-selected {
+          display: inline-block;
+        }
+      }
+      .address-list-selected {
+        background-color: @backColor;
       }
     }
     .first-list {

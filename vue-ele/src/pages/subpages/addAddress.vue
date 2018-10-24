@@ -38,79 +38,84 @@
 <script>
   import { mapMutations, mapState } from 'vuex';
   export default {
-      components: {},
-      computed: {
-        ...mapState([
-          'userInfo',
-          'specificSpaceName',
-          'geohash'
-        ]),
-        checkName () {
-          return !(this.isNull(this.inputName) && this.validateUser(this.inputName));
-        },
-        checkAddress () {
-          return !this.isNull(this.specificSpaceName);
-        },
-        checkDetailAddress () {
-          return !this.isNull(this.inputDetailAddress);
-        },
-        checkCellphoneNumber () {
-          return !(this.isNull(this.inputCellphoneNumber) && this.validateCellPhone(this.inputCellphoneNumber));
-        },
-        checkPhoneNumber () {
-          return !this.validatePhone(this.inputPhoneNumber);
-        }
+    components: {},
+    computed: {
+      ...mapState([
+        'userInfo',
+        'specificSpaceName',
+        'geohash'
+      ]),
+      checkName () {
+        return !(this.isNull(this.inputName) && this.validateUser(this.inputName));
       },
-      data () {
-          return {
-            inputName: '',
-            inputDetailAddress: '',
-            inputCellphoneNumber: '',
-            inputPhoneNumber: ''
+      checkAddress () {
+        return !this.isNull(this.specificSpaceName);
+      },
+      checkDetailAddress () {
+        return !this.isNull(this.inputDetailAddress);
+      },
+      checkCellphoneNumber () {
+        return !(this.isNull(this.inputCellphoneNumber) && this.validateCellPhone(this.inputCellphoneNumber));
+      },
+      checkPhoneNumber () {
+        return !this.validatePhone(this.inputPhoneNumber);
+      }
+    },
+    data () {
+        return {
+          inputName: '',
+          inputDetailAddress: '',
+          inputCellphoneNumber: '',
+          inputPhoneNumber: ''
+        };
+    },
+    methods: {
+      ...mapMutations([
+        'addNewAddress',
+        'saveSpecificSpaceName'
+      ]),
+      asveAddress () {
+        if (!(this.checkName && this.checkAddress && this.checkDetailAddress && this.checkCellphoneNumber && this.checkPhoneNumber)) {
+          let params = {
+            address: this.specificSpaceName,
+            address_detail: this.inputDetailAddress,
+            geohash: this.geohash,
+            name: this.inputName,
+            phone: this.inputCellphoneNumber,
+            phone_bk: this.inputPhoneNumber,
+            poi_type: 0,
+            sex: 1,
+            tag: '公司',
+            tag_type: 4
           };
-      },
-      methods: {
-        ...mapMutations([
-          'addNewAddress'
-        ]),
-        asveAddress () {
-          if (!(this.checkName && this.checkAddress && this.checkDetailAddress && this.checkCellphoneNumber && this.checkPhoneNumber)) {
-            let params = {
-              address: this.specificSpaceName,
-              address_detail: this.inputDetailAddress,
-              geohash: this.geohash,
-              name: this.inputName,
-              phone: this.inputCellphoneNumber,
-              phone_bk: this.inputPhoneNumber,
-              poi_type: 0,
-              sex: 1,
-              tag: '公司',
-              tag_type: 4
-            };
-            this.https({url: '/v1/users/' + this.userInfo.user_id + '/addresses', params, method: 'post'}).then(
-              (res) => {
-                if (res.message) {
-                  alert(res.message);
-                } else {
-                  this.addNewAddress({
-                    name: this.inputName,
-                    address: this.specificSpaceName,
-                    address_detail: this.inputDetailAddress,
-                    geohash: 'wtw37r7cxep4',
-                    phone: this.inputCellphoneNumber,
-                    phone_bk: this.inputPhoneNumber,
-                    poi: this.specificSpaceName,
-                    poi_type: 0
-                  });
-                  this.$router.go(-1);
-                }
-              });
-          }
+          this.https({url: '/v1/users/' + this.userInfo.user_id + '/addresses', params, method: 'post'}).then(
+            (res) => {
+              if (res.message) {
+                alert(res.message);
+              } else {
+                this.addNewAddress({
+                  name: this.inputName,
+                  address: this.specificSpaceName,
+                  address_detail: this.inputDetailAddress,
+                  geohash: 'wtw37r7cxep4',
+                  phone: this.inputCellphoneNumber,
+                  phone_bk: this.inputPhoneNumber,
+                  poi: this.specificSpaceName,
+                  poi_type: 0
+                });
+                this.$router.go(-1);
+              }
+            });
         }
-      },
-      mounted () {
-      },
-      watch: {}
+      }
+    },
+    mounted () {
+    },
+    deactivated () {
+      this.inputDetailAddress = '';
+      this.saveSpecificSpaceName('');
+  },
+    watch: {}
   };
 </script>
 <style lang="less" scoped>

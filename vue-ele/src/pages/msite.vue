@@ -85,7 +85,6 @@
                 for (let i = 0, len = res.length; i < len; i += 8) {
                   this.foodTypes.push(res.slice(i, i + 8));
                 }
-                console.log(res);
               });
           },
           getCategoryId (url) {

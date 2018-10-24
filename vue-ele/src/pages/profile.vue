@@ -129,7 +129,7 @@
           };
       },
       methods: {},
-      mounted () {
+      activated (to, from, next) {
         if (this.userInfo && this.userInfo.user_id) {
           this.avatar = this.userInfo.avatar;
           this.username = this.userInfo.username;
