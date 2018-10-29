@@ -53,6 +53,24 @@ export default new Router({
       name: 'specificSpaceName',
       component: resolve => require(['../pages/subpages/specificSpaceName.vue'], resolve)
     },
+    // 账户余额信息
+    {
+      path: '/balance',
+      name: 'balance',
+      component: resolve => require(['../pages/subpages/balance.vue'], resolve)
+    },
+    // 账户优惠信息
+    {
+      path: '/benefit',
+      name: 'benefit',
+      component: resolve => require(['../pages/subpages/benefit.vue'], resolve)
+    },
+    // 账户积分信息
+    {
+      path: '/points',
+      name: 'points',
+      component: resolve => require(['../pages/subpages/points.vue'], resolve)
+    },
     // 重置密码页
     {
       path: '/forget',

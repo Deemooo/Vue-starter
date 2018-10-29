@@ -10,7 +10,7 @@
       </top-header>
       <div>
         <!--账户信息-->
-        <router-link :to="userInfo.user_id ? '/profileInfo' : '/login'" tag="div" class="profile-info">
+        <router-link :to="userInfo.user_id ? 'profileInfo' : 'login'" tag="div" class="profile-info">
           <img :src="imgBaseUrl + userInfo.avatar" class="avatar-default" v-if="userInfo.user_id">
           <svg v-else class="avatar-default">
             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#avatar-default"></use>
@@ -32,21 +32,21 @@
         </router-link>
         <!--账户余额、优惠信息-->
         <div class="profile-wallet">
-          <router-link to="/balance" tag="div" class="profile-wallet-item">
+          <router-link to="balance" tag="div" class="profile-wallet-item">
             <div class="profile-wallet-item-name">
-              <span class="profile-wallet-item-name-count balance">{{ balance }}</span>
+              <span class="profile-wallet-item-name-count balance">{{ balance.toFixed(2) }}</span>
               <span class="profile-wallet-item-name-unit">元</span>
             </div>
             <div class="profile-wallet-item-value">我的余额</div>
           </router-link>
-          <router-link to="/benefit" tag="div" class="profile-wallet-item">
+          <router-link to="benefit" tag="div" class="profile-wallet-item">
             <div class="profile-wallet-item-name">
               <span class="profile-wallet-item-name-count count">{{ count }}</span>
               <span class="profile-wallet-item-name-unit">个</span>
             </div>
             <div class="profile-wallet-item-value">我的优惠</div>
           </router-link>
-          <router-link to="/points" tag="div" class="profile-wallet-item">
+          <router-link to="points" tag="div" class="profile-wallet-item">
             <div class="profile-wallet-item-name">
               <span class="profile-wallet-item-name-count point">{{ pointNumber }}</span>
               <span class="profile-wallet-item-name-unit">分</span>
@@ -55,7 +55,7 @@
           </router-link>
         </div>
         <div class="profile-order">
-          <router-link tag="div" to='/order' class="user-order">
+          <router-link tag="div" to='order' class="user-order">
             <svg class="icon" fill="#4aa5f0">
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#order"></use>
             </svg>
@@ -73,7 +73,7 @@
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
             </svg>
           </a>
-          <router-link tag="div" to='/vipcard' class="user-order">
+          <router-link tag="div" to='vipcard' class="user-order">
             <svg class="icon" fill="#ffc636">
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#vip"></use>
             </svg>
@@ -84,7 +84,7 @@
           </router-link>
         </div>
         <div class="profile-order">
-          <router-link tag="div" to='/service' class="user-order">
+          <router-link tag="div" to='service' class="user-order">
             <svg class="icon" fill="#4aa5f0">
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#service"></use>
             </svg>
@@ -93,7 +93,7 @@
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
             </svg>
           </router-link>
-          <router-link tag="div" to='/download' class="user-order">
+          <router-link tag="div" to='download' class="user-order">
             <svg class="icon" fill="#3cabff">
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#download"></use>
             </svg>

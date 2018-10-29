@@ -51,7 +51,7 @@
           </svg>
         </router-link>
       </div>
-      <div class="exit-login">退出登录</div>
+      <div @click="exitLogin" class="exit-login">退出登录</div>
     </div>
 </template>
 <script>
@@ -93,6 +93,9 @@
         },
         setCellPhoneNumber () {
           alert('请在APP中设置！');
+        },
+        exitLogin () {
+
         }
       },
       mounted () {
