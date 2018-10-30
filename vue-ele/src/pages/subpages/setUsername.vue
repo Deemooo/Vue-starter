@@ -97,14 +97,14 @@
         margin: 0 auto;
         text-align: center;
         input {
-          border: 1px solid @gray;
+          border: .025px solid @gray;
           padding: 0 .3rem;
           font-size: .65rem;
           color: @fontColor;
           outline: none;
         }
         .search-input, .search-submit {
-          border-radius: .1rem;
+          border-radius: .15rem;
           width: 100%;
           height: 1.4rem;
         }
