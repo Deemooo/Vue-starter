@@ -71,6 +71,18 @@ export default new Router({
       name: 'points',
       component: resolve => require(['../pages/subpages/points.vue'], resolve)
     },
+    // 余额说明
+    {
+      path: '/balanceDetail',
+      name: 'balanceDetail',
+      component: resolve => require(['../pages/subpages/balanceDetail.vue'], resolve)
+    },
+    // 积分说明
+    {
+      path: '/pointDetail',
+      name: 'pointDetail',
+      component: resolve => require(['../pages/subpages/pointDetail.vue'], resolve)
+    },
     // 重置密码页
     {
       path: '/forget',
