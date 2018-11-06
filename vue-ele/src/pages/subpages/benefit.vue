@@ -20,7 +20,24 @@
       </router-link>
     </div>
     <div class="benefit-item-wrap">
-
+      <div class="benefit-item-left">
+        <div class="benefit-item-left-money">
+          <span>¥</span>
+          <span class="number">1</span>
+          <span>.0</span>
+        </div>
+        <div class="benefit-item-left-condition">满 20 元可用</div>
+      </div>
+      <div class="benefit-item-right">
+        <div class="benefit-item-right-item">
+          <div class="share-benefit">分享红包</div>
+          <div class="benefit-item-right-condition">
+            <div>2017-05-23到期</div>
+            <div>限收货手机号为 13681711254</div>
+          </div>
+        </div>
+        <div class="benefit-item-right-date">剩3日</div>
+      </div>
     </div>
   </div>
 </template>
@@ -46,8 +63,7 @@
     width: 100%;
     overflow-y: auto;
     position: relative;
-    color: #fff;
-    background-color: @backColor;
+    background-color: #fff;
     svg, span {
       box-sizing: border-box;
       color: #fff;
@@ -110,8 +126,52 @@
     .benefit-item-wrap {
       display: flex;
       align-items: center;
-      background: #fff url(../../assets/icon/hongbao.png) repeat-x ;
+      background: url(../../assets/icon/hongbao.png) repeat-x ;
       background-size: .5rem .2rem;
+      padding: .8rem .4rem;
+      margin: 0 .5rem;
+      box-shadow: .025rem .025rem .025rem @backColor;
+      .benefit-item-left {
+        flex: 0 0 20%;
+        border-right: .025rem dotted @gray;
+        .benefit-item-left-money {
+          word-spacing: -.4rem;
+          span {
+            font-size: .75rem;
+            color: @fontColor4;
+            font-weight: 700;
+          }
+          .number {
+            font-size: 1.5rem;
+            color: @fontColor4;
+          }
+        }
+        .benefit-item-left-condition {
+          font-size: .4rem;
+          color: @fontColor1;
+        }
+      }
+      .benefit-item-right {
+        flex: 0 0 70%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        .benefit-item-right-item {
+          margin-left: 1rem;
+          .share-benefit {
+            font-size: .7rem;
+            color: @fontColor1;
+          }
+          .benefit-item-right-condition {
+            font-size: .4rem;
+            color: @fontColor1;
+          }
+        }
+        .benefit-item-right-date {
+          font-size: .75rem;
+          color: @fontColor4;
+        }
+      }
     }
   }
 </style>
