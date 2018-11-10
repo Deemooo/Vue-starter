@@ -12,31 +12,44 @@
       <span :class="{selected: benefitType === 0}" @click="benefitType = 0">红包</span>
       <span :class="{selected: benefitType === 1}" @click="benefitType = 1">商家代金券</span>
     </div>
-    <div class="current-benefit-head">
-      <span class="head-title">有 {{ benefitList.length }}个红包即将到期</span>
-      <router-link tag="span" to="benefitDetail" class="benefit-explain">
-        <img src="../../assets/icon/description.png">
-        <span>红包说明</span>
-      </router-link>
-    </div>
-    <div class="benefit-item-wrap">
-      <div class="benefit-item-left">
-        <div class="benefit-item-left-money">
-          <span>¥</span>
-          <span class="number">1</span>
-          <span>.0</span>
-        </div>
-        <div class="benefit-item-left-condition">满 20 元可用</div>
+    <div v-show="benefitType === 0">
+      <div class="current-benefit-head">
+        <span class="head-title">有 {{ benefitList.length }}个红包即将到期</span>
+        <router-link tag="span" to="benefitDetail" class="benefit-explain">
+          <img src="../../assets/icon/description.png">
+          <span>红包说明</span>
+        </router-link>
       </div>
-      <div class="benefit-item-right">
-        <div class="benefit-item-right-item">
-          <div class="share-benefit">分享红包</div>
-          <div class="benefit-item-right-condition">
-            <div>2017-05-23到期</div>
-            <div>限收货手机号为 13681711254</div>
+      <div class="benefit-item-wrap">
+        <div class="benefit-item-left">
+          <div class="benefit-item-left-money">
+            <span>¥</span>
+            <span class="number">1</span>
+            <span>.0</span>
           </div>
+          <div class="benefit-item-left-condition">满 20 元可用</div>
         </div>
-        <div class="benefit-item-right-date">剩3日</div>
+        <div class="benefit-item-right">
+          <div class="benefit-item-right-item">
+            <div class="share-benefit">分享红包</div>
+            <div class="benefit-item-right-condition">
+              <div>2017-05-23到期</div>
+              <div>限收货手机号为 13681711254</div>
+            </div>
+          </div>
+          <div class="benefit-item-right-date">剩3日</div>
+        </div>
+      </div>
+    </div>
+    <div v-show="benefitType === 1">
+      <div class="current-benefit-head">
+        <router-link tag="span" to="couponDetail" class="benefit-explain">
+          <img src="../../assets/icon/description.png">
+          <span>商家代金券说明</span>
+        </router-link>
+      </div>
+      <div class="benefit-item-wrap">
+
       </div>
     </div>
   </div>
@@ -108,7 +121,7 @@
         font-size: .55rem;
       }
       .head-title {
-        color: @fontColor1;
+        color: @fontColor2;
       }
       .benefit-explain {
         display: flex;
@@ -130,7 +143,7 @@
       background-size: .5rem .2rem;
       padding: .8rem .4rem;
       margin: 0 .5rem;
-      box-shadow: .025rem .025rem .025rem @backColor;
+      box-shadow: .1rem .1rem .025rem .1rem @backColor;
       .benefit-item-left {
         flex: 0 0 20%;
         border-right: .025rem dotted @gray;
@@ -148,7 +161,7 @@
         }
         .benefit-item-left-condition {
           font-size: .4rem;
-          color: @fontColor1;
+          color: @fontColor2;
         }
       }
       .benefit-item-right {
@@ -164,10 +177,13 @@
           }
           .benefit-item-right-condition {
             font-size: .4rem;
-            color: @fontColor1;
+            div {
+              color: @fontColor2;
+            }
           }
         }
         .benefit-item-right-date {
+          margin-left: .4rem;
           font-size: .75rem;
           color: @fontColor4;
         }
