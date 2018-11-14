@@ -68,7 +68,6 @@
     width: 100%;
     overflow-y: auto;
     position: relative;
-    color: #fff;
     background-color: @backColor;
     svg, span {
       box-sizing: border-box;

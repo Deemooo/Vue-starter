@@ -44,6 +44,20 @@
         </div>
         <div v-if="item.limit_map" class="benefit-item-limit">{{ item.limit_map.restaurant_flavor_ids }}</div>
       </div>
+      <router-link tag="div" to="benefitHistory" class="benefit-history">
+        <span class="check-history">查看历史红包</span>
+        <svg class="history-right">
+          <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
+        </svg>
+      </router-link>
+      <footer class="benefit-footer">
+        <router-link to="benefitExchange" class="benefit-footer-action">
+          兑换红包
+        </router-link>
+        <router-link to="benefitRecommend" class="benefit-footer-action">
+          推荐有奖
+        </router-link>
+      </footer>
     </div>
     <div v-show="benefitType === 1">
       <div class="coupon-detail-head">
@@ -203,7 +217,7 @@
           flex: 0 0 20%;
           border-right: .025rem dotted @gray;
           .benefit-item-left-money {
-            word-spacing: -.4rem;
+            word-spacing: -.3rem;
             span {
               font-size: .75rem;
               color: @fontColor4;
@@ -249,6 +263,38 @@
         font-size: .4rem;
         color: @fontColor2;
         text-align: center;
+      }
+    }
+    .benefit-history {
+      padding: 1rem 0;
+      text-align: center;
+      .check-history {
+        font-size: .5rem;
+        color: @fontColor2;
+      }
+      .history-right {
+        width: .4rem;
+        height: .4rem;
+        fill: #aaa;
+      }
+    }
+    .benefit-footer {
+      position: fixed;
+      bottom: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      background-color: #fff;
+      .benefit-footer-action {
+        flex: 0 0 50%;
+        line-height: 2rem;
+        text-align: center;
+        font-size: .7rem;
+        color: @fontColor;
+      }
+      .benefit-footer-action:first-child {
+        border-right: .025rem solid @gray;
       }
     }
     .coupon-detail {

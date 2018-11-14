@@ -83,6 +83,24 @@ export default new Router({
       name: 'pointDetail',
       component: resolve => require(['../pages/subpages/pointDetail.vue'], resolve)
     },
+    // 红包说明
+    {
+      path: '/benefitDetail',
+      name: 'benefitDetail',
+      component: resolve => require(['../pages/subpages/benefitDetail.vue'], resolve)
+    },
+    // 代金券说明
+    {
+      path: '/couponDetail',
+      name: 'couponDetail',
+      component: resolve => require(['../pages/subpages/couponDetail.vue'], resolve)
+    },
+    // APP下载
+    {
+      path: '/download',
+      name: 'download',
+      component: resolve => require(['../pages/subpages/download.vue'], resolve)
+    },
     // 重置密码页
     {
       path: '/forget',
