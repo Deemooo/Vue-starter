@@ -12,7 +12,7 @@
         <img src='../../assets/icon/elmlogo.jpeg' class="logo-img">
         <div class="download-content-text">下载饿了么APP</div>
         <div>
-          <input type="submit" name="submit" class="search-submit" @click='setUsername' value="下载">
+          <input type="submit" name="submit" class="search-submit" @click='download' value="下载">
         </div>
       </div>
     </div>
@@ -24,7 +24,32 @@
       data () {
           return {};
       },
-      methods: {},
+      methods: {
+        download () {
+          //判断系统
+          let system = '';
+          let u = navigator.userAgent;
+          let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //g
+          let isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+          if (isAndroid) {
+            system = 'Android';
+          } else if (isIOS) {
+            system = 'iOS';
+          }
+          if (system === 'IOS') {
+            alert('IOS用户请前往AppStore下载');
+          } else {
+            try {
+              let elemIF = document.createElement('iframe');
+              elemIF.src = 'https://cangdu.org/files/elm.apk';
+              elemIF.style.display = 'none';
+              document.body.appendChild(elemIF);
+            } catch (e) {
+              alert('下载失败!');
+            }
+          }
+        }
+      },
       mounted () {
       },
       watch: {}

@@ -101,6 +101,12 @@ export default new Router({
       name: 'download',
       component: resolve => require(['../pages/subpages/download.vue'], resolve)
     },
+    // 历史红包
+    {
+      path: '/benefitHistory',
+      name: 'benefitHistory',
+      component: resolve => require(['../pages/subpages/benefitHistory.vue'], resolve)
+    },
     // 重置密码页
     {
       path: '/forget',
