@@ -107,6 +107,18 @@ export default new Router({
       name: 'benefitHistory',
       component: resolve => require(['../pages/subpages/benefitHistory.vue'], resolve)
     },
+    // 兑换红包
+    {
+      path: '/benefitExchange',
+      name: 'benefitExchange',
+      component: resolve => require(['../pages/subpages/benefitExchange.vue'], resolve)
+    },
+    // 推荐有奖
+    {
+      path: '/benefitRecommend',
+      name: 'benefitRecommend',
+      component: resolve => require(['../pages/subpages/benefitRecommend.vue'], resolve)
+    },
     // 重置密码页
     {
       path: '/forget',

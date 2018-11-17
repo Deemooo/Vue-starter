@@ -21,6 +21,16 @@ export default {
         return this._dateCheck(this.formValidate.startTime, value);
       }
     },
+    validateExchangeCode (value) {
+      if (value) {
+        return this._exchangeCode(value);
+      }
+    },
+    validateCodeNumber (value) {
+      if (value) {
+        return this._codeNumber(value);
+      }
+    },
     isNull (val) {
       let reg = /\S/;
       return reg.test(this.__Trim(val));
@@ -43,6 +53,16 @@ export default {
     // 电话号码验证
     _isTelephone (val) {
       let reg = /^[-0-9+()]{1,20}$/;
+      return val === '' || reg.test(val);
+    },
+    // 兑换码验证
+    _exchangeCode (val) {
+      let reg = /^\d+$/gi;
+      return val === '' || reg.test(val);
+    },
+    // 验证码验证
+    _codeNumber (val) {
+      let reg = /^\w{4}$/gi;
       return val === '' || reg.test(val);
     },
     /**
