@@ -119,6 +119,18 @@ export default new Router({
       name: 'benefitRecommend',
       component: resolve => require(['../pages/subpages/benefitRecommend.vue'], resolve)
     },
+    // 会员卡
+    {
+      path: '/vipcard',
+      name: 'vipcard',
+      component: resolve => require(['../pages/subpages/vipcard.vue'], resolve)
+    },
+    // 服务中心
+    {
+      path: '/service',
+      name: 'service',
+      component: resolve => require(['../pages/subpages/service.vue'], resolve)
+    },
     // 重置密码页
     {
       path: '/forget',
