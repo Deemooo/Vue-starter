@@ -146,7 +146,6 @@
   @import (reference) "../assets/style/dynamic";
   .profile {
     width: 100%;
-    overflow-y: auto;
     position: relative;
     color: #fff;
     background-color: @backColor;
@@ -275,9 +274,6 @@
           width: .46667rem;
           height: .46667rem;
         }
-      }
-      .user-order:last-child {
-        border-bottom: none;
       }
     }
   }
