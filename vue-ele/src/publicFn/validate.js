@@ -31,6 +31,16 @@ export default {
         return this._codeNumber(value);
       }
     },
+    validateCartPassword (value) {
+      if (value) {
+        return this._lengthTest(1, 6, value);
+      }
+    },
+    validateCartNumber (value) {
+      if (value) {
+        return this._lengthTest(1, 10, value);
+      }
+    },
     isNull (val) {
       let reg = /\S/;
       return reg.test(this.__Trim(val));
@@ -75,6 +85,16 @@ export default {
       if (this._typeCheck(starttime) === this._typeCheck(endtime)) {
         return starttime < endtime;
       }
+    },
+    /**
+     * 字符长度验证
+     * start 长度大于该值 Number
+     * end 长度小于该值 Number
+     * val 需要验证的值
+     **/
+    _lengthTest (start, end, val) {
+      val = this.__Trim(val.toString());
+      return val.length >= start && val.length <= end;
     },
     // 错误提示
     erroTip (label) {

@@ -1,27 +1,35 @@
 <template>
-    <div class="benefit-exchange">
+    <div class="exchange-vip">
       <top-header>
         <template>
           <svg class="arrow-left" xmlns="http://www.w3.org/2000/svg" version="1.1" @click="$router.go(-1)">
             <polyline points="12,18 4,9 12,0" style="fill:none;stroke:rgb(255,255,255);stroke-width:2"/>
           </svg>
-          <span class="exchange-way-title">兑换红包</span>
+          <span class="exchange-vip-title">兑换会员</span>
         </template>
       </top-header>
+      <div class="vipcard-user">成功兑换后将关联到当前帐号: <span>{{ userInfo.username }}</span></div>
       <form class="exchange-form" v-on:submit.prevent>
         <div class="password-wrap">
-          <input type="text" name="exchangeCode" placeholder="请输入兑换码" required v-model='exchangeCode'>
-          <div v-if="checkExchangeCode" class="input-error-tips">{{ this.erroTip('兑换码') }}</div>
+          <input type="text" name="cartNumber" placeholder="请输入10位卡号" required v-model='cartNumber'>
+          <div v-if="checkcartNumber" class="input-error-tips">{{ this.erroTip('卡号') }}</div>
         </div>
         <div class="code-wrap">
-          <input type="text" name="codeNumber" placeholder="验证码" class="code" maxlength="4" v-model="codeNumber">
-          <img v-show="captchaCodeImg" :src="captchaCodeImg" alt="验证码" @click="getCaptchaCode">
+          <input type="text" name="cartPassword" placeholder="请输入6位卡密" class="code" maxlength="6" v-model="cartPassword">
         </div>
-        <div v-if="checkCodeNumber" class="input-error-tips">{{ this.erroTip('验证码') }}</div>
+        <div v-if="checkCartPassword" class="input-error-tips">{{ this.erroTip('卡密') }}</div>
         <div class="exchange-btn" @click="exchange">
           <input type="submit" name="submit" class="exchange-submit" value="兑换">
         </div>
       </form>
+      <footer class="exchange-vip-tips">
+        <div class="exchange-vip-tips-title">——温馨提示——</div>
+        <div>新兑换的会员服务，权益以「会员说明」为准。</div>
+        <div>月卡：<b>30次</b>减免配送费。</div>
+        <div>季卡：<b>90次</b>减免配送费。</div>
+        <div>年卡：<b>360</b>次减免配送费。</div>
+        <div>＊仅限蜂鸟专送订单，每日最多减免3单，每单最高减免4元（一个月按31天计算）</div>
+      </footer>
     </div>
 </template>
 <script>
@@ -32,36 +40,27 @@
         ...mapState([
           'userInfo'
         ]),
-        checkExchangeCode () {
-          return !(this.isNull(this.exchangeCode) && this.validateExchangeCode(this.exchangeCode));
+        checkcartNumber () {
+          return !(this.isNull(this.cartNumber) && this.validateCartNumber(this.cartNumber));
         },
-        checkCodeNumber () {
-          return !(this.isNull(this.codeNumber) && this.validateCodeNumber(this.codeNumber));
+        checkCartPassword () {
+          return !(this.isNull(this.cartPassword) && this.validateCartPassword(this.cartPassword));
         }
       },
       data () {
           return {
-            captchaCodeImg: '',
-            exchangeCode: '',
-            codeNumber: ''
+            cartNumber: '',
+            cartPassword: ''
           };
       },
       methods: {
-        // 获取验证码
-        getCaptchaCode () {
-          let params = {};
-          this.https({url: '/v1/captchas', params, method: 'post'}).then(
-            (res) => {
-              this.captchaCodeImg = res.code;
-            });
-        },
         exchange () {
-          if (!(this.checkExchangeCode && this.checkCodeNumber)) {
+          if (!(this.checkcartNumber && this.checkCartPassword)) {
             let params = {
-              exchange_code: this.exchangeCode,
-              captcha_code: this.codeNumber
+              number: this.cartNumber,
+              password: this.cartPassword
             };
-            this.https({url: '/v1/users/' + this.userInfo.user_id + '/hongbao/exchange', params, method: 'post'}).then(
+            this.https({url: '/member/v1/users/' + this.userInfo.id + '/delivery_card/physical_card/bind', params, method: 'post'}).then(
               (res) => {
                 if (res.message) {
                   alert(res.message);
@@ -73,38 +72,46 @@
         }
       },
       mounted () {
-        this.getCaptchaCode();
       },
       watch: {}
   };
 </script>
 <style lang="less" scoped>
   @import (reference) "../../assets/style/dynamic";
-  .benefit-exchange {
+  .exchange-vip {
     width: 100%;
-    overflow-y: auto;
     position: relative;
-    font-size: .55rem;
-    svg, span {
+    color: #fff;
+    svg {
       box-sizing: border-box;
-      color: #fff;
     }
     .arrow-left {
       margin-left: .4rem;
       flex: 0 0 33.333%;
       height: .8rem;
     }
-    .exchange-way-title {
+    .exchange-vip-title {
       flex: 0 0 33.333%;
       font-size: .8rem;
       line-height: .8rem;
       text-align: center;
       font-weight: 700;
+      color: #fff;
+    }
+    .vipcard-user {
+      margin-top: 1.95rem;
+      padding-left: .4rem;
+      font-size: .6rem;
+      color: @fontColor1;
+      line-height: 2rem;
+      span {
+        color: @fontColor;
+        font-weight: 700;
+      }
     }
     .exchange-form {
       background-color: #fff;
       border-top: .025rem solid @gray;
-      margin-top: 1.95rem;
       div {
         width: 100%;
         padding: .2rem 0;
@@ -152,6 +159,23 @@
         font-size: .58rem;
         color: @fontColor3;
         text-align: left;
+      }
+    }
+    .exchange-vip-tips {
+      text-align: center;
+      div {
+        margin-left: 10%;
+        line-height: .8rem;
+        text-align: left;
+        font-size: .5rem;
+        color: @fontColor2;
+      }
+      .exchange-vip-tips-title {
+        margin: .6rem 0;
+        text-align: center;
+        font-weight: 400;
+        font-size: .65rem;
+        color: @fontColor2;
       }
     }
   }

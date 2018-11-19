@@ -46,10 +46,10 @@
               <span>1个月</span>
               <span class="vipcard-apply-buy-money"> ¥20</span>
             </span>
-            <span class="vipcard-apply-buy-btn">购买</span>
+            <span class="vipcard-apply-buy-btn" @click="buyCart">购买</span>
           </div>
         </div>
-        <router-link to="vipDescription" tag="div" class="vip-description exchange-vip">
+        <router-link to="exchangeVip" tag="div" class="vip-description exchange-vip">
           <span>兑换会员</span>
           <span class="vip-description-arrow">
             <span>使用卡号卡密</span>
@@ -58,7 +58,7 @@
             </svg>
           </span>
         </router-link>
-        <router-link to="vipDescription" tag="div" class="vip-description bug-record">
+        <router-link to="bugRecord" tag="div" class="vip-description bug-record">
           <span>购买记录</span>
           <span class="vip-description-arrow">
             <span>开发票</span>
@@ -82,7 +82,11 @@
       data () {
           return {};
       },
-      methods: {},
+      methods: {
+        buyCart () {
+          alert('支付功能暂未开放!');
+        }
+      },
       mounted () {
       },
       watch: {}

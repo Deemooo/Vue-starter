@@ -131,6 +131,24 @@ export default new Router({
       name: 'service',
       component: resolve => require(['../pages/subpages/service.vue'], resolve)
     },
+    // 会员说明
+    {
+      path: '/vipDescription',
+      name: 'vipDescription',
+      component: resolve => require(['../pages/subpages/vipDescription.vue'], resolve)
+    },
+    // 兑换会员
+    {
+      path: '/exchangeVip',
+      name: 'exchangeVip',
+      component: resolve => require(['../pages/subpages/exchangeVip.vue'], resolve)
+    },
+    // 购买记录
+    {
+      path: '/bugRecord',
+      name: 'bugRecord',
+      component: resolve => require(['../pages/subpages/bugRecord.vue'], resolve)
+    },
     // 重置密码页
     {
       path: '/forget',
