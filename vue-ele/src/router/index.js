@@ -131,6 +131,12 @@ export default new Router({
       name: 'service',
       component: resolve => require(['../pages/subpages/service.vue'], resolve)
     },
+    // 问题详情
+    {
+      path: '/questionDetail',
+      name: 'questionDetail',
+      component: resolve => require(['../pages/subpages/questionDetail.vue'], resolve)
+    },
     // 会员说明
     {
       path: '/vipDescription',
