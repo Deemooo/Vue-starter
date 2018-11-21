@@ -8,19 +8,26 @@
           <span class="question-detail-title">{{ question.title }}</span>
         </template>
       </top-header>
-      <div class="question-detail-content">
-        {{ question.detail }}
-      </div>
+      <div class="question-detail-content markdown-body" v-html="content"></div>
     </div>
 </template>
 <script>
+  import marked from 'marked';
+  import Prism from 'prismjs';
+  import 'prismjs/themes/prism.css';
   import { mapState } from 'vuex';
+  marked.setOptions({
+    highlight: (code) => Prism.highlight(code, Prism.languages.javascript)
+  });
   export default {
       components: {},
       computed: {
         ...mapState([
           'question'
-        ])
+        ]),
+        content () {
+          return marked(this.question.detail);
+        }
       },
       data () {
           return {};
@@ -49,10 +56,16 @@
     .question-detail-title {
       flex: 0 0 33.333%;
       font-size: .8rem;
-      line-height: .8rem;
       text-align: center;
       font-weight: 700;
       color: #fff;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .question-detail-content {
+      margin-top: 1.95rem;
+      padding: .8rem;
     }
   }
 </style>

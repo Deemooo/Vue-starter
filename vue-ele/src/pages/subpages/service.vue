@@ -101,9 +101,6 @@
       text-align: center;
       font-weight: 700;
       color: #fff;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
     }
     .service-way {
       display: flex;

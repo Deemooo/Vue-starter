@@ -17,6 +17,8 @@ import bottomFooter from './components/bottomFooter.vue';
 // 触摸滑动组件
 import Swiper from 'vue-awesome-swiper';
 import 'swiper/dist/css/swiper.css';
+// markdown样式
+import 'github-markdown-css/github-markdown.css';
 
 Vue.config.productionTip = false;
 
