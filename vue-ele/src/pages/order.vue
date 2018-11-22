@@ -8,7 +8,7 @@
           <span class="order-title">订单列表</span>
         </template>
       </top-header>
-      <div class="order-list-wrap">
+      <div v-load-more="getMoreList" class="order-list-wrap">
         <div v-for="item in orderList" :key="item.id" class="order-list-item">
           <div class="order-item-shop">
             <img :src="imgBaseUrl + item.restaurant_image_url" alt="店铺图片" class="order-item-shop-img">
@@ -46,7 +46,9 @@
 <script>
   import { mapState } from 'vuex';
   import { imgBaseUrl } from '../../config/env';
+  import { loadMore } from '../publicFn/loadMore'
   export default {
+    mixins: [loadMore],
     components: {},
     computed: {
       ...mapState([
@@ -61,6 +63,7 @@
         };
     },
     methods: {
+      // 获取订单列表
       getOrderList () {
         let params = this.setStrOfUrl({
           limit: 10,
@@ -69,6 +72,17 @@
         this.https({url: '/bos/v2/users/' + this.userInfo.user_id + '/orders' + params, method: 'get'}).then(
           (res) => {
             this.orderList = res;
+          });
+      },
+      getMoreList () {
+        this.offset += 10;
+        let params = this.setStrOfUrl({
+          limit: 10,
+          offset: this.offset
+        });
+        this.https({url: '/bos/v2/users/' + this.userInfo.user_id + '/orders' + params, method: 'get'}).then(
+          (res) => {
+            this.orderList = [...this.orderList].concat(res);
           });
       }
     },
