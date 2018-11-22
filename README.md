@@ -1,4 +1,4 @@
-# Vue新手刷怪之旅
-* Vue-router && Vue-components
-* axios && vuex2
-* 综合应用
+# Vue项目练习
+* 博客
+* 后台管理系统
+* WebAPP
