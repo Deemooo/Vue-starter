@@ -1,6 +1,6 @@
 <template>
     <div class="msite">
-      <top-header>
+      <top-header class="msite-head">
         <template>
           <router-link :to="'/search/geohash'" class="link-search">
             <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" version="1.1">
@@ -11,7 +11,10 @@
           <router-link to="/" class="msite-title">
             <span class="msite-title-text">{{ msiteTitle }}</span>
           </router-link>
-          <span class="head-login" @click="$router.push('login')">登录 | 注册</span>
+          <svg class="user-avatar" v-if="userInfo.id">
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#user"></use>
+          </svg>
+          <span v-else @click="$router.push('login')" class="head-login">登录 | 注册</span>
         </template>
       </top-header>
       <swiper :options="swiperOption" class="nav" v-if="foodTypes.length">
@@ -47,7 +50,8 @@
         },
         computed: {
           ...mapState([
-            'geohash'
+            'geohash',
+            'userInfo'
           ])
         },
         data () {
@@ -120,36 +124,40 @@
     overflow-y: auto;
     position: relative;
     color: #fff;
-    a, span {
+    .msite-head {
+      justify-content: space-between;
       box-sizing: border-box;
-    }
-    .link-search {
-      flex: 0 0 22%;
-      height: .9rem;
-      padding-left: .4rem;
-      text-align: left;
-    }
-    .msite-title {
-      flex: 0 0 56%;
-      font-size: .8rem;
-      line-height: .8rem;
-      text-align: center;
-      color: #fff;
-      .msite-title-text {
-        font-size: .8rem;
-        color: #fff;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+      padding: 0 .4rem;
+      a, span {
+        box-sizing: border-box;
       }
-    }
-    .head-login {
-      flex: 0 0 22%;
-      padding-right: .4rem;
-      text-align: right;
-      font-weight: 400;
-      font-size: .6rem;
-      color: #fff;
+      .link-search {
+        display: flex;
+        align-items: center;
+      }
+      .msite-title {
+        font-size: .8rem;
+        line-height: .8rem;
+        text-align: center;
+        color: #fff;
+        .msite-title-text {
+          font-size: .8rem;
+          color: #fff;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+      .head-login {
+        font-weight: 400;
+        font-size: .6rem;
+        color: #fff;
+      }
+      .user-avatar {
+        width: .8rem;
+        height: .8rem;
+        fill: #fff;
+      }
     }
     .nav {
       margin-top: 1.95rem;

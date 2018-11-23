@@ -1,8 +1,11 @@
 <template>
     <div class="home">
-      <top-header>
+      <top-header class="home-head">
         <span class="head-logo" @click="reload">ele.me</span>
-        <span class="head-login" @click="$router.push('login')">登录 | 注册</span>
+        <svg class="user-avatar" v-if="userInfo.id">
+          <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#user"></use>
+        </svg>
+        <span v-else @click="$router.push('login')" class="head-login">登录 | 注册</span>
       </top-header>
       <nav class="city-nav">
         <div class="tip">
@@ -42,70 +45,74 @@
     </div>
 </template>
 <script>
-    export default {
-        components: {},
-        computed: {
-          sortgroupcity () {
-            let sortobj = {};
-            for (let i = 65; i <= 90; i++) {
-              if (this.groupcity[String.fromCharCode(i)]) {
-                sortobj[String.fromCharCode(i)] = this.groupcity[String.fromCharCode(i)];
-              }
-            }
-            return sortobj
+  import { mapState } from 'vuex';
+  export default {
+    components: {},
+    computed: {
+      ...mapState([
+        'userInfo'
+      ]),
+      sortgroupcity () {
+        let sortobj = {};
+        for (let i = 65; i <= 90; i++) {
+          if (this.groupcity[String.fromCharCode(i)]) {
+            sortobj[String.fromCharCode(i)] = this.groupcity[String.fromCharCode(i)];
           }
-        },
-        data () {
-            return {
-              guessCityId: '',
-              guessCity: '',
-              hotcity: [],
-              groupcity: {}
-            };
-        },
-        methods: {
-          reload () {
-            window.location.reload();
-          },
-          // 获取热门城市
-          getCurrentCity () {
-            let params = this.setStrOfUrl({
-              type: 'guess'
-            });
-            this.https({url: '/v1/cities' + params, method: 'get'}).then(
-              (res) => {
-                this.guessCity = res.name || '';
-                this.guessCityId = res.id || '';
-              });
-          },
-          // 获取热门城市
-          getHotCity () {
-            let params = this.setStrOfUrl({
-              type: 'hot'
-            });
-            this.https({url: '/v1/cities' + params, method: 'get'}).then(
-              (res) => {
-                this.hotcity = res;
-              });
-          },
-          // 获取所有城市
-          getGroupCity () {
-            let params = this.setStrOfUrl({
-              type: 'group'
-            });
-            this.https({url: '/v1/cities' + params, method: 'get'}).then(
-              (res) => {
-                this.groupcity = res;
-              });
-          }
-        },
-        mounted () {
-          this.getCurrentCity();
-          this.getHotCity();
-          this.getGroupCity();
-        },
-        watch: {}
-    };
+        }
+        return sortobj
+      }
+    },
+    data () {
+        return {
+          guessCityId: '',
+          guessCity: '',
+          hotcity: [],
+          groupcity: {}
+        };
+    },
+    methods: {
+      reload () {
+        window.location.reload();
+      },
+      // 获取热门城市
+      getCurrentCity () {
+        let params = this.setStrOfUrl({
+          type: 'guess'
+        });
+        this.https({url: '/v1/cities' + params, method: 'get'}).then(
+          (res) => {
+            this.guessCity = res.name || '';
+            this.guessCityId = res.id || '';
+          });
+      },
+      // 获取热门城市
+      getHotCity () {
+        let params = this.setStrOfUrl({
+          type: 'hot'
+        });
+        this.https({url: '/v1/cities' + params, method: 'get'}).then(
+          (res) => {
+            this.hotcity = res;
+          });
+      },
+      // 获取所有城市
+      getGroupCity () {
+        let params = this.setStrOfUrl({
+          type: 'group'
+        });
+        this.https({url: '/v1/cities' + params, method: 'get'}).then(
+          (res) => {
+            this.groupcity = res;
+          });
+      }
+    },
+    mounted () {
+      this.getCurrentCity();
+      this.getHotCity();
+      this.getGroupCity();
+    },
+    watch: {}
+  };
 </script>
 <style lang="less" scoped>
   @import (reference) "../assets/style/dynamic";
@@ -114,21 +121,21 @@
     height: 100%;
     overflow-y: auto;
     position: relative;
-    svg, span {
+    .home-head {
+      justify-content: space-between;
       box-sizing: border-box;
-      color: #fff;
-      font-weight: 400;
-      font-size: .7rem;
-    }
-    .head-logo {
-      flex: 0 0 50%;
-      padding-left: .4rem;
-      text-align: left;
-    }
-    .head-login {
-      flex: 0 0 50%;
-      padding-right: .4rem;
-      text-align: right;
+      padding: 0 .4rem;
+      svg, span {
+        box-sizing: border-box;
+        color: #fff;
+        font-weight: 400;
+        font-size: .7rem;
+      }
+      .user-avatar {
+        width: .8rem;
+        height: .8rem;
+        fill: #fff;
+      }
     }
     .city-nav {
       padding-top: 2.35rem;
