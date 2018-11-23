@@ -10,7 +10,8 @@ export default new Vuex.Store({
     geohash: '',
     specificSpaceName: '',
     addressList: [],
-    question: {}
+    question: {},
+    orderDetail: {}
   },
   mutations: {
     // 更新城市信息
@@ -56,6 +57,10 @@ export default new Vuex.Store({
     // 保存问题详情
     SAVEQUESTIONS (state, data) {
       state.question = data;
+    },
+    // 保存订单详情
+    SAVEORDERDETAIL (state, data) {
+      state.orderDetail = data;
     }
   },
   actions: {

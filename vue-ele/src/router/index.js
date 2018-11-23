@@ -190,6 +190,18 @@ export default new Router({
       path: '/order',
       name: 'order',
       component: resolve => require(['../pages/order.vue'], resolve)
+    },
+    // 订单详情
+    {
+      path: '/orderDetail',
+      name: 'orderDetail',
+      component: resolve => require(['../pages/subpages/orderDetail.vue'], resolve)
+    },
+    // 店铺页
+    {
+      path: '/shop',
+      name: 'shop',
+      component: resolve => require(['../pages/shop.vue'], resolve)
     }
   ]
 });

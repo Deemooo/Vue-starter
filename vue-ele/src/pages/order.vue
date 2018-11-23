@@ -10,7 +10,7 @@
       </top-header>
       <div v-load-more="getMoreList" class="order-list-wrap">
         <div v-for="item in orderList" :key="item.id" class="order-list-item">
-          <div class="order-item-shop">
+          <div @click="showOrderDetail(item)" class="order-item-shop">
             <img :src="imgBaseUrl + item.restaurant_image_url" alt="店铺图片" class="order-item-shop-img">
             <div class="order-item-shop-info">
               <div class="order-item-shop-info-left">
@@ -44,7 +44,7 @@
     </div>
 </template>
 <script>
-  import { mapState } from 'vuex';
+  import { mapState, mapMutations } from 'vuex';
   import { imgBaseUrl } from '../../config/env';
   import { loadMore } from '../publicFn/loadMore'
   export default {
@@ -63,6 +63,9 @@
         };
     },
     methods: {
+      ...mapMutations([
+        'SAVEORDERDETAIL'
+      ]),
       // 获取订单列表
       getOrderList () {
         let params = this.setStrOfUrl({
@@ -74,6 +77,7 @@
             this.orderList = res;
           });
       },
+      // 获取更多订单
       getMoreList () {
         this.offset += 10;
         let params = this.setStrOfUrl({
@@ -84,12 +88,14 @@
           (res) => {
             this.orderList = [...this.orderList].concat(res);
           });
+      },
+      // 展示订单细节
+      showOrderDetail (item) {
+        this.SAVEORDERDETAIL(item);
+        this.$router.push('orderDetail');
       }
     },
     mounted () {
-      this.getOrderList();
-    },
-    activated () {
       this.getOrderList();
     },
     watch: {}

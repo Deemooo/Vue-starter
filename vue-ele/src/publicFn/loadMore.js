@@ -1,4 +1,4 @@
-import {getStyle} from  './mixins';
+import {getStyle} from  './toolFus';
 export const loadMore = {
   directives: {
     'load-more': {
