@@ -13,7 +13,7 @@
           <input type="search" placeholder="请输入商家或美食名称" class="search-input" required v-model='inputValue'>
         </div>
         <div>
-          <input type="submit" name="submit" class="search-submit" @click='searchRestaurant' value="提交">
+          <input type="submit" name="submit" class="search-submit" @click='searchRestaurant' value="搜索">
         </div>
       </form>
     </div>

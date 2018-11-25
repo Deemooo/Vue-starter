@@ -2,7 +2,7 @@
     <div class="home">
       <top-header class="home-head">
         <span class="head-logo" @click="reload">ele.me</span>
-        <svg class="user-avatar" v-if="userInfo.id">
+        <svg @click="$router.push('profile')"  v-if="userInfo.id" class="user-avatar">
           <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#user"></use>
         </svg>
         <span v-else @click="$router.push('login')" class="head-login">登录 | 注册</span>

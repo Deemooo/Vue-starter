@@ -2,7 +2,7 @@
     <div class="msite">
       <top-header class="msite-head">
         <template>
-          <router-link :to="'/search/geohash'" class="link-search">
+          <router-link :to="'/search'" class="link-search">
             <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" version="1.1">
               <circle cx="8" cy="8" r="7" stroke="rgb(255,255,255)" stroke-width="1" fill="none"/>
               <line x1="14" y1="14" x2="20" y2="20" style="stroke:rgb(255,255,255);stroke-width:2"/>
@@ -11,7 +11,7 @@
           <router-link to="/" class="msite-title">
             <span class="msite-title-text">{{ msiteTitle }}</span>
           </router-link>
-          <svg class="user-avatar" v-if="userInfo.id">
+          <svg @click="$router.push('profile')"  v-if="userInfo.id" class="user-avatar">
             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#user"></use>
           </svg>
           <span v-else @click="$router.push('login')" class="head-login">登录 | 注册</span>
@@ -134,6 +134,10 @@
       .link-search {
         display: flex;
         align-items: center;
+        svg {
+          width: .8rem;
+          height: .8rem;
+        }
       }
       .msite-title {
         font-size: .8rem;
