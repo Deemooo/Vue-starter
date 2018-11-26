@@ -111,35 +111,35 @@
   import { mapState } from 'vuex';
   import { imgBaseUrl } from '../../config/env';
   export default {
-      components: {},
-      computed: {
-        ...mapState([
-          'userInfo'
-        ])
-      },
-      data () {
-          return {
-            imgBaseUrl,
-            username: '登录/注册',
-            mobile: '暂无绑定手机号',
-            balance: 0,
-            count: 0,
-            pointNumber: 0,
-            avatar: ''
-          };
-      },
-      methods: {},
-      activated (to, from, next) {
-        if (this.userInfo && this.userInfo.user_id) {
-          this.avatar = this.userInfo.avatar;
-          this.username = this.userInfo.username;
-          this.mobile = this.userInfo.mobile || '暂无绑定手机号';
-          this.balance = this.userInfo.balance;
-          this.count = this.userInfo.gift_amount;
-          this.pointNumber = this.userInfo.point;
-        }
-      },
-      watch: {}
+    components: {},
+    computed: {
+      ...mapState([
+        'userInfo'
+      ])
+    },
+    data () {
+        return {
+          imgBaseUrl,
+          username: '登录/注册',
+          mobile: '暂无绑定手机号',
+          balance: 0,
+          count: 0,
+          pointNumber: 0,
+          avatar: ''
+        };
+    },
+    methods: {},
+    mounted () {
+      if (this.userInfo && this.userInfo.user_id) {
+        this.avatar = this.userInfo.avatar;
+        this.username = this.userInfo.username;
+        this.mobile = this.userInfo.mobile || '暂无绑定手机号';
+        this.balance = this.userInfo.balance;
+        this.count = this.userInfo.gift_amount;
+        this.pointNumber = this.userInfo.point;
+      }
+    },
+    watch: {}
   };
 </script>
 <style lang="less" scoped>
