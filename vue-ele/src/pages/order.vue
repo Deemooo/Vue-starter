@@ -46,7 +46,7 @@
 <script>
   import { mapState, mapMutations } from 'vuex';
   import { imgBaseUrl } from '../../config/env';
-  import { loadMore } from '../publicFn/loadMore'
+  import { loadMore } from '../publicFn/loadMore';
   export default {
     mixins: [loadMore],
     components: {},

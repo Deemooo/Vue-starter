@@ -42,16 +42,93 @@
               </li>
             </div>
             <div class="food-list">
-              <div v-for="(item,index) in menuList" :key="index" class="food-item">
+              <div v-for="(item, index) in menuList" :key="index" class="food-item">
                 <header class="food-item-header">
                   <span class="name">{{ item.name }}</span>
                   <span class="description">{{ item.description }}</span>
                 </header>
+                <section v-for="(foods, foodIndex) in item.foods" :key="foodIndex" class="food-item-info">
+                  <router-link to="foodDetail" tag="div" class="food-item-info-top">
+                    <img :src="imgBaseUrl + foods.image_path" class="food-img">
+                    <div class="food-desc">
+                      <div class="food-desc-name">
+                        <span class="food-name">{{ foods.name }}</span>
+                        <ul v-if="foods.attributes.length" class="attributes-list">
+                          <li v-for="(attribute, attributeIndex) in foods.attributes"
+                              v-if="attribute"
+                              :key="attributeIndex"
+                              :style="{color: '#' + attribute.icon_color, borderColor:'#' + attribute.icon_color}"
+                              :class="{'attribute-new' : attribute.icon_name === '新'}">
+                            <span :style="{color: attribute.icon_name == '新'? '#fff' : '#' + attribute.icon_color}">
+                              {{ attribute.icon_name === '新' ? '新品' : attribute.icon_name }}
+                            </span>
+                          </li>
+                        </ul>
+                      </div>
+                      <div v-if="foods.description" class="food-desc-content">
+                        {{ foods.description }}
+                      </div>
+                      <div class="food-desc-rating">
+                        <span>月售{{ foods.month_sales }}份</span>
+                        <span>好评率{{ foods.satisfy_rate }}%</span>
+                      </div>
+                      <div class="food-desc-activity">
+                        <span v-if="foods.activity" :style="{color: '#' + foods.activity.image_text_color, borderColor:'#' + foods.activity.icon_color}">
+                          {{ foods.activity.image_text }}
+                        </span>
+                      </div>
+                    </div>
+                  </router-link>
+                  <footer class="food-item-info-bottom">
+                    <section class="food-price">
+                      <span class="price-icon">¥</span>
+                      <span class="price-num">{{ foods.specfoods[0].price }}</span>
+                      <span v-if="foods.specifications.length" class="price-special">起</span>
+                    </section>
+                  </footer>
+                </section>
               </div>
             </div>
           </div>
-          <div v-show="tabType === 1">
-            评价
+          <div v-load-more="loaderMoreRating" v-show="tabType === 1" class="shop-rating-wrap">
+            <header class="shop-rating-header">
+              <div class="header-left">
+                <div class="shop-rating-num">{{ shopDetail.rating }}</div>
+                <div class="shop-rating-text">综合评价</div>
+                <div class="shop-rating-compa">高于周边商家{{ (ratingScoresData.compare_rating * 100).toFixed(1) }}%</div>
+              </div>
+              <div class="header-right">
+                <div>
+                  <span class="header-right-title">服务态度</span>
+                  <rating-star :rating='ratingScoresData.service_score'></rating-star>
+                  <span class="rating-num">{{ratingScoresData.service_score.toFixed(1)}}</span>
+                </div>
+                <div>
+                  <span class="header-right-title">菜品评价</span>
+                  <rating-star :rating='ratingScoresData.food_score'></rating-star>
+                  <span class="rating-num">{{ratingScoresData.food_score.toFixed(1)}}</span>
+                </div>
+                <div>
+                  <span class="header-right-title">送达时间</span>
+                  <span class="delivery-time">{{shopDetail.order_lead_time}}分钟</span>
+                </div>
+              </div>
+            </header>
+            <section class="shop-rating-content">
+              <ul class="rating-tag-list">
+                <li v-for="(item, index) in ratingTagsList"
+                    :key="index"
+                    :class="{unsatisfied: item.unsatisfied, 'tag-activity': ratingTageIndex === index}"
+                    @click="changeTag(index, item.name)">
+                  {{ item.name }}({{ item.count }})
+                </li>
+              </ul>
+              <ul class="user-rating-list">
+                <li v-for="(item, index) in ratingList" :key="index" class="rating-item">
+                  <img :src="getImgPath(item.avatar)" class="user-avatar">
+                </li>
+              </ul>
+            </section>
           </div>
         </div>
       </div>
@@ -60,8 +137,13 @@
 <script>
   import { mapState, mapMutations } from 'vuex';
   import { imgBaseUrl } from '../../config/env';
+  import { loadMore } from '../publicFn/loadMore';
+  import ratingStar from '../components/ratingStar';
   export default {
-    components: {},
+    mixins: [loadMore],
+    components: {
+      ratingStar
+    },
     computed: {
       ...mapState([
         'userInfo'
@@ -74,7 +156,13 @@
           shopId: '',
           shopDetail: {},
           tabType: 0,
-          menuList: []
+          menuList: [],
+          ratingScoresData: {},
+          ratingTagsList: [],
+          ratingTageIndex: '',
+          ratingOffset: 0,
+          ratingTagName: '',
+          ratingList: []
         };
     },
     methods: {
@@ -98,13 +186,47 @@
           (res) => {
             this.menuList = res;
           });
-      }
+      },
+      // 获取商铺评价
+      getShopRating () {
+        this.https({url: '/ugc/v2/restaurants/' + this.shopId + '/ratings/scores', method: 'get'}).then(
+          (res) => {
+            this.ratingScoresData = res;
+          });
+      },
+      // 获取商铺评价标签
+      getShopRatingTag () {
+        this.https({url: '/ugc/v2/restaurants/' + this.shopId + '/ratings/tags', method: 'get'}).then(
+          (res) => {
+            this.ratingTagsList = res;
+          });
+      },
+      // 更改标签
+      changeTag (index, name) {
+        this.ratingTageIndex = index;
+        this.ratingTagName = name;
+        this.ratingOffset = 0;
+        let params = this.setStrOfUrl({
+          has_content: true,
+          offset: this.ratingOffset,
+          limit: 10,
+          tag_name: name
+        });
+        this.https({url: '/ugc/v2/restaurants/' + this.shopId + '/ratings', method: 'get'}).then(
+          (res) => {
+            this.ratingList = res;
+          });
+      },
+      // 获取更多评价
+      loaderMoreRating () {}
     },
     mounted () {
       this.geohash = this.$route.query.geohash;
       this.shopId = this.$route.query.id;
       this.getShopDetail();
       this.getMenuList();
+      this.getShopRating();
+      this.getShopRatingTag();
       this.saveGeohash(this.geohash);
     },
     watch: {}
@@ -204,7 +326,7 @@
           display: flex;
           flex-direction: column;
           align-items: flex-start;
-          box-shadow: .025rem 0 .025rem @gray;
+          box-shadow: .005rem 0 .025rem @gray;
           .menu-list-item {
             display: flex;
             align-items: center;
@@ -233,13 +355,207 @@
               font-size: .7rem;
               color: @fontColor;
               font-weight: 700;
+              margin-right: .4rem;
             }
             .description {
               font-size: .5rem;
               color: @fontColor2;
               overflow: hidden;
             }
+          }
+          .food-item-info {
+            position: relative;
+            padding: .6rem .4rem;
+            border-bottom: .025rem solid @gray;
+            overflow: hidden;
+            .food-item-info-top {
+              display: flex;
+              align-items: flex-start;
+              .food-img {
+                width: 2rem;
+                height: 2rem;
+                margin-right: .4rem;
+              }
+              .food-desc {
+                & > div {
+                  padding: .1rem 0;
+                }
+                .food-desc-name {
+                  display: flex;
+                  align-items: center;
+                  .food-name {
+                    font-size: .7rem;
+                    color: @fontColor;
+                  }
+                  .attributes-list {
+                    display: flex;
+                    align-items: center;
+                    li {
+                      display: flex;
+                      align-items: center;
+                      height: .6rem;
+                      padding: .1rem;
+                      border: .025rem solid @fontColor1;
+                      border-radius: .3rem;
+                      margin-right: .1rem;
+                      line-height: .35rem;
+                      transform: scale(.8);
+                      font-size: .3rem;
+                      span {
+                        color: @fontColor4;
+                      }
+                    }
+                    .attribute-new {
+                      position: absolute;
+                      top: 0;
+                      left: 0;
+                      display: flex;
+                      align-items: flex-end;
+                      width: 2rem;
+                      height: 2rem;
+                      border: none;
+                      border-radius: 0;
+                      background-color: #4cd964;
+                      transform: rotate(-45deg) translate(-.1rem,-1.5rem);
+                      span {
+                        flex: 1;
+                        font-size: .4rem;
+                        text-align: center;
+                      }
+                    }
+                  }
+                }
+                .food-desc-content {
+                  font-size: .5rem;
+                  color: @fontColor2;
+                }
+                .food-desc-rating {
+                  display: flex;
+                  align-items: center;
+                  span {
+                    font-size: .5rem;
+                    color: @fontColor;
+                  }
+                }
+                .food-desc-activity {
+                  display: flex;
+                  align-items: center;
+                  span {
+                    padding: .08rem;
+                    font-size: .3rem;
+                    border: .025rem solid currentColor;
+                    border-radius: .3rem;
+                  }
+                }
 
+              }
+            }
+            .food-item-info-bottom {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-left: 2.4rem;
+              .food-price {
+                display: flex;
+                align-items: center;
+                & > span {
+                  padding: 0 .1rem;
+                }
+                .price-icon, .price-num {
+                  color: @fontColor4;
+                }
+                .price-icon {
+                  font-size: .5rem;
+                }
+                .price-num {
+                  font-size: .7rem;
+                  font-weight: 700;
+                }
+                .price-special {
+                  font-size: .5rem;
+                  color: @fontColor1;
+                }
+              }
+            }
+          }
+        }
+      }
+      .shop-rating-wrap {
+        border-top: .025rem solid @gray;
+        .shop-rating-header {
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+          padding: .8rem .5rem;
+          border-bottom: .5rem solid @gray;
+          .header-left {
+            text-align: center;
+            .shop-rating-num {
+              font-size: 1.2rem;
+              color: @fontColor4;
+            }
+            .shop-rating-text {
+              margin: .2rem 0;
+              font-size: .65rem;
+              color: @fontColor1;
+            }
+            .shop-rating-compa {
+              font-size: .4rem;
+              color: @fontColor2;
+            }
+          }
+          .header-right {
+            .header-right-title {
+              font-size: .65rem;
+              color: #666;
+            }
+            .rating-num {
+              width: 3rem;
+              font-size: .55rem;
+              color: @fontColor4;
+            }
+            .delivery-time {
+              font-size: .4rem;
+              color: @fontColor2;
+            }
+          }
+        }
+        .shop-rating-content {
+          padding: .4rem;
+          .rating-tag-list {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            border-bottom: .025rem solid @gray;
+            li {
+              padding: .3rem;
+              margin: .3rem;
+              border-radius: .2rem;
+              background-color: #ebf5ff;
+              font-size: .6rem;
+              color: @fontColor1;
+            }
+            .unsatisfied{
+              background-color: @backColor;
+              color: #999;
+            }
+            .tag-activity{
+              background-color: @blue;
+              color: #fff;
+            }
+          }
+          .user-rating-list {
+            padding: .4rem;
+            .rating-item {
+              display: flex;
+              align-items: flex-start;
+              .user-avatar {
+                width: 1.5rem;
+                height: 1.5rem;
+                border: .025rem;
+                border-radius: 50%;
+              }
+            }
           }
         }
       }

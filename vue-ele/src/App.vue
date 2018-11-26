@@ -1,8 +1,6 @@
 <template>
   <div id="app">
-    <keep-alive :max="20">
-      <router-view/>
-    </keep-alive>
+    <router-view/>
     <svg-icon></svg-icon>
   </div>
 </template>

@@ -1,14 +1,7 @@
 @import (reference) "./dynamic";
-html, body, #app {
-  width: 100%;
+* {
   padding: 0;
   margin: 0;
-  font-family: "Microsoft Yahei";
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
-  -webkit-font-smoothing: antialiased;
-}
-* {
   list-style: none;
   text-decoration: none;
   font-style: normal;
@@ -16,6 +9,13 @@ html, body, #app {
   border: none;
   color: @fontColor;
   font-weight: normal;
+}
+html, body, #app {
+  width: 100%;
+  font-family: "Microsoft Yahei";
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
 }
 #app {
   background-color: #fff;
