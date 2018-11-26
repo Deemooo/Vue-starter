@@ -35,13 +35,18 @@
             <span :class="{selected: tabType === 0}" @click="tabType = 0">商品</span>
             <span :class="{selected: tabType === 1}" @click="tabType = 1">评价</span>
           </div>
+          <!--商品-->
           <div v-show="tabType === 0" class="shop-food-wrap">
-            <div class="food-menu">
-              <li v-for="(item,index) in menuList" :key="index" class="menu-list-item">
+            <ul class="food-menu" id="wrapper-menu" ref="wrapperMenu">
+              <li v-for="(item,index) in menuList"
+                  :key="index"
+                  @click="chooseMenu(index)"
+                  :class="{'activity-menu': index === menuIndex}"
+                  class="menu-list-item">
                 <span>{{ item.name }}</span>
               </li>
-            </div>
-            <div class="food-list">
+            </ul>
+            <div class="food-list" ref="menuFoodList">
               <div v-for="(item, index) in menuList" :key="index" class="food-item">
                 <header class="food-item-header">
                   <span class="name">{{ item.name }}</span>
@@ -90,23 +95,30 @@
               </div>
             </div>
           </div>
+          <!--评价-->
           <div v-load-more="loaderMoreRating" v-show="tabType === 1" class="shop-rating-wrap">
             <header class="shop-rating-header">
               <div class="header-left">
                 <div class="shop-rating-num">{{ shopDetail.rating }}</div>
                 <div class="shop-rating-text">综合评价</div>
-                <div class="shop-rating-compa">高于周边商家{{ (ratingScoresData.compare_rating * 100).toFixed(1) }}%</div>
+                <div v-if="ratingScoresData.compare_rating" class="shop-rating-compa">
+                  高于周边商家{{ (ratingScoresData.compare_rating * 100).toFixed(1) }}%
+                </div>
               </div>
               <div class="header-right">
                 <div>
                   <span class="header-right-title">服务态度</span>
                   <rating-star :rating='ratingScoresData.service_score'></rating-star>
-                  <span class="rating-num">{{ratingScoresData.service_score.toFixed(1)}}</span>
+                  <span v-if="ratingScoresData.service_score" class="rating-num">
+                    {{ ratingScoresData.service_score.toFixed(1) }}
+                  </span>
                 </div>
                 <div>
                   <span class="header-right-title">菜品评价</span>
                   <rating-star :rating='ratingScoresData.food_score'></rating-star>
-                  <span class="rating-num">{{ratingScoresData.food_score.toFixed(1)}}</span>
+                  <span v-if="ratingScoresData.food_score" class="rating-num">
+                    {{ ratingScoresData.food_score.toFixed(1) }}
+                  </span>
                 </div>
                 <div>
                   <span class="header-right-title">送达时间</span>
@@ -126,6 +138,32 @@
               <ul class="user-rating-list">
                 <li v-for="(item, index) in ratingList" :key="index" class="rating-item">
                   <img :src="getImgPath(item.avatar)" class="user-avatar">
+                  <div class="rating-info">
+                    <div class="rating-info-top">
+                      <div class="rating-info-top-left">
+                        <p class="user-name">{{ item.username }}</p>
+                        <p class="rating-star">
+                          <rating-star :rating='item.rating_star'></rating-star>
+                          <span class="rating-star-text">{{ item.time_spent_desc }}</span>
+                        </p>
+                      </div>
+                      <time class="rating-info-top-right">{{ item.rated_at }}</time>
+                    </div>
+                    <div class="rating-info-middle">
+                      <ul class="food-img-list">
+                        <li v-for="(item, index) in item.item_ratings" :key="index">
+                          <img :src="getImgPath(item.image_hash)" v-if="item.image_hash">
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="rating-info-bottom">
+                      <ul class="food-name-list">
+                        <li v-for="(item, index) in item.item_ratings" :key="index" class="food-name-item">
+                          {{ item.food_name }}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
                 </li>
               </ul>
             </section>
@@ -139,6 +177,7 @@
   import { imgBaseUrl } from '../../config/env';
   import { loadMore } from '../publicFn/loadMore';
   import ratingStar from '../components/ratingStar';
+  import BScroll from 'better-scroll';
   export default {
     mixins: [loadMore],
     components: {
@@ -162,7 +201,11 @@
           ratingTageIndex: '',
           ratingOffset: 0,
           ratingTagName: '',
-          ratingList: []
+          ratingList: [],
+          shopListTop: [],
+          foodScroll: null,
+          menuIndexChange: true,
+          menuIndex: 0
         };
     },
     methods: {
@@ -185,6 +228,9 @@
         this.https({url: '/shopping/v2/menu?restaurant_id=' + this.shopId, method: 'get'}).then(
           (res) => {
             this.menuList = res;
+            this.$nextTick(() => {
+              this.getFoodListHeight();
+            });
           });
       },
       // 获取商铺评价
@@ -201,24 +247,74 @@
             this.ratingTagsList = res;
           });
       },
-      // 更改标签
-      changeTag (index, name) {
-        this.ratingTageIndex = index;
-        this.ratingTagName = name;
-        this.ratingOffset = 0;
+      // 获取评论列表
+      getRatingList () {
         let params = this.setStrOfUrl({
           has_content: true,
           offset: this.ratingOffset,
           limit: 10,
-          tag_name: name
+          tag_name: ''
         });
         this.https({url: '/ugc/v2/restaurants/' + this.shopId + '/ratings', method: 'get'}).then(
           (res) => {
             this.ratingList = res;
           });
       },
+      //点击左侧食品列表标题，相应列表移动到最顶层
+      chooseMenu (index) {
+        this.menuIndex = index;
+        //menuIndexChange解决运动时listenScroll依然监听的bug
+        this.menuIndexChange = false;
+        this.foodScroll.scrollTo(0, -this.shopListTop[index], 400);
+        this.foodScroll.on('scrollEnd', () => {
+          this.menuIndexChange = true;
+        })
+      },
+      // 更改标签
+      changeTag (index, name) {
+        this.ratingTageIndex = index;
+        this.ratingTagName = name;
+        this.ratingOffset = 0;
+        this.getRatingList();
+      },
       // 获取更多评价
-      loaderMoreRating () {}
+      loaderMoreRating () {},
+      //获取食品列表的高度，存入shopListTop
+      getFoodListHeight () {
+        const listContainer = this.$refs.menuFoodList;
+        const listArr = Array.from(listContainer.children);
+        listArr.forEach((item, index) => {
+          this.shopListTop.push(item.offsetTop);
+        });
+        this.listenScroll(listContainer)
+      },
+      //当滑动食品列表时，监听其scrollTop值来设置对应的食品列表标题的样式
+      listenScroll (element) {
+        this.foodScroll = new BScroll(element, {
+          probeType: 3,
+          deceleration: 0.001,
+          bounce: false,
+          swipeTime: 2000,
+          click: true
+        });
+        const wrapperMenu = new BScroll('#wrapper-menu', {
+          click: true
+        });
+        const wrapMenuHeight = this.$refs.wrapperMenu.clientHeight;
+        this.foodScroll.on('scroll', (pos) => {
+          if (!this.$refs.wrapperMenu) {
+            return;
+          }
+          this.shopListTop.forEach((item, index) => {
+            if (this.menuIndexChange && Math.abs(Math.round(pos.y)) >= item) {
+              this.menuIndex = index;
+              const menuList = this.$refs.wrapperMenu.querySelectorAll('.activity-menu');
+              const el = menuList[0];
+              wrapperMenu.scrollToElement(el, 800, 0, -(wrapMenuHeight / 2 - 50));
+            }
+          })
+        })
+      }
     },
     mounted () {
       this.geohash = this.$route.query.geohash;
@@ -227,6 +323,7 @@
       this.getMenuList();
       this.getShopRating();
       this.getShopRatingTag();
+      this.getRatingList();
       this.saveGeohash(this.geohash);
     },
     watch: {}
@@ -301,6 +398,7 @@
       }
     }
     .shop-food-list {
+      overflow-y: auto;
       background-color: #fff;
       .tabs-title {
         display: flex;
@@ -321,6 +419,7 @@
       .shop-food-wrap {
         display: flex;
         border-top: .025rem solid @gray;
+        overflow-y: hidden;
         .food-menu {
           width: 3.8rem;
           display: flex;
@@ -344,9 +443,17 @@
               white-space: nowrap;
             }
           }
+          .activity-menu {
+            border-left: 0.15rem solid @blue;
+            background-color: #fff;
+            span:nth-of-type(1){
+              font-weight: bold;
+            }
+          }
         }
         .food-list {
           flex: 70%;
+          overflow-y: auto;
           .food-item-header {
             display: flex;
             align-items: center;
@@ -507,7 +614,7 @@
           .header-right {
             .header-right-title {
               font-size: .65rem;
-              color: #666;
+              color: @fontColor1;
             }
             .rating-num {
               width: 3rem;
@@ -521,7 +628,6 @@
           }
         }
         .shop-rating-content {
-          padding: .4rem;
           .rating-tag-list {
             display: flex;
             align-items: center;
@@ -545,15 +651,76 @@
             }
           }
           .user-rating-list {
-            padding: .4rem;
             .rating-item {
               display: flex;
               align-items: flex-start;
+              padding: .6rem .4rem;
+              border-bottom: .025rem solid @gray;
               .user-avatar {
                 width: 1.5rem;
                 height: 1.5rem;
+                margin-right: .8rem;
                 border: .025rem;
                 border-radius: 50%;
+              }
+              .rating-info {
+                flex: 80%;
+                .rating-info-top {
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: flex-start;
+                  .rating-info-top-left {
+                    .user-name {
+                      font-size: .55rem;
+                      color: @fontColor1;
+                    }
+                    .rating-star {
+                      display: flex;
+                      align-items: center;
+                      .rating-star-text {
+                        margin-left: .2rem;
+                        font-size: .55rem;
+                        color: @fontColor1;
+                      }
+                    }
+                  }
+                  .rating-info-top-right {
+                    font-size: .4rem;
+                    color: @fontColor2;
+                  }
+                }
+                .rating-info-middle {
+                  padding: .4rem 0;
+                  .food-img-list {
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: center;
+                    img {
+                      width: 3rem;
+                      height: 3rem;
+                      margin-right: .4rem;
+                    }
+                  }
+                }
+                .rating-info-bottom {
+                  .food-name-list {
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: center;
+                    .food-name-item {
+                      width: 2.2rem;
+                      padding: .2rem;
+                      margin-right: .2rem;
+                      border: .025rem solid @gray;
+                      border-radius: .15rem;
+                      font-size: .55rem;
+                      color: @fontColor2;
+                      overflow: hidden;
+                      text-overflow: ellipsis;
+                      white-space: nowrap;
+                    }
+                  }
+                }
               }
             }
           }
