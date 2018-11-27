@@ -69,7 +69,7 @@
         },
         methods: {
           ...mapMutations([
-            'updateUserInfo'
+            'UPDATEUSERINFO'
           ]),
           // 获取验证码
           getCaptchaCode () {
@@ -117,7 +117,7 @@
                   alert(this.userInfo.message);
                   this.getCaptchaCode();
                 } else {
-                  this.updateUserInfo(this.userInfo);
+                  this.UPDATEUSERINFO(this.userInfo);
                   this.$router.go(-1);
                 }
               });

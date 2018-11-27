@@ -10,7 +10,7 @@
       </top-header>
       <div class="food-detail-content">
         <div class="food-detail-img">
-          <img :src="this.$route.query.name" alt="商品图片">
+          <img :src="imgBaseUrl + this.$route.query.image_path" alt="商品图片">
         </div>
         <section class="food-detail-info">
           <p>{{this.$route.query.name}}</p>
@@ -37,6 +37,7 @@
     </div>
 </template>
 <script>
+  import { imgBaseUrl } from '../../../config/env';
   import ratingStar from '../../components/ratingStar';
   export default {
     components: {
@@ -45,6 +46,7 @@
     computed: {},
     data () {
         return {
+          imgBaseUrl,
           foodDetailData: {}
         };
     },

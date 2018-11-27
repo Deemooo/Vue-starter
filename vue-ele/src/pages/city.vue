@@ -56,13 +56,13 @@
       },
       methods: {
         ...mapMutations([
-          'updateCityInfo',
-          'saveGeohash'
+          'UPDATECITYINFO',
+          'SAVEGEOHASH'
         ]),
         getCurrentcity () {
           this.https({url: '/v1/cities/' + this.cityId, method: 'get'}).then(
             (res) => {
-              this.updateCityInfo(res);
+              this.UPDATECITYINFO(res);
             });
         },
         getPois () {
@@ -86,7 +86,7 @@
             {
             path: '/msite'
             });
-          this.saveGeohash(geohash);
+          this.SAVEGEOHASH(geohash);
         },
         selectPlace (index, geohash) {
           let history = this.getListData('searchHistory');
@@ -100,7 +100,7 @@
               this.historyArr.push(this.placeList[index]);
             }
           }
-          this.saveGeohash(geohash);
+          this.SAVEGEOHASH(geohash);
           this.selectHistoryItem(geohash);
           this.setListData('searchHistory', this.historyArr);
         },

@@ -45,7 +45,7 @@
       },
       methods: {
         ...mapMutations([
-          'removeAddress'
+          'REMOVEADDRESS'
         ]),
         selectAddress (index) {
           this.addressIndex === index ? this.addressIndex = '' : this.addressIndex = index;
@@ -55,7 +55,7 @@
             let params = {};
             await this.https({url: '/v1/users/' + this.userInfo.user_id + '/addresses/' + item.id, params, method: 'delete'}).then(
               (res) => {
-                this.removeAddress(index);
+                this.REMOVEADDRESS(index);
               });
           }
         }

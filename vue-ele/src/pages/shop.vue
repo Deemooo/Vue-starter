@@ -212,7 +212,8 @@
     },
     methods: {
       ...mapMutations([
-        'saveGeohash'
+        'SAVEGEOHASH',
+        'SAVESHOPDETAIL'
       ]),
       // 获取商铺信息
       getShopDetail () {
@@ -223,6 +224,7 @@
         this.https({url: '/shopping/restaurant/' + this.shopId + params, method: 'get'}).then(
           (res) => {
             this.shopDetail = res;
+            this.SAVESHOPDETAIL(res);
           });
       },
       // 获取列表信息
@@ -324,7 +326,7 @@
       this.getShopRating();
       this.getShopRatingTag();
       this.getRatingList();
-      this.saveGeohash(this.geohash);
+      this.SAVEGEOHASH(this.geohash);
     },
     watch: {},
     destroyed () {
@@ -540,6 +542,7 @@
                 display: flex;
                 align-items: center;
                 span {
+                  margin-right: .2rem;
                   font-size: .5rem;
                   color: @fontColor;
                 }

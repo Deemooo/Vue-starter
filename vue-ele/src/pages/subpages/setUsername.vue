@@ -37,7 +37,7 @@
       },
       methods: {
         ...mapMutations([
-          'saveUserName'
+          'SAVEUSERNAME'
         ]),
         // 输入检查
         checkInput () {
@@ -52,7 +52,7 @@
         // 设置用户名
         setUsername () {
           if (this.checkInput) {
-            this.saveUserName(this.inputValue);
+            this.SAVEUSERNAME(this.inputValue);
             this.$router.go(-1);
           }
         }

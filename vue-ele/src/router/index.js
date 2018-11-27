@@ -208,6 +208,18 @@ export default new Router({
       path: '/foodDetail',
       name: 'foodDetail',
       component: resolve => require(['../pages/subpages/foodDetail.vue'], resolve)
+    },
+    // 店铺详情
+    {
+      path: '/shopDetail',
+      name: 'shopDetail',
+      component: resolve => require(['../pages/subpages/shopDetail.vue'], resolve)
+    },
+    // 店铺安全信息
+    {
+      path: '/shopSafe',
+      name: 'shopSafe',
+      component: resolve => require(['../pages/subpages/shopSafe.vue'], resolve)
     }
   ]
 });

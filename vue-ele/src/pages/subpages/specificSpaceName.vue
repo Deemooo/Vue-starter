@@ -37,7 +37,7 @@
     },
     methods: {
       ...mapMutations([
-        'saveSpecificSpaceName'
+        'SAVESPECIFICSPACENAME'
       ]),
       // 获取地址列表
       getPois () {
@@ -56,7 +56,7 @@
       },
       // 选择地名
       selectPlace (index) {
-        this.saveSpecificSpaceName(this.placeList[index].address);
+        this.SAVESPECIFICSPACENAME(this.placeList[index].address);
         this.$router.go(-1);
       }
     },

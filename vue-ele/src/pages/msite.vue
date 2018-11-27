@@ -69,7 +69,7 @@
         },
         methods: {
           ...mapMutations([
-            'saveGeohash'
+            'SAVEGEOHASH'
           ]),
           getMsiteAddress () {
             this.https({url: '/v2/pois/' + this.geohash, method: 'get'}).then(
@@ -108,7 +108,7 @@
             this.https({url: '/v1/cities' + params, method: 'get'}).then(
               (res) => {
                 this.geohash = res.latitude + ',' + res.longitude;
-                this.saveGeohash(this.geohash);
+                this.SAVEGEOHASH(this.geohash);
               });
           }
           this.getMsiteAddress();

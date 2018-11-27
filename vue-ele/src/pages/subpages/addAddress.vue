@@ -71,8 +71,8 @@
     },
     methods: {
       ...mapMutations([
-        'addNewAddress',
-        'saveSpecificSpaceName'
+        'ADDNEWADDRESS',
+        'SAVESPECIFICSPACENAME'
       ]),
       asveAddress () {
         if (!(this.checkName && this.checkAddress && this.checkDetailAddress && this.checkCellphoneNumber && this.checkPhoneNumber)) {
@@ -93,7 +93,7 @@
               if (res.message) {
                 alert(res.message);
               } else {
-                this.addNewAddress({
+                this.ADDNEWADDRESS({
                   name: this.inputName,
                   address: this.specificSpaceName,
                   address_detail: this.inputDetailAddress,
@@ -113,7 +113,7 @@
     },
     deactivated () {
       this.inputDetailAddress = '';
-      this.saveSpecificSpaceName('');
+      this.SAVESPECIFICSPACENAME('');
   },
     watch: {}
   };
