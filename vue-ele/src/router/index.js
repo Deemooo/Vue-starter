@@ -202,6 +202,12 @@ export default new Router({
       path: '/shop',
       name: 'shop',
       component: resolve => require(['../pages/shop.vue'], resolve)
+    },
+    // 商品详情
+    {
+      path: '/foodDetail',
+      name: 'foodDetail',
+      component: resolve => require(['../pages/subpages/foodDetail.vue'], resolve)
     }
   ]
 });
