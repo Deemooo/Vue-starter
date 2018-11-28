@@ -32,7 +32,7 @@
           <div class="local">{{ item.name }}</div>
           <div class="content">{{ item.address }}</div>
         </li>
-        <p v-if="placeList.length === 0" class="no-result">很抱歉!无搜索结果。</p>
+        <p v-if="noResultFlag && placeList.length === 0" class="no-result">很抱歉!无搜索结果。</p>
       </ul>
     </div>
 </template>
@@ -52,7 +52,8 @@
             placeList: [],
             placeHistory: [],
             historyArr: [],
-            showFlag: true
+            showFlag: true,
+            noResultFlag: false
           };
       },
       methods: {
@@ -77,6 +78,7 @@
               (res) => {
                 this.placeList = res;
                 this.showFlag = false;
+                this.noResultFlag = true;
               });
           } else {
             alert('请输入学校、商务楼、地址进行搜索！');
@@ -87,7 +89,7 @@
           this.SAVEGEOHASH(geohash);
         },
         selectPlace (index, geohash) {
-          let res = history.every((item) => {
+          let res = this.historyArr.every((item) => {
             return item.geohash !== geohash;
           });
           if (res) {

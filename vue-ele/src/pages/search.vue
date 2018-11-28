@@ -51,7 +51,7 @@
             </div>
           </section>
         </li>
-        <p v-if="restaurantsList.length === 0" class="no-result">很抱歉!无搜索结果。</p>
+        <p v-if="noResultFlag && restaurantsList.length === 0" class="no-result">很抱歉!无搜索结果。</p>
       </ul>
     </div>
 </template>
@@ -74,7 +74,8 @@
             inputValue: '',
             restaurantsList: [],
             historyArr: [],
-            showFlag: true
+            showFlag: true,
+            noResultFlag: false
           };
       },
       methods: {
@@ -92,6 +93,7 @@
               (res) => {
                 this.restaurantsList = res;
                 this.showFlag = false;
+                this.noResultFlag = true;
               });
           } else {
             alert('请输入商家或美食名称进行搜索！');

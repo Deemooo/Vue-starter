@@ -98,6 +98,27 @@
             </li>
           </ul>
         </div>
+        <!--购物车-->
+        <section class="buy-cart-container">
+          <section @click="toggleCartList" class="cart-icon-num">
+            <div class="cart-icon-container" :class="{cart_icon_activity: totalPrice > 0, move_in_cart:receiveInCart}" ref="cartContainer">
+                                <span v-if="totalNum" class="cart-list-length">
+                                    {{totalNum}}
+                                </span>
+              <svg class="cart-icon">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#cart-icon"></use>
+              </svg>
+            </div>
+            <div class="cart-num">
+              <p>¥ {{totalPrice}}</p>
+              <p>配送费¥{{deliveryFee}}</p>
+            </div>
+          </section>
+          <section class="gotopay" :class="{gotopay_acitvity: minimumOrderAmount <= 0}">
+            <span class="gotopay-text" v-if="minimumOrderAmount > 0">还差¥{{minimumOrderAmount}}起送</span>
+            <router-link :to="{path:'/confirmOrder', query:{shopId}}" class="gotopay-text" v-else>去结算</router-link>
+          </section>
+        </section>
       </div>
       <!--评价-->
       <div v-load-more="loaderMoreRating" v-show="tabType === 1" class="shop-rating-wrap">
@@ -207,7 +228,12 @@
           shopListTop: [],
           foodScroll: null,
           menuIndexChange: true,
-          menuIndex: 0
+          menuIndex: 0,
+          totalPrice: 0,
+          totalNum: 0,
+          receiveInCart: '',
+          deliveryFee: 0,
+          minimumOrderAmount: 0
         };
     },
     methods: {
@@ -316,7 +342,8 @@
             }
           })
         })
-      }
+      },
+      toggleCartList () {}
     },
     mounted () {
       this.shopId = this.$route.query.id;
@@ -421,6 +448,7 @@
       flex: 1;
       display: flex;
       position: relative;
+      margin-bottom: 2rem;
       border-top: .025rem solid @gray;
       overflow-y: auto;
       z-index: 10;
@@ -587,6 +615,62 @@
                 color: @fontColor1;
               }
             }
+          }
+        }
+      }
+      .buy-cart-container {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 2rem;
+        display: flex;
+        z-index: 13;
+        background-color: #3d3d3f;
+        .cart-icon-num {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          .cart-icon-container {
+            margin-top: -.7rem;
+            margin-left: .5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 1.5rem;
+            height: 1.5rem;
+            padding: .4rem;
+            border: .18rem solid #444;
+            border-radius: 50%;
+            background-color: #3190e8;
+            .cart-icon {
+              width: 1.2rem;
+              height: 1.2rem;
+            }
+          }
+          .cart-num {
+            margin-left: .4rem;
+            p {
+              font-size: .8rem;
+              font-weight: 700;
+              color: #fff;
+            }
+            & > p:last-of-type {
+              font-size: .4rem;
+            }
+          }
+        }
+        .gotopay {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 5rem;
+          height: 100%;
+          background-color: #4cd964;
+          .gotopay-text {
+            font-size: .7rem;
+            font-weight: 700;
+            color: #fff;
           }
         }
       }
