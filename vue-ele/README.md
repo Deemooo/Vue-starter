@@ -32,9 +32,8 @@ http://localhost:8080
       │
       │
       ├─src                      # 项目的src路径
-      │  ├─assets                # 静态资源文件 （存放公用样式，主题更改文件）
+      │  ├─assets                # 静态资源文件
       │  ├─components            # 公用组件
-      │  ├─pageConfig            # 页面配置文件 （错误编码配置，socket配置，i18n）
       │  ├─pages                 # 页面文件
       │  ├─router                # 路由配置文件
       │  ├─store                 # 全局vuex
@@ -42,7 +41,7 @@ http://localhost:8080
       │  ├─App.vue               # 单页应用入口文件
       │  └─main.js               # 入口js文件
       │
-      ├─static                   # 存放静态资源文件（目前用来存放图片）
+      ├─static                   # 存放静态资源文件
       │
       ├─.babelrc                 # es6转化为es5的配置
       ├─.editorconfig            # 编辑器配置
