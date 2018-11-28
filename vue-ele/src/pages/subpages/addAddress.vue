@@ -43,7 +43,7 @@
       ...mapState([
         'userInfo',
         'specificSpaceName',
-        'geohash'
+        'GEOHASH'
       ]),
       checkName () {
         return !(this.isNull(this.inputName) && this.validateUser(this.inputName));
@@ -79,7 +79,7 @@
           let params = {
             address: this.specificSpaceName,
             address_detail: this.inputDetailAddress,
-            geohash: this.geohash,
+            geohash: this.GEOHASH,
             name: this.inputName,
             phone: this.inputCellphoneNumber,
             phone_bk: this.inputPhoneNumber,

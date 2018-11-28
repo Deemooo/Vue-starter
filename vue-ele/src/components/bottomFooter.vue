@@ -21,13 +21,13 @@
 
       </defs>
     </svg>
-    <section @click = "gotoAddress({path: '/msite', query: {geohash}})" class="guide-item">
+    <section @click = "gotoAddress({path: '/msite'})" class="guide-item">
       <svg class="icon-style">
         <use xmlns:xlink="http://www.w3.org/1999/xlink" :xlink:href="$route.path.indexOf('msite') !== -1? '#msiteActive' : '#msite'"></use>
       </svg>
       <span>外卖</span>
     </section>
-    <section @click = "gotoAddress({path: '/search', query: {geohash}})" class="guide-item">
+    <section @click = "gotoAddress({path: '/search'})" class="guide-item">
       <svg class="icon-style">
         <use xmlns:xlink="http://www.w3.org/1999/xlink" :xlink:href="$route.path.indexOf('search') !== -1? '#findActive' : '#find'"></use>
       </svg>
@@ -64,7 +64,7 @@
     },
     computed: {
       ...mapState([
-        'geohash'
+        'GEOHASH'
       ])
     },
     methods: {

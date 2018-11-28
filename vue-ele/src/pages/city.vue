@@ -27,12 +27,13 @@
         </div>
         <div @click="clearAll" class="clear-all">清空所有</div>
       </div>
-      <div v-else class="search-result">
-        <div v-for="(item, index) in placeList" :key="index" @click='selectPlace(index, item.geohash)' class="list-item">
+      <ul v-else class="search-result">
+        <li v-for="(item, index) in placeList" :key="index" @click='selectPlace(index, item.geohash)' class="list-item">
           <div class="local">{{ item.name }}</div>
           <div class="content">{{ item.address }}</div>
-        </div>
-      </div>
+        </li>
+        <p v-if="placeList.length === 0" class="no-result">很抱歉!无搜索结果。</p>
+      </ul>
     </div>
 </template>
 <script>
@@ -82,23 +83,15 @@
           }
         },
         selectHistoryItem (geohash) {
-          this.$router.push(
-            {
-            path: '/msite'
-            });
+          this.$router.push('/msite');
           this.SAVEGEOHASH(geohash);
         },
         selectPlace (index, geohash) {
-          let history = this.getListData('searchHistory');
-          if (!history) {
+          let res = history.every((item) => {
+            return item.geohash !== geohash;
+          });
+          if (res) {
             this.historyArr.push(this.placeList[index]);
-          } else {
-            let res = history.every((item) => {
-              return item.geohash !== geohash;
-            });
-            if (res) {
-              this.historyArr.push(this.placeList[index]);
-            }
           }
           this.SAVEGEOHASH(geohash);
           this.selectHistoryItem(geohash);
@@ -151,8 +144,8 @@
     }
     .city-form {
       background-color: #fff;
-      border-top: 1px solid @gray;
-      border-bottom: 1px solid @gray;
+      border-top: .025rem solid @gray;
+      border-bottom: .025rem solid @gray;
       margin-top: 1.95rem;
       padding-top: .4rem;
       div {
@@ -160,7 +153,7 @@
         margin: 0 auto;
         text-align: center;
         input {
-          border: 1px solid @gray;
+          border: .025rem solid @gray;
           padding: 0 .3rem;
           font-size: .65rem;
           color: @fontColor;
@@ -182,12 +175,13 @@
     .search-history {
       margin-top: .4rem;
       background-color: #fff;
-      border-top: 1px solid @gray;
+      border-top: .025rem solid @gray;
       .history-list {
         .list-item {
+          padding: .4rem 0;
           margin: 0 auto;
-          border-top: 1px solid @gray;
-          border-bottom: 1px solid @gray;
+          border-top: .025rem solid @gray;
+          border-bottom: .025rem solid @gray;
           .local, .content {
             width: 90%;
             padding: .3rem;
@@ -214,12 +208,12 @@
         font-size: .65rem;
         font-weight: 700;
         color: @fontColor;
-        border-bottom: 1px solid @gray;
+        border-bottom: .025rem solid @gray;
       }
     }
     .search-result {
       background-color: #fff;
-      border-top: 1px solid @gray;
+      border-top: .025rem solid @gray;
       .list-item {
         margin: 0 auto;
         border-top: 1px solid @gray;
@@ -236,6 +230,12 @@
           font-size: .45rem;
           color: #999;
         }
+      }
+      .no-result {
+        padding-top: .5rem;
+        text-align: center;
+        font-size: .7rem;
+        color: @fontColor1;
       }
     }
   }

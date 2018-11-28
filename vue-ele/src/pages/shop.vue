@@ -187,13 +187,13 @@
     },
     computed: {
       ...mapState([
-        'userInfo'
+        'userInfo',
+        'GEOHASH'
       ])
     },
     data () {
         return {
           imgBaseUrl,
-          geohash: '',
           shopId: '',
           shopDetail: {},
           tabType: 0,
@@ -218,8 +218,8 @@
       // 获取商铺信息
       getShopDetail () {
         let params = this.setStrOfUrl({
-          latitude: this.geohash.split(',')[0],
-          longitude: this.geohash.split(',')[1]
+          latitude: this.GEOHASH.split(',')[0],
+          longitude: this.GEOHASH.split(',')[1]
         });
         this.https({url: '/shopping/restaurant/' + this.shopId + params, method: 'get'}).then(
           (res) => {
@@ -319,14 +319,12 @@
       }
     },
     mounted () {
-      this.geohash = this.$route.query.geohash;
       this.shopId = this.$route.query.id;
       this.getShopDetail();
       this.getMenuList();
       this.getShopRating();
       this.getShopRatingTag();
       this.getRatingList();
-      this.SAVEGEOHASH(this.geohash);
     },
     watch: {},
     destroyed () {
@@ -406,6 +404,8 @@
       justify-content: space-around;
       align-items: center;
       height: 2rem;
+      background-color: #fff;
+      z-index: 10;
       span {
         padding-bottom: .2rem;
         text-align: center;
@@ -423,6 +423,7 @@
       position: relative;
       border-top: .025rem solid @gray;
       overflow-y: auto;
+      z-index: 10;
       .food-menu {
         width: 3.8rem;
         display: flex;

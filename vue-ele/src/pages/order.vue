@@ -11,7 +11,7 @@
       <div v-load-more="getMoreList" class="order-list-wrap">
         <div v-for="item in orderList" :key="item.id" class="order-list-item">
           <div @click="showOrderDetail(item)" class="order-item-shop">
-            <img :src="imgBaseUrl + item.restaurant_image_url" alt="店铺图片" class="order-item-shop-img">
+            <img :src="imgBaseUrl + item.restaurant_image_url" alt="" class="order-item-shop-img">
             <div class="order-item-shop-info">
               <div class="order-item-shop-info-left">
                 <div class="shop-name">

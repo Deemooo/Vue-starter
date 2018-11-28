@@ -14,4 +14,5 @@
 </script>
 <style lang="less">
   @import './assets/style/common';
+  @import './assets/style/extra';
 </style>

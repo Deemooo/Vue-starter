@@ -122,12 +122,16 @@
     </div>
 </template>
 <script>
+  import { mapState } from 'vuex';
   import shopList from '../components/shopList';
   export default {
       components: {
         shopList
       },
       computed: {
+        ...mapState([
+          'GEOHASH'
+        ]),
         // 筛选面板中的清空按钮状态
         clearBtnSelected () {
           let res = this.screenActivitySelectStatus.some((item) => {
@@ -138,7 +142,6 @@
       },
       data () {
           return {
-            geohash: '',
             headTitle: '',
             restaurantCategoryId: '',
             restaurantCategoryId1: '',

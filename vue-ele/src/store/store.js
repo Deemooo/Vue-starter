@@ -7,7 +7,7 @@ export default new Vuex.Store({
   state: {
     cityInfo: {},
     userInfo: {},
-    geohash: '',
+    GEOHASH: '',
     specificSpaceName: '',
     addressList: [],
     question: {},
@@ -30,7 +30,7 @@ export default new Vuex.Store({
     // 更新地理位置信息
     SAVEGEOHASH (state, data) {
       if (data) {
-        state.geohash = data;
+        state.GEOHASH = data;
       }
     },
     // 设置用户名

@@ -2,7 +2,7 @@
 <template>
     <div class="shop-list">
       <div v-if="shopListArr.length">
-        <router-link :to="{path: 'shop', query:{geohash, id: item.id}}" v-for="item in shopListArr" tag='div' :key="item.id" class="shop-list-item">
+        <router-link :to="{path: 'shop', query:{id: item.id}}" v-for="item in shopListArr" tag='div' :key="item.id" class="shop-list-item">
           <div class="img-wrap">
             <img :src="imgBaseUrl + item.image_path" class="shop-img">
           </div>
@@ -65,7 +65,7 @@
       },
       computed: {
         ...mapState([
-          'geohash'
+          'GEOHASH'
         ])
       },
       data () {
@@ -275,6 +275,7 @@
     padding-top: .5rem;
     border-top: .025rem solid @gray;
     text-align: center;
+    font-size: .7rem;
     color: @fontColor1;
   }
 </style>

@@ -139,14 +139,14 @@
     }
     .city-nav {
       padding-top: 2.35rem;
-      border-top: 1px solid @gray;
+      border-top: .025rem solid @gray;
       background-color: #fff;
       margin-bottom: .4rem;
       .tip {
         display: flex;
         align-items: center;
         line-height: 1.45rem;
-        border-bottom: 1px solid @gray;
+        border-bottom: .025rem solid @gray;
         span:first-child {
           margin-left: .4rem;
           font-size: .55rem;
@@ -165,7 +165,7 @@
         height: 1.8rem;
         padding-left: .4rem;
         font-size: 0.75rem;
-        border-bottom: 1px solid @gray;
+        border-bottom: .025rem solid @gray;
         span {
           color: @blue;
         }
@@ -185,8 +185,8 @@
         color: @fontColor1;
         font-weight: 400;
         padding-left: .4rem;
-        border-top: 1px solid @gray;
-        border-bottom: 1px solid @gray;
+        border-top: .025rem solid @gray;
+        border-bottom: .025rem solid @gray;
         font: .55rem/1.45rem Helvetica Neue;
       }
       .city-list {

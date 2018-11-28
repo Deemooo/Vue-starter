@@ -74,7 +74,7 @@
     computed: {
       ...mapState([
         'orderDetail',
-        'geohash',
+        'GEOHASH',
         'userInfo'
       ])
     },

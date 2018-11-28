@@ -166,12 +166,12 @@
     }
     .login-form {
       background-color: #fff;
-      border-top: 1px solid @gray;
+      border-top: .025rem solid @gray;
       margin-top: 1.95rem;
       div {
         width: 100%;
         padding: .2rem 0;
-        border-top: 1px solid @gray;
+        border-top: .025rem solid @gray;
         text-align: left;
         input {
           height: 1.4rem;
@@ -208,7 +208,7 @@
           height: 1rem;
           padding: 0 .2rem;
           margin-left: 1.2rem;
-          border: 1px;
+          border: .025rem;
           border-radius: .5rem;
           background-color: @backColor;
           .switch-button {

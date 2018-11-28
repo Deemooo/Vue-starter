@@ -92,8 +92,8 @@
     }
     .add-detail-form {
       background-color: #fff;
-      border-top: 1px solid @gray;
-      border-bottom: 1px solid @gray;
+      border-top: .025rem solid @gray;
+      border-bottom: .025rem solid @gray;
       margin-top: 1.95rem;
       padding-top: .4rem;
       div {
@@ -101,7 +101,7 @@
         margin: 0 auto;
         text-align: center;
         input {
-          border: 1px solid @gray;
+          border: .025rem solid @gray;
           padding: 0 .3rem;
           font-size: .65rem;
           color: @fontColor;
@@ -122,11 +122,11 @@
     }
     .search-result {
       background-color: #fff;
-      border-top: 1px solid @gray;
+      border-top: .025rem solid @gray;
       .list-item {
         margin: 0 auto;
-        border-top: 1px solid @gray;
-        border-bottom: 1px solid @gray;
+        border-top: .025rem solid @gray;
+        border-bottom: .025rem solid @gray;
         .local, .content {
           width: 90%;
           padding: .3rem;

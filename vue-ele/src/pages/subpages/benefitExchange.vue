@@ -145,14 +145,6 @@
           color: #fff;
         }
       }
-      .input-error-tips {
-        width: 100%;
-        height: 0.58rem;
-        padding: .4rem;
-        font-size: .58rem;
-        color: @fontColor3;
-        text-align: left;
-      }
     }
   }
 </style>

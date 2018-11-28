@@ -87,8 +87,8 @@
     }
     .set-username-form {
       background-color: #fff;
-      border-top: 1px solid @gray;
-      border-bottom: 1px solid @gray;
+      border-top: .025rem solid @gray;
+      border-bottom: .025rem solid @gray;
       margin-top: 1.95rem;
       padding-top: .4rem;
       div {
