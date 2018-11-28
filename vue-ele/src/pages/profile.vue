@@ -10,8 +10,8 @@
       </top-header>
       <div>
         <!--账户信息-->
-        <router-link :to="userInfo.user_id ? 'profileInfo' : 'login'" tag="div" class="profile-info">
-          <img :src="imgBaseUrl + userInfo.avatar" class="avatar-default" v-if="userInfo.user_id">
+        <router-link :to="USERINFO.user_id ? 'profileInfo' : 'login'" tag="div" class="profile-info">
+          <img :src="imgBaseUrl + USERINFO.avatar" class="avatar-default" v-if="USERINFO.user_id">
           <svg v-else class="avatar-default">
             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#avatar-default"></use>
           </svg>
@@ -114,7 +114,7 @@
     components: {},
     computed: {
       ...mapState([
-        'userInfo'
+        'USERINFO'
       ])
     },
     data () {
@@ -130,13 +130,13 @@
     },
     methods: {},
     mounted () {
-      if (this.userInfo && this.userInfo.user_id) {
-        this.avatar = this.userInfo.avatar;
-        this.username = this.userInfo.username;
-        this.mobile = this.userInfo.mobile || '暂无绑定手机号';
-        this.balance = this.userInfo.balance;
-        this.count = this.userInfo.gift_amount;
-        this.pointNumber = this.userInfo.point;
+      if (this.USERINFO && this.USERINFO.user_id) {
+        this.avatar = this.USERINFO.avatar;
+        this.username = this.USERINFO.username;
+        this.mobile = this.USERINFO.mobile || '暂无绑定手机号';
+        this.balance = this.USERINFO.balance;
+        this.count = this.USERINFO.gift_amount;
+        this.pointNumber = this.USERINFO.point;
       }
     },
     watch: {}

@@ -93,6 +93,7 @@
                     <span class="price-num">{{ foods.specfoods[0].price }}</span>
                     <span v-if="foods.specifications.length" class="price-special">起</span>
                   </section>
+                  <buy-cart></buy-cart>
                 </footer>
               </section>
             </li>
@@ -102,9 +103,7 @@
         <section class="buy-cart-container">
           <section @click="toggleCartList" class="cart-icon-num">
             <div class="cart-icon-container" :class="{cart_icon_activity: totalPrice > 0, move_in_cart:receiveInCart}" ref="cartContainer">
-                                <span v-if="totalNum" class="cart-list-length">
-                                    {{totalNum}}
-                                </span>
+              <span v-if="totalNum" class="cart-list-length">{{totalNum}}</span>
               <svg class="cart-icon">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#cart-icon"></use>
               </svg>
@@ -200,15 +199,17 @@
   import { imgBaseUrl } from '../../config/env';
   import { loadMore } from '../publicFn/loadMore';
   import ratingStar from '../components/ratingStar';
+  import buyCart from '../components/buyCart';
   import BScroll from 'better-scroll';
   export default {
     mixins: [loadMore],
     components: {
-      ratingStar
+      ratingStar,
+      buyCart
     },
     computed: {
       ...mapState([
-        'userInfo',
+        'USERINFO',
         'GEOHASH'
       ])
     },

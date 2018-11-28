@@ -57,7 +57,10 @@
       },
       methods: {
         shareWay () {
-          alert('请在APP中打开!');
+          this.$snotify.warning('请在APP中打开！', {
+            showProgressBar: false,
+            timeout: 1000
+          });
         }
       },
       mounted () {

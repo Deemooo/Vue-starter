@@ -45,7 +45,7 @@
       components: {},
       computed: {
         ...mapState([
-          'userInfo'
+          'USERINFO'
         ])
       },
       data () {
@@ -55,8 +55,8 @@
       },
     methods: {
       getExpiredList () {
-        if (this.userInfo) {
-          this.https({url: '/promotion/v2/users/' + this.userInfo.id + '/expired_hongbaos?limit=20&offset=0', method: 'get'}).then(
+        if (this.USERINFO) {
+          this.https({url: '/promotion/v2/users/' + this.USERINFO.id + '/expired_hongbaos?limit=20&offset=0', method: 'get'}).then(
             (res) => {
               this.expiredList = res;
             });
@@ -67,7 +67,7 @@
       this.getExpiredList();
     },
     watch: {
-      userInfo () {
+      USERINFO () {
         this.getExpiredList();
       }
     }

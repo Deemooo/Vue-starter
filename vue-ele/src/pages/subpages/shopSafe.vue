@@ -14,7 +14,7 @@
         </header>
         <section class="shop-status-detail">
           <div class="shop-status-detail-left">
-            <svg class="shop-status-svg" v-if="shopDetail.status === 1">
+            <svg class="shop-status-svg" v-if="SHOPDETAIL.status === 1">
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#res-well"></use>
             </svg>
             <svg class="shop-status-svg" v-else>
@@ -24,33 +24,33 @@
           <div class="shop-status-detail-right">
             <p>
               <span>监督检查结果：</span>
-              <span class="well" v-if="shopDetail.status === 1">良好</span>
+              <span class="well" v-if="SHOPDETAIL.status === 1">良好</span>
               <span class="bad" v-else>差</span>
             </p>
             <p>
               <span>检查日期：</span>
-              <span>{{ shopDetail.identification.identificate_date && shopDetail.identification.identificate_date.split('T')[0] }}</span>
+              <span>{{ SHOPDETAIL.identification.identificate_date && SHOPDETAIL.identification.identificate_date.split('T')[0] }}</span>
             </p>
           </div>
         </section>
       </section>
       <section class="shop-status-info">
         <header>工商登记信息</header>
-        <p>企业名称：{{shopDetail.identification.company_name}}</p>
-        <p>工商执照注册号：{{shopDetail.identification.identificate_agency}}</p>
-        <p>注册资本：{{shopDetail.identification.registered_number}}</p>
-        <p>注册地址：{{shopDetail.identification.registered_address}}</p>
-        <p>属地监管所：{{shopDetail.identification.registered_principal}}</p>
-        <p>法定代表人：{{shopDetail.identification.legal_person}}</p>
-        <p>经营范围：{{shopDetail.identification.operation_period}}</p>
+        <p>企业名称：{{SHOPDETAIL.identification.company_name}}</p>
+        <p>工商执照注册号：{{SHOPDETAIL.identification.identificate_agency}}</p>
+        <p>注册资本：{{SHOPDETAIL.identification.registered_number}}</p>
+        <p>注册地址：{{SHOPDETAIL.identification.registered_address}}</p>
+        <p>属地监管所：{{SHOPDETAIL.identification.registered_principal}}</p>
+        <p>法定代表人：{{SHOPDETAIL.identification.legal_person}}</p>
+        <p>经营范围：{{SHOPDETAIL.identification.operation_period}}</p>
       </section>
       <section class="shop-status-info">
         <header>餐饮许可证</header>
-        <p>营业范围：{{shopDetail.identification.operation_period}}</p>
-        <p>许可证有效期：{{shopDetail.identification.licenses_date}}</p>
-        <p>许可证号：{{shopDetail.identification.licenses_number}}</p>
-        <p>发证时间：{{shopDetail.identification.licenses_scope}}</p>
-        <p>发证机关：{{shopDetail.identification.registered_principal}}</p>
+        <p>营业范围：{{SHOPDETAIL.identification.operation_period}}</p>
+        <p>许可证有效期：{{SHOPDETAIL.identification.licenses_date}}</p>
+        <p>许可证号：{{SHOPDETAIL.identification.licenses_number}}</p>
+        <p>发证时间：{{SHOPDETAIL.identification.licenses_scope}}</p>
+        <p>发证机关：{{SHOPDETAIL.identification.registered_principal}}</p>
       </section>
     </div>
 </template>
@@ -60,7 +60,7 @@
     components: {},
     computed: {
       ...mapState([
-        'shopDetail'
+        'SHOPDETAIL'
       ])
     },
     data () {

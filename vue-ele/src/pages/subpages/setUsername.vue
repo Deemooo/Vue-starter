@@ -26,7 +26,7 @@
       components: {},
       computed: {
         ...mapState([
-          'userInfo'
+          'USERINFO'
         ])
       },
       data () {

@@ -8,7 +8,7 @@
           <span class="vipcard-title">会员中心</span>
         </template>
       </top-header>
-      <div class="vipcard-user">为账户 <span>{{ userInfo.username }}</span> 购买会员</div>
+      <div class="vipcard-user">为账户 <span>{{ USERINFO.username }}</span> 购买会员</div>
       <div class="vipcard-privilege">
         <router-link to="vipDescription" tag="div" class="vip-description">
           <span>会员特权</span>
@@ -76,7 +76,7 @@
       components: {},
       computed: {
         ...mapState([
-          'userInfo'
+          'USERINFO'
         ])
       },
       data () {
@@ -84,7 +84,10 @@
       },
       methods: {
         buyCart () {
-          alert('支付功能暂未开放!');
+          this.$snotify.warning('支付功能暂未开放！', {
+            showProgressBar: false,
+            timeout: 1000
+          });
         }
       },
       mounted () {

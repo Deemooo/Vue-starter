@@ -8,7 +8,7 @@
           <span class="exchange-vip-title">兑换会员</span>
         </template>
       </top-header>
-      <div class="vipcard-user">成功兑换后将关联到当前帐号: <span>{{ userInfo.username }}</span></div>
+      <div class="vipcard-user">成功兑换后将关联到当前帐号: <span>{{ USERINFO.username }}</span></div>
       <form class="exchange-form" v-on:submit.prevent>
         <div class="password-wrap">
           <input type="text" name="cartNumber" placeholder="请输入10位卡号" required v-model='cartNumber'>
@@ -38,7 +38,7 @@
       components: {},
       computed: {
         ...mapState([
-          'userInfo'
+          'USERINFO'
         ]),
         checkcartNumber () {
           return !(this.isNull(this.cartNumber) && this.validateCartNumber(this.cartNumber));
@@ -60,12 +60,18 @@
               number: this.cartNumber,
               password: this.cartPassword
             };
-            this.https({url: '/member/v1/users/' + this.userInfo.id + '/delivery_card/physical_card/bind', params, method: 'post'}).then(
+            this.https({url: '/member/v1/users/' + this.USERINFO.id + '/delivery_card/physical_card/bind', params, method: 'post'}).then(
               (res) => {
                 if (res.message) {
-                  alert(res.message);
+                  this.$snotify.warning(res.message, {
+                    showProgressBar: false,
+                    timeout: 1000
+                  });
                 } else {
-                  alert('兑换成功!');
+                  this.$snotify.success('兑换成功！', {
+                    showProgressBar: false,
+                    timeout: 1000
+                  });
                 }
               });
           }

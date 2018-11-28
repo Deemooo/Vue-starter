@@ -37,7 +37,10 @@
             system = 'iOS';
           }
           if (system === 'IOS') {
-            alert('IOS用户请前往AppStore下载');
+            this.$snotify.warning('iOS用户请前往AppStore下载！', {
+              showProgressBar: false,
+              timeout: 1000
+            });
           } else {
             try {
               let elemIF = document.createElement('iframe');
@@ -45,7 +48,10 @@
               elemIF.style.display = 'none';
               document.body.appendChild(elemIF);
             } catch (e) {
-              alert('下载失败!');
+              this.$snotify.warning('下载失败！', {
+                showProgressBar: false,
+                timeout: 1000
+              });
             }
           }
         }

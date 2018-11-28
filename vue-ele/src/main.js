@@ -19,13 +19,16 @@ import Swiper from 'vue-awesome-swiper';
 import 'swiper/dist/css/swiper.css';
 // markdown样式
 import 'github-markdown-css/github-markdown.css';
-
+// 弹出框
+import 'vue-snotify/styles/material.css';
+import Snotify from 'vue-snotify';
 Vue.config.productionTip = false;
 
 Vue.use(https);
 Vue.mixin(mixins);
 Vue.mixin(validate);
 Vue.use(Swiper);
+Vue.use(Snotify);
 
 Vue.component('top-header', topHeader);
 Vue.component('bottom-footer', bottomFooter);

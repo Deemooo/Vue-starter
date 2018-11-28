@@ -10,23 +10,23 @@
       </top-header>
       <div class="order-detail-content">
         <div class="order-detail-content-title">
-          <img :src="imgBaseUrl + orderDetail.restaurant_image_url">
-          <div class="order-status">{{ orderDetail.status_bar.title }}</div>
-          <div v-if="orderDetail.timeline_node.description" class="order-des">{{ orderDetail.timeline_node.description }}</div>
-          <router-link tag="div" :to="{path: '/shop', query: {geohash, id: orderDetail.restaurant_id}}" class="order-item-btn-again">再来一单</router-link>
+          <img :src="imgBaseUrl + ORDERDETAIL.restaurant_image_url">
+          <div class="order-status">{{ ORDERDETAIL.status_bar.title }}</div>
+          <div v-if="ORDERDETAIL.timeline_node.description" class="order-des">{{ ORDERDETAIL.timeline_node.description }}</div>
+          <router-link tag="div" :to="{path: '/shop', query: {geohash, id: ORDERDETAIL.restaurant_id}}" class="order-item-btn-again">再来一单</router-link>
         </div>
         <div class="order-detail-info">
-          <router-link tag="div" :to="{path: '/shop', query: {geohash, id: orderDetail.restaurant_id}}" class="order-detail-info-item">
+          <router-link tag="div" :to="{path: '/shop', query: {geohash, id: ORDERDETAIL.restaurant_id}}" class="order-detail-info-item">
             <div class="shop-name">
-              <img :src="imgBaseUrl + orderDetail.restaurant_image_url">
-              <span>{{ orderDetail.restaurant_name }}</span>
+              <img :src="imgBaseUrl + ORDERDETAIL.restaurant_image_url">
+              <span>{{ ORDERDETAIL.restaurant_name }}</span>
             </div>
             <svg fill="#333" class="arrow-right">
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
             </svg>
           </router-link>
           <div class="order-food-list">
-            <div v-for="(item, index) in orderDetail.basket.group[0]" :key="index" class="order-detail-shop">
+            <div v-for="(item, index) in ORDERDETAIL.basket.group[0]" :key="index" class="order-detail-shop">
               <div class="food-name">{{ item.name }}</div>
               <div class="quantity-price">
                 <span class="quantity-price-quantity">X{{ item.quantity }}</span>
@@ -36,9 +36,9 @@
           </div>
           <div class="order-delivery-list">
             <span>配送费</span>
-            <span>¥{{ orderDetail.basket.deliver_fee&&orderDetail.basket.deliver_fee.price || 0 }}</span>
+            <span>¥{{ ORDERDETAIL.basket.deliver_fee && ORDERDETAIL.basket.deliver_fee.price || 0 }}</span>
           </div>
-          <div class="order-detail-payment">实付¥{{ orderDetail.total_amount.toFixed(2) }}</div>
+          <div class="order-detail-payment">实付¥{{ ORDERDETAIL.total_amount.toFixed(2) }}</div>
         </div>
         <div class="order-detail-delivery">
           <div class="order-detail-delivery-title">配送信息</div>
@@ -73,9 +73,9 @@
     components: {},
     computed: {
       ...mapState([
-        'orderDetail',
+        'ORDERDETAIL',
         'GEOHASH',
-        'userInfo'
+        'USERINFO'
       ])
     },
     data () {
@@ -86,7 +86,7 @@
     },
     methods: {
       getDeliveryData () {
-        this.https({url: `/bos/v1/users/${this.userInfo.user_id}/orders/${this.orderDetail.unique_id}/snapshot`, method: 'get'}).then(
+        this.https({url: `/bos/v1/users/${this.USERINFO.user_id}/orders/${this.ORDERDETAIL.unique_id}/snapshot`, method: 'get'}).then(
           (res) => {
             this.deliveryData = res;
           });

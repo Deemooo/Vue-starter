@@ -52,7 +52,7 @@
     components: {},
     computed: {
       ...mapState([
-        'userInfo'
+        'USERINFO'
       ])
     },
     data () {
@@ -72,7 +72,7 @@
           limit: 10,
           offset: this.offset
         });
-        this.https({url: '/bos/v2/users/' + this.userInfo.user_id + '/orders' + params, method: 'get'}).then(
+        this.https({url: '/bos/v2/users/' + this.USERINFO.user_id + '/orders' + params, method: 'get'}).then(
           (res) => {
             this.orderList = res;
           });
@@ -84,7 +84,7 @@
           limit: 10,
           offset: this.offset
         });
-        this.https({url: '/bos/v2/users/' + this.userInfo.user_id + '/orders' + params, method: 'get'}).then(
+        this.https({url: '/bos/v2/users/' + this.USERINFO.user_id + '/orders' + params, method: 'get'}).then(
           (res) => {
             this.orderList = [...this.orderList].concat(res);
           });

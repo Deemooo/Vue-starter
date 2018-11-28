@@ -12,7 +12,7 @@
         <div class="user-info-list-item"  @click="uploadAvatar">
           <input type="file" accept="image/*" class="upload-avatar">
           <span class="text">头像</span>
-          <img :src="imgBaseUrl + userInfo.avatar" class="avatar-default" v-if="userInfo.user_id">
+          <img :src="imgBaseUrl + USERINFO.avatar" class="avatar-default" v-if="USERINFO.user_id">
           <svg v-else class="avatar-default">
             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#avatar-default"></use>
           </svg>
@@ -61,7 +61,7 @@
       components: {},
       computed: {
         ...mapState([
-          'userInfo'
+          'USERINFO'
         ])
       },
       data () {
@@ -78,21 +78,27 @@
             let data = new FormData();
             data.append('file', uploadInput.files[0]);
             try {
-              this.https({url: '/eus/v1/users/' + this.userInfo.user_id + '/avatar', data, method: 'post'}).then(
+              this.https({url: '/eus/v1/users/' + this.USERINFO.user_id + '/avatar', data, method: 'post'}).then(
                 (res) => {
                   if (res.status === 1) {
-                    this.$set(this.userInfo, 'avatar', res.image_path);
+                    this.$set(this.USERINFO, 'avatar', res.image_path);
                   } else {
                     throw new Error('上传失败!');
                   }
                 });
             } catch (e) {
-              alert(e);
+              this.$snotify.warning(e, {
+                showProgressBar: false,
+                timeout: 1000
+              });
             }
           })();
         },
         setCellPhoneNumber () {
-          alert('请在APP中设置！');
+          this.$snotify.warning('请在APP中设置！', {
+            showProgressBar: false,
+            timeout: 1000
+          });
         },
         exitLogin () {
 

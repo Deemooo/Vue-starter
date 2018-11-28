@@ -15,7 +15,7 @@
             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
           </svg>
         </router-link>
-        <div v-for="(item, index) in addressList" :key="index" @click="selectAddress(index)" :class="{'address-list-selected': addressIndex === index}" class="address-list-wrap">
+        <div v-for="(item, index) in ADDRESSLIST" :key="index" @click="selectAddress(index)" :class="{'address-list-selected': addressIndex === index}" class="address-list-wrap">
           <div class="item-name">
             <span>{{ item.name }}</span>
             <span class="item-name-phone">{{ item.phone }}</span>
@@ -34,8 +34,8 @@
       components: {},
       computed: {
         ...mapState([
-          'userInfo',
-          'addressList'
+          'USERINFO',
+          'ADDRESSLIST'
         ])
       },
       data () {
@@ -51,9 +51,9 @@
           this.addressIndex === index ? this.addressIndex = '' : this.addressIndex = index;
         },
         async deleteAddress (index, item) {
-          if (this.userInfo && this.userInfo.user_id) {
+          if (this.USERINFO && this.USERINFO.user_id) {
             let params = {};
-            await this.https({url: '/v1/users/' + this.userInfo.user_id + '/addresses/' + item.id, params, method: 'delete'}).then(
+            await this.https({url: '/v1/users/' + this.USERINFO.user_id + '/addresses/' + item.id, params, method: 'delete'}).then(
               (res) => {
                 this.REMOVEADDRESS(index);
               });

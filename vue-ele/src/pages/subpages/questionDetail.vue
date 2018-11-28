@@ -5,7 +5,7 @@
           <svg class="arrow-left" xmlns="http://www.w3.org/2000/svg" version="1.1" @click="$router.go(-1)">
             <polyline points="12,18 4,9 12,0" style="fill:none;stroke:rgb(255,255,255);stroke-width:2"/>
           </svg>
-          <span class="question-detail-title">{{ question.title }}</span>
+          <span class="question-detail-title">{{ QUESTION.title }}</span>
         </template>
       </top-header>
       <div class="question-detail-content markdown-body" v-html="content"></div>
@@ -23,10 +23,10 @@
       components: {},
       computed: {
         ...mapState([
-          'question'
+          'QUESTION'
         ]),
         content () {
-          return marked(this.question.detail);
+          return marked(this.QUESTION.detail);
         }
       },
       data () {

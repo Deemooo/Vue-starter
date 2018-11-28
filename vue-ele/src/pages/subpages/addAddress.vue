@@ -41,8 +41,8 @@
     components: {},
     computed: {
       ...mapState([
-        'userInfo',
-        'specificSpaceName',
+        'USERINFO',
+        'SPECIFICSPACENAME',
         'GEOHASH'
       ]),
       checkName () {
@@ -88,10 +88,13 @@
             tag: '公司',
             tag_type: 4
           };
-          this.https({url: '/v1/users/' + this.userInfo.user_id + '/addresses', params, method: 'post'}).then(
+          this.https({url: '/v1/users/' + this.USERINFO.user_id + '/addresses', params, method: 'post'}).then(
             (res) => {
               if (res.message) {
-                alert(res.message);
+                this.$snotify.warning(res.message, {
+                  showProgressBar: false,
+                  timeout: 1000
+                });
               } else {
                 this.ADDNEWADDRESS({
                   name: this.inputName,

@@ -11,13 +11,13 @@
       <section class="shop-activity">
         <header>活动与属性</header>
         <ul class="actibities-list">
-          <li v-for="item in shopDetail.activities" :key="item.id">
+          <li v-for="item in SHOPDETAIL.activities" :key="item.id">
             <span :style='{backgroundColor: "#" + item.icon_color}'>{{ item.icon_name }}</span>
             <span>{{ item.description }}(APP专享)</span>
           </li>
         </ul>
         <ul class="actibities-list">
-          <li v-for="item in shopDetail.supports" :key="item.id">
+          <li v-for="item in SHOPDETAIL.supports" :key="item.id">
             <span :style='{backgroundColor: "#" + item.icon_color}'>{{ item.icon_name }}</span>
             <span>{{ item.description }}(APP专享)</span>
           </li>
@@ -35,7 +35,7 @@
         </router-link>
         <section class="shop-status-detail">
           <div class="shop-status-detail-left">
-            <svg class="shop-status-svg" v-if="shopDetail.status === 1">
+            <svg class="shop-status-svg" v-if="SHOPDETAIL.status === 1">
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#res-well"></use>
             </svg>
             <svg class="shop-status-svg" v-else>
@@ -45,27 +45,27 @@
           <div class="shop-status-detail-right">
             <p>
               <span>监督检查结果：</span>
-              <span class="well" v-if="shopDetail.status === 1">良好</span>
+              <span class="well" v-if="SHOPDETAIL.status === 1">良好</span>
               <span class="bad" v-else>差</span>
             </p>
             <p>
               <span>检查日期：</span>
-              <span>{{ shopDetail.identification.identificate_date && shopDetail.identification.identificate_date.split('T')[0] }}</span>
+              <span>{{ SHOPDETAIL.identification.identificate_date && SHOPDETAIL.identification.identificate_date.split('T')[0] }}</span>
             </p>
           </div>
         </section>
       </section>
       <section class="shop-status-info">
         <header>商家信息</header>
-        <p>{{ shopDetail.name }}</p>
-        <p>地址：{{ shopDetail.address }}</p>
-        <p>营业时间：[{{ shopDetail.opening_hours[0] }}]</p>
-        <p @click="showLicenseImg(shopDetail.license.business_license_image)" class="license-wrap">
+        <p>{{ SHOPDETAIL.name }}</p>
+        <p>地址：{{ SHOPDETAIL.address }}</p>
+        <p>营业时间：[{{ SHOPDETAIL.opening_hours[0] }}]</p>
+        <p @click="showLicenseImg(SHOPDETAIL.license.business_license_image)" class="license-wrap">
           <span>营业执照</span>
           <svg width="14" height="14" xmlns="http://www.w3.org/2000/svg" version="1.1" class="description_arrow" >
             <path d="M0 0 L8 7 L0 14"  stroke="#bbb" stroke-width="1.5" fill="none"/>
           </svg></p>
-        <p @click="showLicenseImg(shopDetail.license.catering_service_license_image)" class="license-wrap">
+        <p @click="showLicenseImg(SHOPDETAIL.license.catering_service_license_image)" class="license-wrap">
           <span>餐饮服务许可证</span>
           <svg width="14" height="14" xmlns="http://www.w3.org/2000/svg" version="1.1" class="description_arrow" >
             <path d="M0 0 L8 7 L0 14"  stroke="#bbb" stroke-width="1.5" fill="none"/>
@@ -84,7 +84,7 @@
       components: {},
       computed: {
         ...mapState([
-          'shopDetail'
+          'SHOPDETAIL'
         ])
       },
       data () {

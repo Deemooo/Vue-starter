@@ -30,7 +30,7 @@
       components: {},
       computed: {
         ...mapState([
-          'userInfo'
+          'USERINFO'
         ]),
         checkExchangeCode () {
           return !(this.isNull(this.exchangeCode) && this.validateExchangeCode(this.exchangeCode));
@@ -61,12 +61,18 @@
               exchange_code: this.exchangeCode,
               captcha_code: this.codeNumber
             };
-            this.https({url: '/v1/users/' + this.userInfo.user_id + '/hongbao/exchange', params, method: 'post'}).then(
+            this.https({url: '/v1/users/' + this.USERINFO.user_id + '/hongbao/exchange', params, method: 'post'}).then(
               (res) => {
                 if (res.message) {
-                  alert(res.message);
+                  this.$snotify.warning('res.message', {
+                    showProgressBar: false,
+                    timeout: 1000
+                  });
                 } else {
-                  alert('兑换成功!');
+                  this.$snotify.success('兑换成功！', {
+                    showProgressBar: false,
+                    timeout: 1000
+                  });
                 }
               });
           }

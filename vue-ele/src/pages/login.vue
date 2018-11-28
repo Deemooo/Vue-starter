@@ -114,7 +114,10 @@
                 this.userInfo = res;
                 //如果返回的值不正确，则弹出提示框，返回的值正确则返回上一页
                 if (!this.userInfo.user_id) {
-                  alert(this.userInfo.message);
+                  this.$snotify.warning(this.userInfo.message, {
+                    showProgressBar: false,
+                    timeout: 1000
+                  });
                   this.getCaptchaCode();
                 } else {
                   this.UPDATEUSERINFO(this.userInfo);

@@ -5,13 +5,13 @@
           <svg class="arrow-left" xmlns="http://www.w3.org/2000/svg" version="1.1" @click="$router.go(-1)">
             <polyline points="12,18 4,9 12,0" style="fill:none;stroke:rgb(255,255,255);stroke-width:2"/>
           </svg>
-          <span class="city-name">{{ cityInfo.name }}</span>
+          <span class="city-name">{{ CITYINFO.name }}</span>
           <span class="change-city" @click="$router.push('/')">切换城市</span>
         </template>
       </top-header>
       <form class="city-form" v-on:submit.prevent>
         <div>
-          <input type="search" name="city" placeholder="输入学校、商务楼、地址" class="search-input" required v-model='inputValue'>
+          <input type="search" name="city" placeholder="输入学校、商务楼、地址" class="search-input" v-model='inputValue'>
         </div>
         <div>
           <input type="submit" name="submit" class="search-submit" @click='getPois' value="提交">
@@ -34,6 +34,7 @@
         </li>
         <p v-if="noResultFlag && placeList.length === 0" class="no-result">很抱歉!无搜索结果。</p>
       </ul>
+      <vue-snotify></vue-snotify>
     </div>
 </template>
 <script>
@@ -42,7 +43,7 @@
       components: {},
       computed: {
         ...mapState([
-          'cityInfo'
+          'CITYINFO'
         ])
       },
       data () {
@@ -81,7 +82,10 @@
                 this.noResultFlag = true;
               });
           } else {
-            alert('请输入学校、商务楼、地址进行搜索！');
+            this.$snotify.warning('请输入学校、商务楼、地址进行搜索！', {
+              showProgressBar: false,
+              timeout: 1000
+            });
           }
         },
         selectHistoryItem (geohash) {

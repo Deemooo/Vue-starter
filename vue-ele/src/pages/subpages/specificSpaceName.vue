@@ -51,7 +51,10 @@
               this.placeList = res;
             });
         } else {
-          alert('请输入学校、商务楼、地址进行搜索！');
+          this.$snotify.warning('请输入学校、商务楼、地址进行搜索！', {
+            showProgressBar: false,
+            timeout: 1000
+          });
         }
       },
       // 选择地名

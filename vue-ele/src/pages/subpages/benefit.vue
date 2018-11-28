@@ -83,7 +83,7 @@
     components: {},
     computed: {
       ...mapState([
-        'userInfo'
+        'USERINFO'
       ])
     },
     data () {
@@ -94,8 +94,8 @@
     },
     methods: {
       getBenefitList () {
-        if (this.userInfo) {
-          this.https({url: '/promotion/v2/users/' + this.userInfo.id + '/hongbaos?limit=20&offset=0', method: 'get'}).then(
+        if (this.USERINFO) {
+          this.https({url: '/promotion/v2/users/' + this.USERINFO.id + '/hongbaos?limit=20&offset=0', method: 'get'}).then(
             (res) => {
               this.benefitList = res;
             });
@@ -106,7 +106,7 @@
       this.getBenefitList();
     },
     watch: {
-      userInfo () {
+      USERINFO () {
         this.getBenefitList();
       }
     }

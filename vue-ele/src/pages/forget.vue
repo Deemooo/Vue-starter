@@ -93,10 +93,14 @@
         this.https({url: '/v2/changepassword', params, method: 'post'}).then(
           (res) => {
             if (res.message) {
-              alert(res.message);
+              this.$snotify.warning(res.message, {
+                showProgressBar: false,
+                timeout: 1000
+              });
               this.getCaptchaCode();
             } else {
               alert('密码修改成功！');
+
             }
           });
       }

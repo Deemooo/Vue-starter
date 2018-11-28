@@ -11,7 +11,7 @@
           <router-link to="/" class="msite-title">
             <span class="msite-title-text">{{ msiteTitle }}</span>
           </router-link>
-          <svg @click="$router.push('profile')"  v-if="userInfo.id" class="user-avatar">
+          <svg @click="$router.push('profile')"  v-if="USERINFO.id" class="user-avatar">
             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#user"></use>
           </svg>
           <span v-else @click="$router.push('login')" class="head-login">登录 | 注册</span>
@@ -51,7 +51,7 @@
         computed: {
           ...mapState([
             'GEOHASH',
-            'userInfo'
+            'USERINFO'
           ])
         },
         data () {
