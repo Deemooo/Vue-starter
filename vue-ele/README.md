@@ -11,6 +11,7 @@ npm run build
 http://localhost:8080
 
 ## 目录结构
+```html
   vue-ele
       ├─build                     # 编译配置
       │   ├─build.js              # 构建环境下的配置
@@ -52,3 +53,4 @@ http://localhost:8080
       ├─index.html               # 项目入口文件
       ├─package.json             # 各种配置文件管理
       └─README.md                # 项目注释
+```
