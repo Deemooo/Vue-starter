@@ -1,10 +1,10 @@
 <template>
   <div class="buy-cart">
     <div class="cart-button" >
-      <svg v-if="foodNum" class="reduce-icon">
+      <svg v-show="foodNum" @click="reduceFromCart" class="reduce-icon">
         <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#cart-minus"></use>
       </svg>
-      <span class="food-num" v-if="foodNum">{{foodNum}}</span>
+      <span class="food-num" v-show="foodNum">{{foodNum}}</span>
       <svg class="add-icon" @click="addToCart">
         <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#cart-add"></use>
       </svg>
@@ -14,21 +14,33 @@
 <script>
   import {mapState, mapMutations} from 'vuex'
   export default {
-    props: ['itemId', 'shopId'],
+    props: ['foods', 'shopId'],
     components: {},
     computed: {
       ...mapState([
         'CARTLIST'
-      ])
+      ]),
+      foodNum () {
+        let itemId = this.foods.item_id;
+        if (this.CARTLIST[itemId]) {
+          return this.CARTLIST[itemId].num || 0;
+        } else {
+          return 0;
+        }
+      }
     },
     data () {
       return {
-        foodNum: 0
       };
     },
     methods: {
       addToCart () {
         this.$emit('addToCart');
+      },
+      reduceFromCart () {
+        if (this.foodNum > 0) {
+          this.$emit('reduceFromCart');
+        }
       }
     },
     mounted () {

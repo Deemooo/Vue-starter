@@ -73,14 +73,33 @@ export default new Vuex.Store({
     ADDFOODS (state, foods) {
       // 为重复商品则数量加一，新商品则数量为一
       let itemId = foods.item_id;
-      if (state.CARTLIST.hasOwnProperty(itemId)) {
+      if (state.CARTLIST.hasOwnProperty(itemId) && Object.keys(state.CARTLIST[itemId]).length !== 0) {
         let exFood = state.CARTLIST[itemId]['num'];
-        Vue.set(state.CARTLIST[itemId], 'num', ++exFood);
+        let num = exFood;
+        Vue.set(state.CARTLIST[itemId], 'num', ++num);
       } else {
         Vue.set(state.CARTLIST, itemId, foods);
         Vue.set(state.CARTLIST[itemId], 'num', 1);
       }
       setListData('CARTLIST', state.CARTLIST);
+    },
+    // 购物车移除商品
+    REDUCEFOODS (state, foods) {
+      let itemId = foods.item_id;
+      let exFood = state.CARTLIST[itemId]['num'];
+      let num = exFood;
+      if (num >= 1) {
+        --num;
+        Vue.set(state.CARTLIST[itemId], 'num', num);
+        if (num <= 0) {
+          Vue.set(state.CARTLIST, itemId, {});
+        }
+      }
+      setListData('CARTLIST', state.CARTLIST);
+    },
+    // 从缓存中初始化购物车
+    INITBUYCART (state) {
+      state.CARTLIST = getListData('CARTLIST') || {};
     }
   },
   actions: {

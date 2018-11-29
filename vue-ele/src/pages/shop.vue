@@ -43,6 +43,7 @@
               :class="{'activity-menu': index === menuIndex}"
               class="menu-list-item">
             <span>{{ item.name }}</span>
+            <span class="category-num" v-if="categoryNum(item.id)">{{categoryNum(item.id)}}</span>
           </li>
         </ul>
         <!--商品列表-->
@@ -94,8 +95,9 @@
                     <span v-if="foods.specifications.length" class="price-special">起</span>
                   </section>
                   <buy-cart
-                    @addToCart="addToCart(foods.category_id, foods.item_id, foods.specfoods[0].food_id, foods.specfoods[0].name, foods.specfoods[0].price, '', foods.specfoods[0].packing_fee, foods.specfoods[0].sku_id, foods.specfoods[0].stock, $event)"
-                    :itemId="itemId"
+                    @addToCart="addToCart(foods.category_id, foods.item_id, foods.specfoods[0].food_id, foods.specfoods[0].name, foods.specfoods[0].price, '', foods.specfoods[0].packing_fee, foods.specfoods[0].sku_id, foods.specfoods[0].stock)"
+                    @reduceFromCart="reduceFromCart(foods.category_id, foods.item_id, foods.specfoods[0].food_id, foods.specfoods[0].name, foods.specfoods[0].price, '', foods.specfoods[0].packing_fee, foods.specfoods[0].sku_id, foods.specfoods[0].stock)"
+                    :foods="foods"
                     :shopId="shopId">
                   </buy-cart>
                 </footer>
@@ -106,19 +108,19 @@
         <!--购物车-->
         <section class="buy-cart-container">
           <section @click="toggleCartList" class="cart-icon-num">
-            <div class="cart-icon-container" :class="{cart_icon_activity: totalPrice > 0, move_in_cart:receiveInCart}" ref="cartContainer">
-              <span v-if="totalNum" class="cart-list-length">{{totalNum}}</span>
+            <div class="cart-icon-container" :class="{'cart-activity': totalNum > 0}" ref="cartContainer">
               <svg class="cart-icon">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#cart-icon"></use>
               </svg>
+              <span class="total-num" v-if="totalNum">{{totalNum}}</span>
             </div>
             <div class="cart-num">
               <p>¥ {{totalPrice}}</p>
-              <p>配送费¥{{deliveryFee}}</p>
+              <p>配送费 ¥{{deliveryFee}}</p>
             </div>
           </section>
-          <section class="gotopay" :class="{gotopay_acitvity: minimumOrderAmount <= 0}">
-            <span class="gotopay-text" v-if="minimumOrderAmount > 0">还差¥{{minimumOrderAmount}}起送</span>
+          <section class="gotopay" :class="{'gotopay-acitvity': minimumOrderAmount <= 0}">
+            <span class="gotopay-text" v-if="minimumOrderAmount > 0">还差¥ {{minimumOrderAmount}}起送</span>
             <router-link :to="{path:'/confirmOrder', query:{shopId}}" class="gotopay-text" v-else>去结算</router-link>
           </section>
         </section>
@@ -214,8 +216,37 @@
     computed: {
       ...mapState([
         'USERINFO',
-        'GEOHASH'
-      ])
+        'GEOHASH',
+        'CARTLIST'
+      ]),
+      // 商品总数量
+      totalNum () {
+        let counter = 0;
+        Object.keys(this.CARTLIST).forEach((key) => {
+          if (Object.keys(this.CARTLIST[key]).length !== 0) {
+            counter += (this.CARTLIST[key].num || 0);
+          }
+        });
+        return counter;
+      },
+      // 商品总价
+      totalPrice () {
+        let counter = 0;
+        Object.keys(this.CARTLIST).forEach((key) => {
+          if (Object.keys(this.CARTLIST[key]).length !== 0) {
+            counter += (this.CARTLIST[key].num * this.CARTLIST[key].price || 0);
+          }
+        });
+        return counter;
+      },
+      // 配送费
+      deliveryFee () {
+        return this.shopDetail.float_delivery_fee || 0;
+      },
+      // 起送价差额
+      minimumOrderAmount () {
+        return this.shopDetail.float_minimum_order_amount - this.totalPrice;
+      }
     },
     data () {
         return {
@@ -234,19 +265,16 @@
           foodScroll: null,
           menuIndexChange: true,
           menuIndex: 0,
-          totalPrice: 0,
-          totalNum: 0,
-          receiveInCart: '',
-          deliveryFee: 0,
-          minimumOrderAmount: 0,
-          itemId: ''
+          receiveInCart: ''
         };
     },
     methods: {
       ...mapMutations([
         'SAVEGEOHASH',
         'SAVESHOPDETAIL',
-        'ADDFOODS'
+        'ADDFOODS',
+        'REDUCEFOODS',
+        'INITBUYCART'
       ]),
       // 获取商铺信息
       getShopDetail () {
@@ -329,11 +357,25 @@
           click: true
         });
       },
+      // 商品种类数量
+      categoryNum (id) {
+        let counter = 0;
+        Object.keys(this.CARTLIST).forEach((key) => {
+          if (this.CARTLIST[key].category_id === id) {
+            counter += (this.CARTLIST[key].num || 0);
+          }
+        });
+        return counter;
+      },
+      // 购物车明细显示切换
       toggleCartList () {},
       // 添加商品
-      addToCart (category_id, item_id, food_id, name, price, specs, packing_fee, sku_id, stock, event) {
-        this.itemId = item_id;
+      addToCart (category_id, item_id, food_id, name, price, specs, packing_fee, sku_id, stock) {
         this.ADDFOODS({shopid: this.shopId, category_id, item_id, food_id, name, price, specs, packing_fee, sku_id, stock});
+      },
+      // 移除商品
+      reduceFromCart (category_id, item_id, food_id, name, price, specs, packing_fee, sku_id, stock) {
+        this.REDUCEFOODS({shopid: this.shopId, category_id, item_id, food_id, name, price, specs, packing_fee, sku_id, stock});
       }
     },
     mounted () {
@@ -343,8 +385,10 @@
       this.getShopRating();
       this.getShopRatingTag();
       this.getRatingList();
+      this.INITBUYCART();
     },
-    watch: {},
+    watch: {
+    },
     destroyed () {
       this.foodScroll && this.foodScroll.destroy();
     }
@@ -431,7 +475,7 @@
         color: @fontColor;
       }
       .selected {
-        border-bottom: .025rem solid #3190e8;
+        border-bottom: .025rem solid @blue;
         color: @blue;
       }
     }
@@ -450,6 +494,7 @@
         align-items: flex-start;
         box-shadow: .005rem 0 .025rem @gray;
         .menu-list-item {
+          position: relative;
           display: flex;
           align-items: center;
           width: 100%;
@@ -464,6 +509,21 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+          }
+          .category-num {
+            position: absolute;
+            top: .1rem;
+            right: .1rem;
+            width: .6rem;
+            height: .6rem;
+            border-radius: 50%;
+            border: .025rem solid @fontColor3;
+            line-height: .6rem;
+            background-color: @fontColor3;
+            text-align: center;
+            font-size: .5rem;
+            color: #fff;
+            font-family: Helvetica Neue,Tahoma,Arial;
           }
         }
         .activity-menu {
@@ -623,8 +683,7 @@
           display: flex;
           align-items: center;
           .cart-icon-container {
-            margin-top: -.7rem;
-            margin-left: .5rem;
+            position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -633,11 +692,31 @@
             padding: .4rem;
             border: .18rem solid #444;
             border-radius: 50%;
-            background-color: #3190e8;
+            margin-top: -.7rem;
+            margin-left: .5rem;
+            background-color: #3d3d3f;
             .cart-icon {
               width: 1.2rem;
               height: 1.2rem;
             }
+            .total-num {
+              position: absolute;
+              top: -.25rem;
+              right: -.25rem;
+              width: .7rem;
+              height: .7rem;
+              border-radius: 50%;
+              border: .025rem solid @fontColor3;
+              line-height: .7rem;
+              background-color: @fontColor3;
+              text-align: center;
+              font-size: .5rem;
+              color: #fff;
+              font-family: Helvetica Neue,Tahoma,Arial;
+            }
+          }
+          .cart-activity {
+            background-color: @blue;
           }
           .cart-num {
             margin-left: .4rem;
@@ -657,12 +736,15 @@
           align-items: center;
           width: 5rem;
           height: 100%;
-          background-color: #4cd964;
+          background-color: #535356;
           .gotopay-text {
             font-size: .7rem;
             font-weight: 700;
             color: #fff;
           }
+        }
+        .gotopay-acitvity {
+          background-color: #4cd964;
         }
       }
     }
