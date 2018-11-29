@@ -46,6 +46,7 @@
         <img src="../../assets/icon/qianbao.png">
         <div>还不赶紧去邀请好友</div>
       </div>
+      <vue-snotify></vue-snotify>
     </div>
 </template>
 <script>

@@ -30,6 +30,7 @@
         <input type="submit" name="submit" class="login-submit" value="确认修改">
       </div>
     </form>
+    <vue-snotify></vue-snotify>
   </div>
 </template>
 <script>

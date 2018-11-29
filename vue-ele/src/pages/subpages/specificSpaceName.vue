@@ -22,6 +22,7 @@
           <div class="content">{{ item.address }}</div>
         </div>
       </div>
+      <vue-snotify></vue-snotify>
     </div>
 </template>
 <script>

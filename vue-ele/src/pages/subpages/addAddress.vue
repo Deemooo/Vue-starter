@@ -33,6 +33,7 @@
           <input type="submit" name="submit" class="add-address-submit" @click='asveAddress' value="提交">
         </div>
       </form>
+      <vue-snotify></vue-snotify>
     </div>
 </template>
 <script>

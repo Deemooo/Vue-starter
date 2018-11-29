@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import { setListData, getListData, removeListData } from '../publicFn/toolFus';
 
 Vue.use(Vuex);
 
@@ -67,6 +68,19 @@ export default new Vuex.Store({
     // 保存店铺详情
     SAVESHOPDETAIL (state, data) {
       state.SHOPDETAIL = data;
+    },
+    // 购物车添加商品
+    ADDFOODS (state, foods) {
+      // 为重复商品则数量加一，新商品则数量为一
+      let itemId = foods.item_id;
+      if (state.CARTLIST.hasOwnProperty(itemId)) {
+        let exFood = state.CARTLIST[itemId]['num'];
+        Vue.set(state.CARTLIST[itemId], 'num', ++exFood);
+      } else {
+        Vue.set(state.CARTLIST, itemId, foods);
+        Vue.set(state.CARTLIST[itemId], 'num', 1);
+      }
+      setListData('CARTLIST', state.CARTLIST);
     }
   },
   actions: {

@@ -22,6 +22,7 @@
           <input type="submit" name="submit" class="exchange-submit" value="兑换">
         </div>
       </form>
+      <vue-snotify></vue-snotify>
     </div>
 </template>
 <script>

@@ -45,6 +45,7 @@
         </div>
         <div class="reset-btn" @click="$router.push('forget')">重置密码？</div>
       </form>
+      <vue-snotify></vue-snotify>
     </div>
 </template>
 <script>

@@ -30,6 +30,7 @@
         <div>年卡：<b>360</b>次减免配送费。</div>
         <div>＊仅限蜂鸟专送订单，每日最多减免3单，每单最高减免4元（一个月按31天计算）</div>
       </footer>
+      <vue-snotify></vue-snotify>
     </div>
 </template>
 <script>

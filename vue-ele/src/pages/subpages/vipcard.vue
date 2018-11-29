@@ -68,6 +68,7 @@
           </span>
         </router-link>
       </div>
+      <vue-snotify></vue-snotify>
     </div>
 </template>
 <script>

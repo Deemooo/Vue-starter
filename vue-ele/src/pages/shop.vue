@@ -93,7 +93,11 @@
                     <span class="price-num">{{ foods.specfoods[0].price }}</span>
                     <span v-if="foods.specifications.length" class="price-special">起</span>
                   </section>
-                  <buy-cart></buy-cart>
+                  <buy-cart
+                    @addToCart="addToCart(foods.category_id, foods.item_id, foods.specfoods[0].food_id, foods.specfoods[0].name, foods.specfoods[0].price, '', foods.specfoods[0].packing_fee, foods.specfoods[0].sku_id, foods.specfoods[0].stock, $event)"
+                    :itemId="itemId"
+                    :shopId="shopId">
+                  </buy-cart>
                 </footer>
               </section>
             </li>
@@ -234,13 +238,15 @@
           totalNum: 0,
           receiveInCart: '',
           deliveryFee: 0,
-          minimumOrderAmount: 0
+          minimumOrderAmount: 0,
+          itemId: ''
         };
     },
     methods: {
       ...mapMutations([
         'SAVEGEOHASH',
-        'SAVESHOPDETAIL'
+        'SAVESHOPDETAIL',
+        'ADDFOODS'
       ]),
       // 获取商铺信息
       getShopDetail () {
@@ -317,34 +323,18 @@
         listArr.forEach((item, index) => {
           this.shopListTop.push(item.offsetTop);
         });
-        this.listenScroll(listContainer);
-      },
-      //当滑动食品列表时，监听其scrollTop值来设置对应的食品列表标题的样式
-      listenScroll (element) {
-        this.foodScroll = new BScroll(element, {
+        this.foodScroll = new BScroll(listContainer, {
           probeType: 3,
           bounce: false,
           click: true
         });
-        const wrapperMenu = new BScroll('#wrapper-menu', {
-          click: true
-        });
-        const wrapMenuHeight = this.$refs.wrapperMenu.clientHeight;
-        this.foodScroll.on('scroll', (pos) => {
-          if (!this.$refs.wrapperMenu) {
-            return;
-          }
-          this.shopListTop.forEach((item, index) => {
-            if (this.menuIndexChange && Math.abs(Math.round(pos.y)) >= item) {
-              this.menuIndex = index;
-              const menuList = this.$refs.wrapperMenu.querySelectorAll('.activity-menu');
-              const el = menuList[0];
-              wrapperMenu.scrollToElement(el, 800, 0);
-            }
-          })
-        })
       },
-      toggleCartList () {}
+      toggleCartList () {},
+      // 添加商品
+      addToCart (category_id, item_id, food_id, name, price, specs, packing_fee, sku_id, stock, event) {
+        this.itemId = item_id;
+        this.ADDFOODS({shopid: this.shopId, category_id, item_id, food_id, name, price, specs, packing_fee, sku_id, stock});
+      }
     },
     mounted () {
       this.shopId = this.$route.query.id;

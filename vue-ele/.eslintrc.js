@@ -32,5 +32,6 @@ module.exports = {
     'semi': 0,
     'valid-typeof': 0,
     'no-mixed-operators': 0,
+    "camelcase": 0,
     'vue/no-parsing-error': [2, { 'x-invalid-end-tag': false }]  }
 }

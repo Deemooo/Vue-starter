@@ -15,4 +15,22 @@ const getStyle = (element, attr, NumberMode = 'int') => {
   //在获取 opactiy 时需要获取小数 parseFloat
   return  NumberMode === 'float' ? parseFloat(target) : parseInt(target);
 };
-export { getStyle };
+// 将数据写入sessionStorage
+const setListData =  (key, data) => {
+  if (data) {
+    sessionStorage.setItem(key, JSON.stringify(data));
+  }
+};
+// 返回sessionStorage数据
+const getListData = (key) => {
+  return JSON.parse(sessionStorage.getItem(key)) || '';
+};
+// 删除某项数据
+const removeListData = (...arg) => {
+  if (arg && arg.length !== 0) {
+    arg.forEach((item) => {
+      sessionStorage.removeItem(item);
+    });
+  }
+};
+export { getStyle, setListData, getListData, removeListData };
