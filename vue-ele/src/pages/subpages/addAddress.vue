@@ -14,7 +14,7 @@
           <div v-if="checkName" class="input-error-tips">{{ this.erroTip('姓名') }}</div>
         </div>
         <router-link tag="div" to='specificSpaceName' class="add-detail">
-          <input type="text" placeholder="请选择小区/写字楼/学校等" readonly="readonly" class="add-address-input" v-model='specificSpaceName'>
+          <input type="text" placeholder="请选择小区/写字楼/学校等" readonly="readonly" class="add-address-input" v-model='SPECIFICSPACENAME'>
           <div v-if="checkAddress" class="input-error-tips">{{ this.erroTip('小区/写字楼/学校名称') }}</div>
         </router-link>
         <div>
@@ -50,7 +50,7 @@
         return !(this.isNull(this.inputName) && this.validateUser(this.inputName));
       },
       checkAddress () {
-        return !this.isNull(this.specificSpaceName);
+        return !this.isNull(this.SPECIFICSPACENAME);
       },
       checkDetailAddress () {
         return !this.isNull(this.inputDetailAddress);
@@ -78,7 +78,7 @@
       asveAddress () {
         if (!(this.checkName && this.checkAddress && this.checkDetailAddress && this.checkCellphoneNumber && this.checkPhoneNumber)) {
           let params = {
-            address: this.specificSpaceName,
+            address: this.SPECIFICSPACENAME,
             address_detail: this.inputDetailAddress,
             geohash: this.GEOHASH,
             name: this.inputName,
@@ -99,12 +99,12 @@
               } else {
                 this.ADDNEWADDRESS({
                   name: this.inputName,
-                  address: this.specificSpaceName,
+                  address: this.SPECIFICSPACENAME,
                   address_detail: this.inputDetailAddress,
                   geohash: 'wtw37r7cxep4',
                   phone: this.inputCellphoneNumber,
                   phone_bk: this.inputPhoneNumber,
-                  poi: this.specificSpaceName,
+                  poi: this.SPECIFICSPACENAME,
                   poi_type: 0
                 });
                 this.$router.go(-1);

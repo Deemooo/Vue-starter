@@ -220,6 +220,12 @@ export default new Router({
       path: '/shopSafe',
       name: 'shopSafe',
       component: resolve => require(['../pages/subpages/shopSafe.vue'], resolve)
+    },
+    // 确认订单
+    {
+      path: '/confirmOrder',
+      name: 'confirmOrder',
+      component: resolve => require(['../pages/subpages/confirmOrder.vue'], resolve)
     }
   ]
 });

@@ -105,25 +105,6 @@
             </li>
           </ul>
         </div>
-        <!--购物车-->
-        <section class="buy-cart-container">
-          <section @click="toggleCartList" class="cart-icon-num">
-            <div class="cart-icon-container" :class="{'cart-activity': totalNum > 0}" ref="cartContainer">
-              <svg class="cart-icon">
-                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#cart-icon"></use>
-              </svg>
-              <span class="total-num" v-if="totalNum">{{totalNum}}</span>
-            </div>
-            <div class="cart-num">
-              <p>¥ {{totalPrice}}</p>
-              <p>配送费 ¥{{deliveryFee}}</p>
-            </div>
-          </section>
-          <section class="gotopay" :class="{'gotopay-acitvity': minimumOrderAmount <= 0}">
-            <span class="gotopay-text" v-if="minimumOrderAmount > 0">还差¥ {{minimumOrderAmount}}起送</span>
-            <router-link :to="{path:'/confirmOrder', query:{shopId}}" class="gotopay-text" v-else>去结算</router-link>
-          </section>
-        </section>
       </div>
       <!--评价-->
       <div v-load-more="loaderMoreRating" v-show="tabType === 1" class="shop-rating-wrap">
@@ -198,6 +179,57 @@
           </ul>
         </section>
       </div>
+      <!--购物车-->
+      <section class="buy-cart-container">
+        <section @click="toggleCartList" class="cart-icon-num">
+          <div class="cart-icon-container" :class="{'cart-activity': totalNum > 0}" ref="cartContainer">
+            <svg class="cart-icon">
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#cart-icon"></use>
+            </svg>
+            <span class="total-num" v-if="totalNum">{{totalNum}}</span>
+          </div>
+          <div class="cart-num">
+            <p>¥ {{totalPrice}}</p>
+            <p>配送费 ¥{{deliveryFee}}</p>
+          </div>
+        </section>
+        <section class="gotopay" :class="{'gotopay-acitvity': minimumOrderAmount <= 0}">
+          <span class="gotopay-text" v-if="minimumOrderAmount > 0">还差¥ {{minimumOrderAmount}}起送</span>
+          <router-link :to="{path:'/confirmOrder', query:{shopId}}" class="gotopay-text" v-else>去结算</router-link>
+        </section>
+      </section>
+      <section v-show="cartFoodListShow && Object.keys(cartFoodList).length" class="cart-food-details">
+        <header>
+          <p>已选商品</p>
+          <div @click="clearCart">
+            <svg>
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#cart-remove"></use>
+            </svg>
+            <span class="clear-cart">清空</span>
+          </div>
+        </header>
+        <section class="cart-food-list">
+          <ul>
+            <li v-for="(item, index) in cartFoodList" :key="index" class="cart-food-item">
+              <div class="cart-item-num">
+                <span class="name ellipsis">{{item.name}}</span>
+                <p class=" speces ellipsis">{{item.specs}}</p>
+              </div>
+              <div class="cart-item-price">
+                <span>¥</span>
+                <span>{{item.price}}</span>
+              </div>
+              <buy-cart
+                @addToCart="addToCart(item.category_id, item.item_id, item.food_id, item.name, item.price, item.specs)"
+                @reduceFromCart="reduceFromCart(item.category_id, item.item_id, item.food_id, item.name, item.price, item.specs)"
+                :foods="item"
+                :shopId="shopId">
+              </buy-cart>
+            </li>
+          </ul>
+        </section>
+      </section>
+      <screen-cover :coverShow="cartFoodListShow && Object.keys(cartFoodList).length"></screen-cover>
     </div>
 </template>
 <script>
@@ -206,12 +238,14 @@
   import { loadMore } from '../publicFn/loadMore';
   import ratingStar from '../components/ratingStar';
   import buyCart from '../components/buyCart';
+  import screenCover from '../components/screenCover';
   import BScroll from 'better-scroll';
   export default {
     mixins: [loadMore],
     components: {
       ratingStar,
-      buyCart
+      buyCart,
+      screenCover
     },
     computed: {
       ...mapState([
@@ -246,6 +280,16 @@
       // 起送价差额
       minimumOrderAmount () {
         return this.shopDetail.float_minimum_order_amount - this.totalPrice;
+      },
+      // 购物车列表
+      cartFoodList () {
+        let list = {};
+        Object.keys(this.CARTLIST).forEach((key) => {
+          if (Object.keys(this.CARTLIST[key]).length !== 0) {
+            list[key] = {...this.CARTLIST[key]};
+          }
+        });
+        return list;
       }
     },
     data () {
@@ -265,7 +309,8 @@
           foodScroll: null,
           menuIndexChange: true,
           menuIndex: 0,
-          receiveInCart: ''
+          receiveInCart: '',
+          cartFoodListShow: false
         };
     },
     methods: {
@@ -274,7 +319,8 @@
         'SAVESHOPDETAIL',
         'ADDFOODS',
         'REDUCEFOODS',
-        'INITBUYCART'
+        'INITBUYCART',
+        'CLEARCART'
       ]),
       // 获取商铺信息
       getShopDetail () {
@@ -368,7 +414,9 @@
         return counter;
       },
       // 购物车明细显示切换
-      toggleCartList () {},
+      toggleCartList () {
+        this.cartFoodListShow = !this.cartFoodListShow;
+      },
       // 添加商品
       addToCart (category_id, item_id, food_id, name, price, specs, packing_fee, sku_id, stock) {
         this.ADDFOODS({shopid: this.shopId, category_id, item_id, food_id, name, price, specs, packing_fee, sku_id, stock});
@@ -376,6 +424,11 @@
       // 移除商品
       reduceFromCart (category_id, item_id, food_id, name, price, specs, packing_fee, sku_id, stock) {
         this.REDUCEFOODS({shopid: this.shopId, category_id, item_id, food_id, name, price, specs, packing_fee, sku_id, stock});
+      },
+      // 清空购物车
+      clearCart () {
+        this.CLEARCART();
+        this.toggleCartList();
       }
     },
     mounted () {
@@ -669,82 +722,155 @@
           }
         }
       }
-      .buy-cart-container {
-        position: fixed;
-        bottom: 0;
-        right: 0;
-        width: 100%;
-        height: 2rem;
+    }
+    .buy-cart-container {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      width: 100%;
+      height: 2rem;
+      display: flex;
+      z-index: 102;
+      background-color: #3d3d3f;
+      .cart-icon-num {
+        flex: 1;
         display: flex;
-        z-index: 13;
-        background-color: #3d3d3f;
-        .cart-icon-num {
-          flex: 1;
-          display: flex;
-          align-items: center;
-          .cart-icon-container {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 1.5rem;
-            height: 1.5rem;
-            padding: .4rem;
-            border: .18rem solid #444;
-            border-radius: 50%;
-            margin-top: -.7rem;
-            margin-left: .5rem;
-            background-color: #3d3d3f;
-            .cart-icon {
-              width: 1.2rem;
-              height: 1.2rem;
-            }
-            .total-num {
-              position: absolute;
-              top: -.25rem;
-              right: -.25rem;
-              width: .7rem;
-              height: .7rem;
-              border-radius: 50%;
-              border: .025rem solid @fontColor3;
-              line-height: .7rem;
-              background-color: @fontColor3;
-              text-align: center;
-              font-size: .5rem;
-              color: #fff;
-              font-family: Helvetica Neue,Tahoma,Arial;
-            }
-          }
-          .cart-activity {
-            background-color: @blue;
-          }
-          .cart-num {
-            margin-left: .4rem;
-            p {
-              font-size: .8rem;
-              font-weight: 700;
-              color: #fff;
-            }
-            & > p:last-of-type {
-              font-size: .4rem;
-            }
-          }
-        }
-        .gotopay {
+        align-items: center;
+        .cart-icon-container {
+          position: relative;
           display: flex;
           justify-content: center;
           align-items: center;
-          width: 5rem;
-          height: 100%;
-          background-color: #535356;
-          .gotopay-text {
-            font-size: .7rem;
+          width: 1.5rem;
+          height: 1.5rem;
+          padding: .4rem;
+          border: .18rem solid #444;
+          border-radius: 50%;
+          margin-top: -.7rem;
+          margin-left: .5rem;
+          background-color: #3d3d3f;
+          .cart-icon {
+            width: 1.2rem;
+            height: 1.2rem;
+          }
+          .total-num {
+            position: absolute;
+            top: -.25rem;
+            right: -.25rem;
+            width: .7rem;
+            height: .7rem;
+            border-radius: 50%;
+            border: .025rem solid @fontColor3;
+            line-height: .7rem;
+            background-color: @fontColor3;
+            text-align: center;
+            font-size: .5rem;
+            color: #fff;
+            font-family: Helvetica Neue,Tahoma,Arial;
+          }
+        }
+        .cart-activity {
+          background-color: @blue;
+        }
+        .cart-num {
+          margin-left: .4rem;
+          p {
+            font-size: .8rem;
             font-weight: 700;
             color: #fff;
           }
+          & > p:last-of-type {
+            font-size: .4rem;
+          }
         }
-        .gotopay-acitvity {
-          background-color: #4cd964;
+      }
+      .gotopay {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 5rem;
+        height: 100%;
+        background-color: #535356;
+        .gotopay-text {
+          font-size: .7rem;
+          font-weight: 700;
+          color: #fff;
+        }
+      }
+      .gotopay-acitvity {
+        background-color: #4cd964;
+      }
+    }
+    .cart-food-details {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      width: 100%;
+      margin-bottom: 2rem;
+      z-index: 101;
+      background-color: #fff;
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: .4rem .6rem;
+        background-color: #eceff1;
+        p {
+          font-size: .7rem;
+          color: @fontColor1;
+        }
+        div {
+          display: flex;
+          align-items: center;
+          svg {
+            width: .6rem;
+            height: .6rem;
+            margin-right: .2rem;
+          }
+          span {
+            height: .6rem;
+            line-height: .6rem;
+            font-size: .6rem;
+            color: @fontColor1;
+          }
+        }
+      }
+      .cart-food-list {
+        padding: .4rem;
+        .cart-food-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: .6rem 0;
+          .cart-item-num {
+            display: flex;
+            align-items: center;
+            span {
+              color: @fontColor1;
+            }
+            .name {
+              font-size: .7rem;
+              font-weight: 700;
+            }
+            .speces {
+              font-size: .4rem;
+            }
+          }
+          .cart-item-price {
+            display: flex;
+            align-items: center;
+            span {
+              color: @fontColor4;
+              font-family: Helvetica Neue,Tahoma;
+            }
+            span:first-of-type {
+              font-size: .6rem;
+            }
+            span:last-of-type {
+              font-size: .7rem;
+              font-weight: 700;
+            }
+          }
         }
       }
     }

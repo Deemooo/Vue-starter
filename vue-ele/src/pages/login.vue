@@ -49,94 +49,104 @@
     </div>
 </template>
 <script>
-  import { mapMutations } from 'vuex';
+  import { mapState, mapMutations } from 'vuex';
   export default {
-        components: {},
-        computed: {},
-        data () {
-            return {
-              userAccount: '',
-              password: '',
-              codeNumber: '',
-              captchaCodeImg: '',
-              showPassword: false,
-              loginWay: true,
-              userInfo: {},
-              phoneNumber: '',
-              mobileCode: '',
-              sendFlag: false,
-              computeTime: 60
-            };
-        },
-        methods: {
-          ...mapMutations([
-            'UPDATEUSERINFO'
-          ]),
-          // 获取验证码
-          getCaptchaCode () {
-            let params = {};
-            this.https({url: '/v1/captchas', params, method: 'post'}).then(
-              (res) => {
-                this.captchaCodeImg = res.code;
-              });
-          },
-          // 获取短信验证码
-          getVerifyCode () {
-            this.sendFlag = true;
-            let clock = setInterval(() => {
-              if (this.computeTime <= 0) {
-                clearInterval(clock);
-                this.sendFlag = false;
-                this.computeTime = 60;
-              } else {
-                --this.computeTime;
-              }
-            }, 1000);
-          },
-          // 登陆
-          login () {
-            if (!this.userAccount) {
-              alert('请输入手机号/邮箱/用户名！');
-              return;
-            } else if (!this.password) {
-              alert('请输入密码！');
-              return;
-            } else if (!this.codeNumber) {
-              alert('请输入验证码！');
-              return;
-            }
-            let params = {
-              username: this.userAccount,
-              password: this.password,
-              captcha_code: this.codeNumber
-            };
-            this.https({url: '/v2/login', params, method: 'post'}).then(
-              (res) => {
-                this.userInfo = res;
-                //如果返回的值不正确，则弹出提示框，返回的值正确则返回上一页
-                if (!this.userInfo.user_id) {
-                  this.$snotify.warning(this.userInfo.message, {
-                    showProgressBar: false,
-                    timeout: 1000
-                  });
-                  this.getCaptchaCode();
-                } else {
-                  this.UPDATEUSERINFO(this.userInfo);
-                  this.$router.go(-1);
-                }
-              });
-          },
-          changeLoginWay () {
-            this.loginWay = !this.loginWay;
-          },
-          changePassWordType () {
-            this.showPassword = !this.showPassword;
+    components: {},
+    computed: {
+      ...mapState([
+        'USERINFO'
+      ])
+    },
+    data () {
+        return {
+          userAccount: '',
+          password: '',
+          codeNumber: '',
+          captchaCodeImg: '',
+          showPassword: false,
+          loginWay: true,
+          userInfo: {},
+          phoneNumber: '',
+          mobileCode: '',
+          sendFlag: false,
+          computeTime: 60
+        };
+    },
+    methods: {
+      ...mapMutations([
+        'UPDATEUSERINFO',
+        'INITBUYUSERINFO'
+      ]),
+      // 获取验证码
+      getCaptchaCode () {
+        let params = {};
+        this.https({url: '/v1/captchas', params, method: 'post'}).then(
+          (res) => {
+            this.captchaCodeImg = res.code;
+          });
+      },
+      // 获取短信验证码
+      getVerifyCode () {
+        this.sendFlag = true;
+        let clock = setInterval(() => {
+          if (this.computeTime <= 0) {
+            clearInterval(clock);
+            this.sendFlag = false;
+            this.computeTime = 60;
+          } else {
+            --this.computeTime;
           }
-        },
-        mounted () {
-          this.getCaptchaCode();
-        },
-        watch: {}
+        }, 1000);
+      },
+      // 登陆
+      login () {
+        if (!this.userAccount) {
+          alert('请输入手机号/邮箱/用户名！');
+          return;
+        } else if (!this.password) {
+          alert('请输入密码！');
+          return;
+        } else if (!this.codeNumber) {
+          alert('请输入验证码！');
+          return;
+        }
+        let params = {
+          username: this.userAccount,
+          password: this.password,
+          captcha_code: this.codeNumber
+        };
+        this.https({url: '/v2/login', params, method: 'post'}).then(
+          (res) => {
+            this.userInfo = res;
+            //如果返回的值不正确，则弹出提示框，返回的值正确则返回上一页
+            if (!this.userInfo.user_id) {
+              this.$snotify.warning(this.userInfo.message, {
+                showProgressBar: false,
+                timeout: 1000
+              });
+              this.getCaptchaCode();
+            } else {
+              this.UPDATEUSERINFO(this.userInfo);
+              this.$router.go(-1);
+            }
+          });
+      },
+      changeLoginWay () {
+        this.loginWay = !this.loginWay;
+      },
+      changePassWordType () {
+        this.showPassword = !this.showPassword;
+      }
+    },
+    created () {
+      this.INITBUYUSERINFO();
+      this.userAccount = this.USERINFO.userAccount;
+      this.password = this.USERINFO.password;
+    },
+    mounted () {
+      this.getCaptchaCode();
+    },
+    watch: {}
     };
 </script>
 <style lang="less" scoped>

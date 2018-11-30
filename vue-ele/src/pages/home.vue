@@ -45,7 +45,7 @@
     </div>
 </template>
 <script>
-  import { mapState } from 'vuex';
+  import { mapState, mapMutations } from 'vuex';
   export default {
     components: {},
     computed: {
@@ -71,6 +71,9 @@
         };
     },
     methods: {
+      ...mapMutations([
+        'INITBUYUSERINFO'
+      ]),
       reload () {
         window.location.reload();
       },
@@ -106,6 +109,9 @@
           });
       }
     },
+    created () {
+      this.INITBUYUSERINFO();
+    },
     mounted () {
       this.getCurrentCity();
       this.getHotCity();
@@ -130,6 +136,7 @@
         color: #fff;
         font-weight: 400;
         font-size: .7rem;
+        cursor: pointer;
       }
       .user-avatar {
         width: .8rem;

@@ -14,7 +14,9 @@ export default new Vuex.Store({
     QUESTION: {},
     ORDERDETAIL: {},
     SHOPDETAIL: {},
-    CARTLIST: {}
+    CARTLIST: {},
+    DEFAULTADDRESS: {},
+    DEFAULTADDRESSINDEX: 0
   },
   mutations: {
     // 更新城市信息
@@ -27,7 +29,12 @@ export default new Vuex.Store({
     UPDATEUSERINFO (state, data) {
       if (data) {
         state.USERINFO = data;
+        setListData('USERINFO', state.USERINFO);
       }
+    },
+    // 从缓存中初始化用户信息
+    INITBUYUSERINFO (state) {
+      state.USERINFO = getListData('USERINFO') || {};
     },
     // 更新地理位置信息
     SAVEGEOHASH (state, data) {
@@ -52,6 +59,14 @@ export default new Vuex.Store({
       if (typeof index !== 'undefined') {
         state.ADDRESSLIST.splice(index, 1);
       }
+    },
+    // 设置默认地址
+    SETDEFAULTADDRESS (state, {
+      address,
+      index
+    }) {
+      state.DEFAULTADDRESS = address;
+      state.DEFAULTADDRESSINDEX = index;
     },
     // 保存特殊地名
     SAVESPECIFICSPACENAME (state, name) {
@@ -95,6 +110,13 @@ export default new Vuex.Store({
           Vue.set(state.CARTLIST, itemId, {});
         }
       }
+      setListData('CARTLIST', state.CARTLIST);
+    },
+    // 清空购物车
+    CLEARCART (state) {
+      Object.keys(state.CARTLIST).forEach((key) => {
+        Vue.set(state.CARTLIST, key, {});
+      });
       setListData('CARTLIST', state.CARTLIST);
     },
     // 从缓存中初始化购物车
