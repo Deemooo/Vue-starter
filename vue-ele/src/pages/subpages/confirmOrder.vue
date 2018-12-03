@@ -86,6 +86,26 @@
           </div>
         </div>
       </section>
+      <section class="order-remarks">
+        <router-link tag="header" :to='{path: "/orderRemark", query: {id: orderData.cart.id, sig: orderData.sig}}' class="order-remarks-header">
+          <span>订单备注</span>
+          <div class="header-text">
+            <span class="ellipsis">{{PRESETREMARK || CUSTOMREMARK ? orderRemark: '口味、偏好等'}}</span>
+            <svg class="arrow-right">
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
+            </svg>
+          </div>
+        </router-link>
+        <router-link v-if="orderData.invoice.is_available" to="/orderInvoice" class="invoice">
+          <span>发票抬头</span>
+          <div class="invoice-text">
+            <span>{{orderData.invoice.status_text}}</span>
+            <svg class="arrow-right">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
+            </svg>
+          </div>
+        </router-link>
+      </section>
     </div>
 </template>
 <script>
@@ -99,7 +119,9 @@
         'USERINFO',
         'GEOHASH',
         'CARTLIST',
-        'ORDERDETAIL'
+        'ORDERDETAIL',
+        'PRESETREMARK',
+        'CUSTOMREMARK'
       ])
     },
     data () {
@@ -110,9 +132,13 @@
             cart: {
               id: ''
             },
-            sig: ''
+            sig: '',
+            invoice: {
+              is_available: false
+            }
           },
-          addressList: []
+          addressList: [],
+          orderRemark: ''
         };
     },
     methods: {
@@ -390,22 +416,65 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        padding: 0 .8rem;
         line-height: 1.8rem;
         .total-price-name {
-          padding: 0 .8rem;
           font-size: .65rem;
           color: #666;
         }
         .num-price {
-          padding: 0 .8rem;
+          display: flex;
+          align-items: center;
           font-size: .65rem;
           p {
             text-align: right;
             color: @fontColor4;
           }
+          p:first-of-type {
+            margin-right: .4rem;
+          }
         }
       }
 
+    }
+    .order-remarks {
+      padding: 0 .8rem;
+      margin-top: .4rem;
+      line-height: 2rem;
+      .order-remarks-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        & > span {
+          font-size: .7rem;
+          color: #666;
+        }
+        .header-text {
+          display: flex;
+          align-items: center;
+          span {
+            font-size: .6rem;
+            color: @fontColor2;
+          }
+          svg {
+            width: .5rem;
+            height: .5rem;
+            fill: #ccc;
+          }
+        }
+      }
+      .invoice {
+        padding: 0 .8rem;
+        margin-top: .4rem;
+        line-height: 2rem;
+        .invoice-text {
+
+        }
+        span {
+
+        }
+
+      }
     }
   }
 </style>

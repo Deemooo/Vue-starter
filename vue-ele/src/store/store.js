@@ -16,7 +16,9 @@ export default new Vuex.Store({
     SHOPDETAIL: {},
     CARTLIST: {},
     DEFAULTADDRESS: {},
-    DEFAULTADDRESSINDEX: 0
+    DEFAULTADDRESSINDEX: 0,
+    PRESETREMARK: '',
+    CUSTOMREMARK: ''
   },
   mutations: {
     // 更新城市信息
