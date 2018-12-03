@@ -226,6 +226,30 @@ export default new Router({
       path: '/confirmOrder',
       name: 'confirmOrder',
       component: resolve => require(['../pages/subpages/confirmOrder.vue'], resolve)
+    },
+    // 确认订单-选择地址
+    {
+      path: '/chooseAddress',
+      name: 'chooseAddress',
+      component: resolve => require(['../pages/subpages/chooseAddress.vue'], resolve)
+    },
+    // 确认订单-订单备注
+    {
+      path: '/orderRemark',
+      name: 'orderRemark',
+      component: resolve => require(['../pages/subpages/orderRemark.vue'], resolve)
+    },
+    // 确认订单-发票
+    {
+      path: '/orderInvoice',
+      name: 'orderInvoice',
+      component: resolve => require(['../pages/subpages/orderInvoice.vue'], resolve)
+    },
+    // 确认订单-支付
+    {
+      path: '/payment',
+      name: 'payment',
+      component: resolve => require(['../pages/subpages/payment.vue'], resolve)
     }
   ]
 });

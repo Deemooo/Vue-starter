@@ -87,24 +87,28 @@
         </div>
       </section>
       <section class="order-remarks">
-        <router-link tag="header" :to='{path: "/orderRemark", query: {id: orderData.cart.id, sig: orderData.sig}}' class="order-remarks-header">
+        <router-link tag="div" :to='{path: "/orderRemark", query: {id: orderData.cart.id, sig: orderData.sig}}' class="order-remarks-item">
           <span>订单备注</span>
-          <div class="header-text">
+          <div class="order-remarks-item-text">
             <span class="ellipsis">{{PRESETREMARK || CUSTOMREMARK ? orderRemark: '口味、偏好等'}}</span>
             <svg class="arrow-right">
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
             </svg>
           </div>
         </router-link>
-        <router-link v-if="orderData.invoice.is_available" to="/orderInvoice" class="invoice">
+        <router-link tag="div" v-if="orderData.invoice.is_available" to="/orderInvoice" class="order-remarks-item">
           <span>发票抬头</span>
-          <div class="invoice-text">
+          <div class="order-remarks-item-text">
             <span>{{orderData.invoice.status_text}}</span>
             <svg class="arrow-right">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
             </svg>
           </div>
         </router-link>
+      </section>
+      <section class="confrim-order">
+        <span>待支付 ¥{{orderData.cart.total}}</span>
+        <span @click="confrimOrder">确认下单</span>
       </section>
     </div>
 </template>
@@ -192,7 +196,8 @@
           color = '@blue';
         }
         return color;
-      }
+      },
+      confrimOrder () {}
     },
     created () {
       this.shopId = this.$route.query.shopId;
@@ -420,7 +425,7 @@
         line-height: 1.8rem;
         .total-price-name {
           font-size: .65rem;
-          color: #666;
+          color: @fontColor1;
         }
         .num-price {
           display: flex;
@@ -440,16 +445,17 @@
     .order-remarks {
       padding: 0 .8rem;
       margin-top: .4rem;
+      margin-bottom: 2rem;
       line-height: 2rem;
-      .order-remarks-header {
+      .order-remarks-item {
         display: flex;
         justify-content: space-between;
         align-items: center;
         & > span {
-          font-size: .7rem;
-          color: #666;
+          font-size: .65rem;
+          color: @fontColor1;
         }
-        .header-text {
+        .order-remarks-item-text {
           display: flex;
           align-items: center;
           span {
@@ -463,17 +469,29 @@
           }
         }
       }
-      .invoice {
-        padding: 0 .8rem;
-        margin-top: .4rem;
+    }
+    .confrim-order {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 2rem;
+      span {
         line-height: 2rem;
-        .invoice-text {
-
-        }
-        span {
-
-        }
-
+        font-size: .75rem;
+        color: #fff;
+      }
+      span:first-of-type {
+        flex: 7;
+        padding-left: .4rem;
+        background-color: #3c3c3c;
+      }
+      span:last-of-type {
+        flex: 3;
+        text-align: center;
+        background-color: #56d176;
       }
     }
   }

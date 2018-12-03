@@ -1,5 +1,6 @@
 <template>
     <div class="choose-address">
+      chooseAddress
     </div>
 </template>
 <script>
