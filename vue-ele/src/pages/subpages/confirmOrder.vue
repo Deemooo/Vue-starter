@@ -8,21 +8,21 @@
           <span class="confirm-order-title">确认订单</span>
         </template>
       </top-header>
-      <router-link :to='{path: "/chooseAddress", query: {id: orderData.cart.id, sig: orderData.sig}}' class="address-list">
+      <router-link :to='{path: "/chooseAddress", query: {shopId: this.shopId}}' class="address-list">
         <div class="address-item-left">
           <svg class="location-icon">
             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#location"></use>
           </svg>
-          <div class="add-address" v-if="!DEFAULTADDRESS">请添加一个收货地址</div>
+          <div class="add-address" v-if="!defaultaddress">请添加一个收货地址</div>
           <div v-else class="address-detail">
             <header>
-              <span>{{DEFAULTADDRESS.name}}</span>
-              <span>{{DEFAULTADDRESS.sex == 1 ? '先生':'女士'}}</span>
-              <span>{{DEFAULTADDRESS.phone}}</span>
+              <span>{{defaultaddress.name}}</span>
+              <span>{{defaultaddress.sex == 1 ? '先生':'女士'}}</span>
+              <span>{{defaultaddress.phone}}</span>
             </header>
             <div class="address-detail-info">
-              <span v-if="DEFAULTADDRESS.tag" :style="{backgroundColor: iconColor(DEFAULTADDRESS.tag)}">{{DEFAULTADDRESS.tag}}</span>
-              <p>{{DEFAULTADDRESS.address_detail}}</p>
+              <span v-if="defaultaddress.tag" :style="{backgroundColor: iconColor(defaultaddress.tag)}">{{defaultaddress.tag}}</span>
+              <p>{{defaultaddress.address_detail}}</p>
             </div>
           </div>
         </div>
@@ -183,7 +183,7 @@
           (res) => {
             if (res && res.length !== 0) {
               this.addressList = res;
-              this.SETDEFAULTADDRESS({address: this.addressList[0], index: 0});
+              this.defaultaddress = this.addressList[0];
             }
           });
       },
@@ -196,6 +196,14 @@
           color = '@blue';
         }
         return color;
+      },
+      // 设置默认地址
+      defaultaddress () {
+        if (this.DEFAULTADDRESS) {
+          return this.DEFAULTADDRESS;
+        } else if (this.addressList && this.addressList.length !== 0) {
+          return this.addressList[0];
+        }
       },
       confrimOrder () {}
     },

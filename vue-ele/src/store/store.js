@@ -10,6 +10,7 @@ export default new Vuex.Store({
     USERINFO: {},
     GEOHASH: '',
     SPECIFICSPACENAME: '',
+    ADDRESSOTHERINFO: {},
     ADDRESSLIST: [],
     QUESTION: {},
     ORDERDETAIL: {},
@@ -68,11 +69,17 @@ export default new Vuex.Store({
       index
     }) {
       state.DEFAULTADDRESS = address;
-      state.DEFAULTADDRESSINDEX = index;
+      if (typeof index !== 'undefined') {
+        state.DEFAULTADDRESSINDEX = index;
+      }
     },
     // 保存特殊地名
     SAVESPECIFICSPACENAME (state, name) {
       state.SPECIFICSPACENAME = name;
+    },
+    // 保存新增地址时的其他信息
+    SAVEADDRESSOTHERINFO (state, data) {
+      state.ADDRESSOTHERINFO = data;
     },
     // 保存问题详情
     SAVEQUESTIONS (state, data) {

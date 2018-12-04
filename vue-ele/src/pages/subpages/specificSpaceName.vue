@@ -109,7 +109,7 @@
           padding: 0 .3rem;
           font-size: .65rem;
           color: @fontColor;
-          outline: none;
+          box-sizing: border-box;
         }
         .search-input, .search-submit {
           border-radius: .1rem;

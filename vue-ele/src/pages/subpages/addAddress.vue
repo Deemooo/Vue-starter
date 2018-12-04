@@ -10,19 +10,19 @@
       </top-header>
       <form class="add-address-form" v-on:submit.prevent>
         <div>
-          <input type="text" placeholder="请输入您的姓名" required v-model='inputName' class="add-address-input">
+          <input type="text" placeholder="请输入您的姓名"  v-model='inputName' class="add-address-input">
           <div v-if="checkName" class="input-error-tips">{{ this.erroTip('姓名') }}</div>
         </div>
-        <router-link tag="div" to='specificSpaceName' class="add-detail">
+        <div @click='searchSpecialPlaceName' class="add-detail">
           <input type="text" placeholder="请选择小区/写字楼/学校等" readonly="readonly" class="add-address-input" v-model='SPECIFICSPACENAME'>
           <div v-if="checkAddress" class="input-error-tips">{{ this.erroTip('小区/写字楼/学校名称') }}</div>
-        </router-link>
+        </div>
         <div>
-          <input type="text" placeholder="请输入详细送餐地址" class="add-address-input" required v-model='inputDetailAddress'>
+          <input type="text" placeholder="请输入详细送餐地址" class="add-address-input"  v-model='inputDetailAddress'>
           <div v-if="checkDetailAddress" class="input-error-tips">{{ this.erroTip('详细送餐地址') }}</div>
         </div>
         <div>
-          <input type="text" placeholder="请输入您的手机号" class="add-address-input" required v-model='inputCellphoneNumber'>
+          <input type="text" placeholder="请输入您的手机号" class="add-address-input"  v-model='inputCellphoneNumber'>
           <div v-if="checkCellphoneNumber" class="input-error-tips">{{ this.erroTip('手机号') }}</div>
         </div>
         <div>
@@ -30,7 +30,7 @@
           <div v-if="checkPhoneNumber" class="input-error-tips">{{ this.erroTip('备用联系电话') }}</div>
         </div>
         <div>
-          <input type="submit" name="submit" class="add-address-submit" @click='asveAddress' value="提交">
+          <input type="submit" name="submit" class="add-address-submit" @click='saveAddress' value="提交">
         </div>
       </form>
       <vue-snotify></vue-snotify>
@@ -44,7 +44,8 @@
       ...mapState([
         'USERINFO',
         'SPECIFICSPACENAME',
-        'GEOHASH'
+        'GEOHASH',
+        'ADDRESSOTHERINFO'
       ]),
       checkName () {
         return !(this.isNull(this.inputName) && this.validateUser(this.inputName));
@@ -73,9 +74,20 @@
     methods: {
       ...mapMutations([
         'ADDNEWADDRESS',
-        'SAVESPECIFICSPACENAME'
+        'SAVESPECIFICSPACENAME',
+        'SAVEADDRESSOTHERINFO'
       ]),
-      asveAddress () {
+      // 搜索特殊地名
+      searchSpecialPlaceName () {
+        this.SAVEADDRESSOTHERINFO({
+          inputName: this.inputName,
+          inputDetailAddress: this.inputDetailAddress,
+          inputCellphoneNumber: this.inputCellphoneNumber,
+          inputPhoneNumber: this.inputPhoneNumber
+        });
+        this.$router.push('specificSpaceName');
+      },
+      saveAddress () {
         if (!(this.checkName && this.checkAddress && this.checkDetailAddress && this.checkCellphoneNumber && this.checkPhoneNumber)) {
           let params = {
             address: this.SPECIFICSPACENAME,
@@ -114,11 +126,12 @@
       }
     },
     mounted () {
+      if (this.ADDRESSOTHERINFO) {
+        Object.keys(this.ADDRESSOTHERINFO).forEach((key) => {
+          this[key] = this.ADDRESSOTHERINFO[key] || '';
+        });
+      }
     },
-    deactivated () {
-      this.inputDetailAddress = '';
-      this.SAVESPECIFICSPACENAME('');
-  },
     watch: {}
   };
 </script>
@@ -147,7 +160,6 @@
     }
     .add-address-form {
       background-color: #fff;
-      border-top: 0.25rem solid @gray;
       margin-top: 1.95rem;
       padding-top: .4rem;
       div {
