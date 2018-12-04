@@ -40,7 +40,7 @@
       <section class="pay-way">
         <section class="pay-way-item">
           <span>支付方式</span>
-          <div class="more-way">
+          <div class="more-way" @click="showPayWayFun">
             <span>在线支付</span>
             <svg class="arrow-right">
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
@@ -110,13 +110,28 @@
         <span>待支付 ¥{{orderData.cart.total}}</span>
         <span @click="confrimOrder">确认下单</span>
       </section>
+      <section class="choose-pay-way" v-if="payWayShow">
+        <header>支付方式</header>
+        <ul>
+          <li v-for="item in orderData.payments" :key="item.id" :class="{choose: payWayId === item.id}" class="pay-way-item">
+            <span>{{item.name}}<span v-if="!item.is_online_payment">{{item.description}}</span></span>
+            <svg class="select" @click="choosePayWay(item.is_online_payment, item.id)">
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#select"></use>
+            </svg>
+          </li>
+        </ul>
+      </section>
+      <screen-cover :coverShow="payWayShow" @click.native="payWayShow = !payWayShow"></screen-cover>
     </div>
 </template>
 <script>
   import { mapState, mapMutations } from 'vuex';
   import { imgBaseUrl } from '../../../config/env';
+  import screenCover from '../../components/screenCover';
   export default {
-    components: {},
+    components: {
+      screenCover
+    },
     computed: {
       ...mapState([
         'DEFAULTADDRESS',
@@ -126,7 +141,18 @@
         'ORDERDETAIL',
         'PRESETREMARK',
         'CUSTOMREMARK'
-      ])
+      ]),
+      // 设置默认地址
+      defaultaddress: {
+        get () {
+          if (this.DEFAULTADDRESS) {
+            return this.DEFAULTADDRESS;
+          } else if (this.addressList && this.addressList.length !== 0) {
+            return this.addressList[0];
+          }
+        },
+        set () {}
+      }
     },
     data () {
         return {
@@ -142,7 +168,9 @@
             }
           },
           addressList: [],
-          orderRemark: ''
+          orderRemark: '',
+          payWayShow: false,
+          payWayId: 1
         };
     },
     methods: {
@@ -197,12 +225,15 @@
         }
         return color;
       },
-      // 设置默认地址
-      defaultaddress () {
-        if (this.DEFAULTADDRESS) {
-          return this.DEFAULTADDRESS;
-        } else if (this.addressList && this.addressList.length !== 0) {
-          return this.addressList[0];
+      // 显示付款方式
+      showPayWayFun () {
+        this.payWayShow = !this.payWayShow;
+      },
+      // 选择付款方式
+      choosePayWay (is_online_payment, id) {
+        if (is_online_payment) {
+          this.payWayShow = !this.payWayShow;
+          this.payWayId = id;
         }
       },
       confrimOrder () {}
@@ -500,6 +531,45 @@
         flex: 3;
         text-align: center;
         background-color: #56d176;
+      }
+    }
+    .choose-pay-way {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      z-index: 101;
+      background-color: #fff;
+      header {
+        line-height: 2rem;
+        background-color: @backColor;
+        font-size: .7rem;
+        color: @fontColor;
+        text-align: center;
+      }
+      .pay-way-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 .7rem;
+        line-height: 2.5rem;
+        span {
+          font-size: .7rem;
+          color: @fontColor2;
+        }
+        svg {
+          width: .8rem;
+          height: .8rem;
+          fill: #eee;
+        }
+      }
+      .choose {
+        span {
+          color: @fontColor;
+        }
+        svg {
+          fill: #4cd964;
+        }
       }
     }
   }
