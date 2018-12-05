@@ -74,26 +74,29 @@
 <script>
   import { mapState } from 'vuex';
   export default {
-      components: {},
-      computed: {
-        ...mapState([
-          'USERINFO'
-        ])
-      },
-      data () {
-          return {};
-      },
-      methods: {
-        buyCart () {
-          this.$snotify.warning('支付功能暂未开放！', {
-            showProgressBar: false,
-            timeout: 1000
-          });
-        }
-      },
-      mounted () {
-      },
-      watch: {}
+    components: {},
+    computed: {
+      ...mapState([
+        'USERINFO'
+      ])
+    },
+    data () {
+        return {};
+    },
+    methods: {
+      buyCart () {
+        this.$snotify.warning('支付功能暂未开放！', {
+          showProgressBar: false,
+          timeout: 1000
+        });
+      }
+    },
+    mounted () {
+    },
+  destroyed () {
+    this.$snotify.clear();
+  },
+    watch: {}
   };
 </script>
 <style lang="less" scoped>

@@ -51,22 +51,25 @@
 </template>
 <script>
   export default {
-      components: {},
-      computed: {},
-      data () {
-          return {};
-      },
-      methods: {
-        shareWay () {
-          this.$snotify.warning('请在APP中打开！', {
-            showProgressBar: false,
-            timeout: 1000
-          });
-        }
-      },
-      mounted () {
-      },
-      watch: {}
+    components: {},
+    computed: {},
+    data () {
+        return {};
+    },
+    methods: {
+      shareWay () {
+        this.$snotify.warning('请在APP中打开！', {
+          showProgressBar: false,
+          timeout: 1000
+        });
+      }
+    },
+    mounted () {
+    },
+    destroyed () {
+      this.$snotify.clear();
+    },
+    watch: {}
   };
 </script>
 <style lang="less" scoped>

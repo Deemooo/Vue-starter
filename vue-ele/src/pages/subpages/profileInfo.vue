@@ -59,55 +59,58 @@
   import { mapState } from 'vuex';
   import { imgBaseUrl } from '../../../config/env';
   export default {
-      components: {},
-      computed: {
-        ...mapState([
-          'USERINFO'
-        ])
-      },
-      data () {
-          return {
-            imgBaseUrl
-          };
-      },
-      methods: {
-        // 上传头像
-        uploadAvatar () {
-          var uploadInput = document.querySelector('.upload-avatar');
-          uploadInput.click();
-          uploadInput.onload = (() =>  {
-            let data = new FormData();
-            data.append('file', uploadInput.files[0]);
-            try {
-              this.https({url: '/eus/v1/users/' + this.USERINFO.user_id + '/avatar', data, method: 'post'}).then(
-                (res) => {
-                  if (res.status === 1) {
-                    this.$set(this.USERINFO, 'avatar', res.image_path);
-                  } else {
-                    throw new Error('上传失败!');
-                  }
-                });
-            } catch (e) {
-              this.$snotify.warning(e, {
-                showProgressBar: false,
-                timeout: 1000
+    components: {},
+    computed: {
+      ...mapState([
+        'USERINFO'
+      ])
+    },
+    data () {
+        return {
+          imgBaseUrl
+        };
+    },
+    methods: {
+      // 上传头像
+      uploadAvatar () {
+        var uploadInput = document.querySelector('.upload-avatar');
+        uploadInput.click();
+        uploadInput.onload = (() =>  {
+          let data = new FormData();
+          data.append('file', uploadInput.files[0]);
+          try {
+            this.https({url: '/eus/v1/users/' + this.USERINFO.user_id + '/avatar', data, method: 'post'}).then(
+              (res) => {
+                if (res.status === 1) {
+                  this.$set(this.USERINFO, 'avatar', res.image_path);
+                } else {
+                  throw new Error('上传失败!');
+                }
               });
-            }
-          })();
-        },
-        setCellPhoneNumber () {
-          this.$snotify.warning('请在APP中设置！', {
-            showProgressBar: false,
-            timeout: 1000
-          });
-        },
-        exitLogin () {
+          } catch (e) {
+            this.$snotify.warning(e, {
+              showProgressBar: false,
+              timeout: 1000
+            });
+          }
+        })();
+      },
+      setCellPhoneNumber () {
+        this.$snotify.warning('请在APP中设置！', {
+          showProgressBar: false,
+          timeout: 1000
+        });
+      },
+      exitLogin () {
 
-        }
-      },
-      mounted () {
-      },
-      watch: {}
+      }
+    },
+    mounted () {
+    },
+  destroyed () {
+    this.$snotify.clear();
+  },
+    watch: {}
   };
 </script>
 <style lang="less" scoped>

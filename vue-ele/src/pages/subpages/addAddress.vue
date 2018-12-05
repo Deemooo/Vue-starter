@@ -132,6 +132,9 @@
         });
       }
     },
+    destroyed () {
+      this.$snotify.clear();
+    },
     watch: {}
   };
 </script>

@@ -72,7 +72,7 @@
     },
     methods: {
       ...mapMutations([
-        'INITBUYUSERINFO'
+        'INITUSERINFO'
       ]),
       reload () {
         window.location.reload();
@@ -110,7 +110,7 @@
       }
     },
     created () {
-      this.INITBUYUSERINFO();
+      this.INITUSERINFO();
     },
     mounted () {
       this.getCurrentCity();

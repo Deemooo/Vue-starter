@@ -657,7 +657,7 @@
                     height: 2rem;
                     border: none;
                     border-radius: 0;
-                    background-color: #4cd964;
+                    background-color: @btnColor;
                     transform: rotate(-45deg) translate(-.1rem,-1.5rem);
                     span {
                       flex: 1;
@@ -798,7 +798,7 @@
         }
       }
       .gotopay-acitvity {
-        background-color: #4cd964;
+        background-color: @btnColor;
       }
     }
     .cart-food-details {

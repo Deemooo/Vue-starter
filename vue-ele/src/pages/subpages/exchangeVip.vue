@@ -36,51 +36,54 @@
 <script>
   import { mapState } from 'vuex';
   export default {
-      components: {},
-      computed: {
-        ...mapState([
-          'USERINFO'
-        ]),
-        checkcartNumber () {
-          return !(this.isNull(this.cartNumber) && this.validateCartNumber(this.cartNumber));
-        },
-        checkCartPassword () {
-          return !(this.isNull(this.cartPassword) && this.validateCartPassword(this.cartPassword));
-        }
+    components: {},
+    computed: {
+      ...mapState([
+        'USERINFO'
+      ]),
+      checkcartNumber () {
+        return !(this.isNull(this.cartNumber) && this.validateCartNumber(this.cartNumber));
       },
-      data () {
-          return {
-            cartNumber: '',
-            cartPassword: ''
+      checkCartPassword () {
+        return !(this.isNull(this.cartPassword) && this.validateCartPassword(this.cartPassword));
+      }
+    },
+    data () {
+        return {
+          cartNumber: '',
+          cartPassword: ''
+        };
+    },
+    methods: {
+      exchange () {
+        if (!(this.checkcartNumber && this.checkCartPassword)) {
+          let params = {
+            number: this.cartNumber,
+            password: this.cartPassword
           };
-      },
-      methods: {
-        exchange () {
-          if (!(this.checkcartNumber && this.checkCartPassword)) {
-            let params = {
-              number: this.cartNumber,
-              password: this.cartPassword
-            };
-            this.https({url: '/member/v1/users/' + this.USERINFO.id + '/delivery_card/physical_card/bind', params, method: 'post'}).then(
-              (res) => {
-                if (res.message) {
-                  this.$snotify.warning(res.message, {
-                    showProgressBar: false,
-                    timeout: 1000
-                  });
-                } else {
-                  this.$snotify.success('兑换成功！', {
-                    showProgressBar: false,
-                    timeout: 1000
-                  });
-                }
-              });
-          }
+          this.https({url: '/member/v1/users/' + this.USERINFO.id + '/delivery_card/physical_card/bind', params, method: 'post'}).then(
+            (res) => {
+              if (res.message) {
+                this.$snotify.warning(res.message, {
+                  showProgressBar: false,
+                  timeout: 1000
+                });
+              } else {
+                this.$snotify.success('兑换成功！', {
+                  showProgressBar: false,
+                  timeout: 1000
+                });
+              }
+            });
         }
-      },
-      mounted () {
-      },
-      watch: {}
+      }
+    },
+    mounted () {
+    },
+    destroyed () {
+      this.$snotify.clear();
+    },
+    watch: {}
   };
 </script>
 <style lang="less" scoped>

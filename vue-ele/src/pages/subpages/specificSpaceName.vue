@@ -65,9 +65,8 @@
       }
     },
     mounted () {},
-    deactivated () {
-      this.inputValue = '';
-      this.placeList = [];
+    destroyed () {
+      this.$snotify.clear();
     },
     watch: {}
   };

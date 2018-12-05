@@ -75,7 +75,7 @@
     methods: {
       ...mapMutations([
         'UPDATEUSERINFO',
-        'INITBUYUSERINFO'
+        'INITUSERINFO'
       ]),
       // 获取验证码
       getCaptchaCode () {
@@ -139,12 +139,15 @@
       }
     },
     created () {
-      this.INITBUYUSERINFO();
+      this.INITUSERINFO();
       this.userAccount = this.USERINFO.userAccount;
       this.password = this.USERINFO.password;
     },
     mounted () {
       this.getCaptchaCode();
+    },
+    destroyed () {
+      this.$snotify.clear();
     },
     watch: {}
     };

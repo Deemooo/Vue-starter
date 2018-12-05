@@ -109,6 +109,9 @@
     mounted () {
       this.getCaptchaCode();
     },
+    destroyed () {
+      this.$snotify.clear();
+    },
     watch: {}
   };
 </script>

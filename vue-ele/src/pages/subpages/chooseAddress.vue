@@ -85,7 +85,7 @@
       iconColor (name) {
         let color = '';
         if (name === '公司') {
-          color = '#4cd964';
+          color = '@btnColor';
         } else if (name === '学校') {
           color = '@blue';
         }
@@ -180,7 +180,7 @@
               width: .8rem;
               height: .8rem;
               margin-right: .4rem;
-              fill: #4cd964;
+              fill: @btnColor;
               opacity: 0;
             }
             .default-address {

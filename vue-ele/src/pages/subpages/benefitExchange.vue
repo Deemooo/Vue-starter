@@ -28,61 +28,64 @@
 <script>
   import { mapState } from 'vuex';
   export default {
-      components: {},
-      computed: {
-        ...mapState([
-          'USERINFO'
-        ]),
-        checkExchangeCode () {
-          return !(this.isNull(this.exchangeCode) && this.validateExchangeCode(this.exchangeCode));
-        },
-        checkCodeNumber () {
-          return !(this.isNull(this.codeNumber) && this.validateCodeNumber(this.codeNumber));
-        }
+    components: {},
+    computed: {
+      ...mapState([
+        'USERINFO'
+      ]),
+      checkExchangeCode () {
+        return !(this.isNull(this.exchangeCode) && this.validateExchangeCode(this.exchangeCode));
       },
-      data () {
-          return {
-            captchaCodeImg: '',
-            exchangeCode: '',
-            codeNumber: ''
+      checkCodeNumber () {
+        return !(this.isNull(this.codeNumber) && this.validateCodeNumber(this.codeNumber));
+      }
+    },
+    data () {
+        return {
+          captchaCodeImg: '',
+          exchangeCode: '',
+          codeNumber: ''
+        };
+    },
+    methods: {
+      // 获取验证码
+      getCaptchaCode () {
+        let params = {};
+        this.https({url: '/v1/captchas', params, method: 'post'}).then(
+          (res) => {
+            this.captchaCodeImg = res.code;
+          });
+      },
+      exchange () {
+        if (!(this.checkExchangeCode && this.checkCodeNumber)) {
+          let params = {
+            exchange_code: this.exchangeCode,
+            captcha_code: this.codeNumber
           };
-      },
-      methods: {
-        // 获取验证码
-        getCaptchaCode () {
-          let params = {};
-          this.https({url: '/v1/captchas', params, method: 'post'}).then(
+          this.https({url: '/v1/users/' + this.USERINFO.user_id + '/hongbao/exchange', params, method: 'post'}).then(
             (res) => {
-              this.captchaCodeImg = res.code;
+              if (res.message) {
+                this.$snotify.warning('res.message', {
+                  showProgressBar: false,
+                  timeout: 1000
+                });
+              } else {
+                this.$snotify.success('兑换成功！', {
+                  showProgressBar: false,
+                  timeout: 1000
+                });
+              }
             });
-        },
-        exchange () {
-          if (!(this.checkExchangeCode && this.checkCodeNumber)) {
-            let params = {
-              exchange_code: this.exchangeCode,
-              captcha_code: this.codeNumber
-            };
-            this.https({url: '/v1/users/' + this.USERINFO.user_id + '/hongbao/exchange', params, method: 'post'}).then(
-              (res) => {
-                if (res.message) {
-                  this.$snotify.warning('res.message', {
-                    showProgressBar: false,
-                    timeout: 1000
-                  });
-                } else {
-                  this.$snotify.success('兑换成功！', {
-                    showProgressBar: false,
-                    timeout: 1000
-                  });
-                }
-              });
-          }
         }
-      },
-      mounted () {
-        this.getCaptchaCode();
-      },
-      watch: {}
+      }
+    },
+    mounted () {
+      this.getCaptchaCode();
+    },
+    destroyed () {
+      this.$snotify.clear();
+    },
+    watch: {}
   };
 </script>
 <style lang="less" scoped>

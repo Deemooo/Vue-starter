@@ -20,46 +20,49 @@
 </template>
 <script>
   export default {
-      components: {},
-      computed: {},
-      data () {
-          return {};
-      },
-      methods: {
-        download () {
-          //判断系统
-          let system = '';
-          let u = navigator.userAgent;
-          let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //g
-          let isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
-          if (isAndroid) {
-            system = 'Android';
-          } else if (isIOS) {
-            system = 'iOS';
-          }
-          if (system === 'IOS') {
-            this.$snotify.warning('iOS用户请前往AppStore下载！', {
+    components: {},
+    computed: {},
+    data () {
+        return {};
+    },
+    methods: {
+      download () {
+        //判断系统
+        let system = '';
+        let u = navigator.userAgent;
+        let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //g
+        let isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        if (isAndroid) {
+          system = 'Android';
+        } else if (isIOS) {
+          system = 'iOS';
+        }
+        if (system === 'IOS') {
+          this.$snotify.warning('iOS用户请前往AppStore下载！', {
+            showProgressBar: false,
+            timeout: 1000
+          });
+        } else {
+          try {
+            let elemIF = document.createElement('iframe');
+            elemIF.src = 'https://cangdu.org/files/elm.apk';
+            elemIF.style.display = 'none';
+            document.body.appendChild(elemIF);
+          } catch (e) {
+            this.$snotify.warning('下载失败！', {
               showProgressBar: false,
               timeout: 1000
             });
-          } else {
-            try {
-              let elemIF = document.createElement('iframe');
-              elemIF.src = 'https://cangdu.org/files/elm.apk';
-              elemIF.style.display = 'none';
-              document.body.appendChild(elemIF);
-            } catch (e) {
-              this.$snotify.warning('下载失败！', {
-                showProgressBar: false,
-                timeout: 1000
-              });
-            }
           }
         }
-      },
-      mounted () {
-      },
-      watch: {}
+      }
+    },
+    mounted () {
+    },
+    destroyed () {
+      this.$snotify.clear();
+    },
+    watch: {}
   };
 </script>
 <style lang="less" scoped>

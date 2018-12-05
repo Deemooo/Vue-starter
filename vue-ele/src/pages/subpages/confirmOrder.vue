@@ -90,7 +90,7 @@
         <router-link tag="div" :to='{path: "/orderRemark", query: {id: orderData.cart.id, sig: orderData.sig}}' class="order-remarks-item">
           <span>订单备注</span>
           <div class="order-remarks-item-text">
-            <span class="ellipsis">{{PRESETREMARK || CUSTOMREMARK ? orderRemark: '口味、偏好等'}}</span>
+            <span class="ellipsis">{{orderRemark || '口味、偏好等'}}</span>
             <svg class="arrow-right">
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
             </svg>
@@ -122,6 +122,7 @@
         </ul>
       </section>
       <screen-cover :coverShow="payWayShow" @click.native="payWayShow = !payWayShow"></screen-cover>
+      <vue-snotify></vue-snotify>
     </div>
 </template>
 <script>
@@ -139,19 +140,28 @@
         'GEOHASH',
         'CARTLIST',
         'ORDERDETAIL',
-        'PRESETREMARK',
-        'CUSTOMREMARK'
+        'ORDERREMARK',
+        'ORDERINVOICE'
       ]),
       // 设置默认地址
       defaultaddress: {
         get () {
-          if (this.DEFAULTADDRESS) {
+          if (Object.keys(this.DEFAULTADDRESS).length !== 0) {
             return this.DEFAULTADDRESS;
           } else if (this.addressList && this.addressList.length !== 0) {
             return this.addressList[0];
           }
         },
         set () {}
+      },
+      // 用户备注
+      orderRemark () {
+        let str = '';
+        this.ORDERREMARK.remarkList.forEach((item) => {
+          str += `${item.text},`;
+        });
+        this.ORDERREMARK.customRemark ? str += this.ORDERREMARK.customRemark : str.substring(0, str.lastIndexOf(','));
+        return str;
       }
     },
     data () {
@@ -168,14 +178,14 @@
             }
           },
           addressList: [],
-          orderRemark: '',
           payWayShow: false,
           payWayId: 1
         };
     },
     methods: {
       ...mapMutations([
-        'SETDEFAULTADDRESS'
+        'SETDEFAULTADDRESS',
+        'SAVECHECKORDERINFO'
       ]),
       // 获取订单数据
       getOrderData () {
@@ -219,7 +229,7 @@
       iconColor (name) {
         let color = '';
         if (name === '公司') {
-          color = '#4cd964';
+          color = '@btnColor';
         } else if (name === '学校') {
           color = '@blue';
         }
@@ -236,7 +246,51 @@
           this.payWayId = id;
         }
       },
-      confrimOrder () {}
+      // 确认
+      confrimOrder () {
+        // 用户登录、地址选择验证
+        if (!(this.USERINFO && this.USERINFO.user_id)) {
+          this.$snotify.warning('请先登录!', {
+            showProgressBar: false,
+            timeout: 1000
+          });
+          return;
+        }
+        if (Object.keys(this.defaultaddress).length === 0) {
+          this.$snotify.warning('请先选择一个地址!', {
+            showProgressBar: false,
+            timeout: 1000
+          });
+          return;
+        }
+        // 保存订单校验信息
+        this.SAVECHECKORDERINFO({
+          user_id: this.USERINFO.user_id,
+          cart_id: this.orderData.cart.id,
+          address_id: this.defaultaddress.id,
+          description: this.orderRemark,
+          entities: this.orderData.cart.groups,
+          geohash: this.GEOHASH,
+          sig: this.orderData.sig
+        });
+        // 下单
+        let params = {
+          address_id: this.defaultaddress.id,
+          come_from: 'mobile_web',
+          deliver_time: '',
+          description: this.orderRemark,
+          entities: this.orderData.cart.groups,
+          geohash: this.GEOHASH,
+          paymethod_id: 1,
+          sig: this.orderData.sig
+        };
+        this.https({url: '/v1/users/' + this.USERINFO.user_id + '/carts/' + this.orderData.cart.id + '/orders', params, method: 'post'}).then(
+          (res) => {
+            if (!res.need_validation) {
+              this.$router.push('payment');
+            }
+          });
+      }
     },
     created () {
       this.shopId = this.$route.query.shopId;
@@ -244,6 +298,9 @@
       this.getAddressList();
     },
     mounted () {
+    },
+    destroyed () {
+      this.$snotify.clear();
     },
     watch: {}
   };
@@ -568,7 +625,7 @@
           color: @fontColor;
         }
         svg {
-          fill: #4cd964;
+          fill: @btnColor;
         }
       }
     }

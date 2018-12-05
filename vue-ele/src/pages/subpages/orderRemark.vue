@@ -8,27 +8,37 @@
           <span class="order-remarks-title">订单备注</span>
         </template>
       </top-header>
-      <section class="quick-remark" v-if="remarkList.remarks.length">
+      <section class="quick-remark" v-if="remarkList.length">
         <header class="header">快速备注</header>
         <ul class="quick-remark-list">
-          <li class="quick-remark-item" v-for="(item,index) in remarkList.remarks" :key="index">
-            <span v-for="(remarkTtem, remarkIndex) in item" :key="remarkIndex">{{remarkTtem}}</span>
+          <li v-for="(item, index) in remarkList"
+              :key="index"
+              @click="chooseRemark(index, item)"
+              :class="{choosed: item.status}"
+              class="quick-remark-item">
+            {{item.text}}
           </li>
         </ul>
       </section>
       <section class="custom-remark">
         <header class="header">其他备注</header>
-        <seaction>
-          <textarea class="custom-remark-textarea" v-model="customRemark" placeholder="请输入备注内容(可不填)"></textarea>
-        </seaction>
+        <section>
+          <textarea
+            v-model="customRemark"
+            placeholder="请输入备注内容(选填)"
+            class="custom-remark-textarea">
+          </textarea>
+        </section>
       </section>
       <div class="confirm-btn" @click="confirmRemark">确定</div>
     </div>
 </template>
 <script>
+  import { mapMutations } from 'vuex';
   export default {
     components: {},
-    computed: {},
+    computed: {
+    },
     data () {
         return {
           remarkList: {
@@ -38,6 +48,9 @@
         };
     },
     methods: {
+      ...mapMutations([
+        'SAVEREMARK'
+      ]),
       // 获取备注信息
       getAddressList () {
         let id = this.$route.query.id;
@@ -48,9 +61,33 @@
         this.https({url: '/v1/carts/' + id + '/remarks', params, method: 'get'}).then(
           (res) => {
             this.remarkList = res;
+            if (this.remarkList.remarks) {
+              let arr = this.remarkList.remarks.reduce((a, b) => {
+                return a.concat(b);
+              });
+              let resArr = [];
+              arr.forEach((item) => {
+                resArr.push({
+                  status: false,
+                  text: item
+                });
+              });
+              this.remarkList = resArr;
+            }
           });
       },
-      confirmRemark () {}
+      // 快速备注选择
+      chooseRemark (index, item) {
+        this.remarkList.splice(index, 1, {status: !item.status, text: item.text});
+      },
+      // 确认
+      confirmRemark () {
+        let remarkList = this.remarkList.filter((item) => {
+          return item.status;
+        });
+        this.SAVEREMARK({remarkList, customRemark: this.customRemark});
+        this.$router.go(-1);
+      }
     },
     created () {
       this.getAddressList();
@@ -99,22 +136,17 @@
         .quick-remark-item {
           display: flex;
           align-items: center;
+          padding: .3rem .6rem;
           margin-right: .6rem;
           margin-bottom: .6rem;
           border: .025rem solid @blue;
           border-radius: .2rem;
-          span {
-            font-size: .6rem;
-            color: @fontColor;
-            padding: .3rem .6rem;
-          }
-          span:nth-child(even) {
-            border-left: .025rem solid @blue;
-            border-right: .025rem solid @blue;
-          }
-          span:last-child {
-            border-right: none;
-          }
+          font-size: .6rem;
+          color: @fontColor;
+        }
+        .choosed {
+          background-color: @blue;
+          color: #fff;
         }
       }
     }
@@ -126,7 +158,7 @@
         color: @fontColor;
         line-height: 2rem;
       }
-      seaction {
+      section {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -149,7 +181,7 @@
       margin: 0 auto;
       border-radius: .2rem;
       line-height: 1.8rem;
-      background-color: #4cd964;
+      background-color: @btnColor;
       font-size: .7rem;
       color: #fff;
       text-align: center;

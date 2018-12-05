@@ -42,79 +42,83 @@
     </div>
 </template>
 <script>
-    import { mapMutations, mapState } from 'vuex';
-    import shopList from '../components/shopList';
-    export default {
-        components: {
-          shopList
-        },
-        computed: {
-          ...mapState([
-            'GEOHASH',
-            'USERINFO'
-          ])
-        },
-        data () {
-            return {
-              msiteTitle: '',
-              foodTypes: [],
-              imgBaseUrl: 'https://fuss10.elemecdn.com',
-              swiperOption: {
-                pagination: {
-                  el: '.swiper-pagination',
-                  dynamicBullets: true
-                }
-              }
-            };
-        },
-        methods: {
-          ...mapMutations([
-            'SAVEGEOHASH'
-          ]),
-          getMsiteAddress () {
-            this.https({url: '/v2/pois/' + this.GEOHASH, method: 'get'}).then(
-              (res) => {
-                this.msiteTitle = res.name;
-              });
-          },
-          getFoodTypes () {
-            let params = {
-              geohash: this.GEOHASH,
-              group_type: '1',
-              'flags[]': 'F'
-            };
-            this.https({url: '/v2/index_entry', params, method: 'get'}).then(
-              (res) => {
-                this.foodTypes = [];
-                for (let i = 0, len = res.length; i < len; i += 8) {
-                  this.foodTypes.push(res.slice(i, i + 8));
-                }
-              });
-          },
-          getCategoryId (url) {
-            let urlData = decodeURIComponent(url.split('=')[1].replace('&target_name', ''));
-            if (/restaurant_category_id/gi.test(urlData)) {
-              return JSON.parse(urlData).restaurant_category_id.id;
-            } else {
-              return '';
+  import { mapMutations, mapState } from 'vuex';
+  import shopList from '../components/shopList';
+  export default {
+    components: {
+      shopList
+    },
+    computed: {
+      ...mapState([
+        'GEOHASH',
+        'USERINFO'
+      ])
+    },
+    data () {
+        return {
+          msiteTitle: '',
+          foodTypes: [],
+          imgBaseUrl: 'https://fuss10.elemecdn.com',
+          swiperOption: {
+            pagination: {
+              el: '.swiper-pagination',
+              dynamicBullets: true
             }
           }
-        },
-       async mounted () {
-          if (!this.GEOHASH) {
-            let params = this.setStrOfUrl({
-              type: 'guess'
-            });
-            this.https({url: '/v1/cities' + params, method: 'get'}).then(
-              (res) => {
-                this.SAVEGEOHASH(res.latitude + ',' + res.longitude);
-              });
-          }
-          this.getMsiteAddress();
-          this.getFoodTypes();
-        },
-        watch: {}
-    };
+        };
+    },
+    methods: {
+      ...mapMutations([
+        'SAVEGEOHASH',
+        'INITUSERINFO'
+      ]),
+      getMsiteAddress () {
+        this.https({url: '/v2/pois/' + this.GEOHASH, method: 'get'}).then(
+          (res) => {
+            this.msiteTitle = res.name;
+          });
+      },
+      getFoodTypes () {
+        let params = {
+          geohash: this.GEOHASH,
+          group_type: '1',
+          'flags[]': 'F'
+        };
+        this.https({url: '/v2/index_entry', params, method: 'get'}).then(
+          (res) => {
+            this.foodTypes = [];
+            for (let i = 0, len = res.length; i < len; i += 8) {
+              this.foodTypes.push(res.slice(i, i + 8));
+            }
+          });
+      },
+      getCategoryId (url) {
+        let urlData = decodeURIComponent(url.split('=')[1].replace('&target_name', ''));
+        if (/restaurant_category_id/gi.test(urlData)) {
+          return JSON.parse(urlData).restaurant_category_id.id;
+        } else {
+          return '';
+        }
+      }
+    },
+    created () {
+      this.INITUSERINFO();
+    },
+    mounted () {
+      if (!this.GEOHASH) {
+        let params = this.setStrOfUrl({
+          type: 'guess'
+        });
+        this.https({url: '/v1/cities' + params, method: 'get'}).then(
+          (res) => {
+            this.SAVEGEOHASH(res.latitude + ',' + res.longitude);
+          });
+      }
+      this.getMsiteAddress();
+      this.getFoodTypes();
+    },
+    watch: {}
+  };
 </script>
 <style lang="less" scoped>
   @import (reference) "../assets/style/dynamic";

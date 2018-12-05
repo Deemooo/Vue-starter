@@ -18,8 +18,12 @@ export default new Vuex.Store({
     CARTLIST: {},
     DEFAULTADDRESS: {},
     DEFAULTADDRESSINDEX: 0,
-    PRESETREMARK: '',
-    CUSTOMREMARK: ''
+    ORDERREMARK: {
+      remarkList: [],
+      customRemark: ''
+    },
+    ORDERINVOICE: false,
+    CHECKORDERINFO: {}
   },
   mutations: {
     // 更新城市信息
@@ -36,7 +40,7 @@ export default new Vuex.Store({
       }
     },
     // 从缓存中初始化用户信息
-    INITBUYUSERINFO (state) {
+    INITUSERINFO (state) {
       state.USERINFO = getListData('USERINFO') || {};
     },
     // 更新地理位置信息
@@ -89,6 +93,10 @@ export default new Vuex.Store({
     SAVEORDERDETAIL (state, data) {
       state.ORDERDETAIL = data;
     },
+    // 保存订单校验信息
+    SAVECHECKORDERINFO (state, data) {
+      state.CHECKORDERINFO = data;
+    },
     // 保存店铺详情
     SAVESHOPDETAIL (state, data) {
       state.SHOPDETAIL = data;
@@ -131,6 +139,14 @@ export default new Vuex.Store({
     // 从缓存中初始化购物车
     INITBUYCART (state) {
       state.CARTLIST = getListData('CARTLIST') || {};
+    },
+    // 保存订单备注信息
+    SAVEREMARK (state, {remarkList, customRemark}) {
+      state.ORDERREMARK = {remarkList, customRemark};
+    },
+    // 保存订单发票信息
+    SAVEORDERINVOICE (state, data) {
+      state.ORDERINVOICE = data;
     }
   },
   actions: {

@@ -115,6 +115,9 @@
         this.placeHistory = this.getListData('searchHistory') || [];
         this.historyArr = this.getListData('searchHistory') || [];
       },
+      destroyed () {
+        this.$snotify.clear();
+      },
       watch: {}
     };
 </script>
