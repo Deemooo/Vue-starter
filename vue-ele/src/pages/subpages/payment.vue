@@ -10,7 +10,9 @@
     </top-header>
     <section class="time-amount">
       <header>支付剩余时间</header>
-      <p class="time">{{remaining}}</p>
+      <p class="time">
+        <compute-time :countNum="900"></compute-time>
+      </p>
     </section>
     <section class="pay-way-list">
       <header>选择支付方式</header>
@@ -40,44 +42,18 @@
   </div>
 </template>
 <script>
+  import computeTime from  '../../components/computeTime';
   export default {
-    components: {},
-    computed: {
-      // 记时
-      remaining () {
-        let minute = parseInt(this.countNum / 60);
-        if (minute < 10) {
-          minute = '0' + minute;
-        }
-        let second = parseInt(this.countNum % 60);
-        if (second < 10) {
-          second = '0' + second;
-        }
-        return `00 : ${minute} : ${second}`;
-      }
+    components: {
+      computeTime
     },
+    computed: {},
     data () {
       return {
-        timer: null,
-        countNum: 900,
         payWay: 1
       };
     },
     methods: {
-      // 支付记时
-      remainingTime () {
-        clearInterval(this.timer);
-        this.timer = setInterval(() => {
-          this.countNum--;
-          if (this.countNum === 0) {
-            clearInterval(this.timer);
-            this.$snotify.warning('支付超时!', {
-              showProgressBar: false,
-              timeout: 1500
-            });
-          }
-        }, 1000);
-      },
       // 确认支付
       confirmPay () {
         this.$snotify.confirm('当前环境无法支付，请打开官方APP进行付款!', '支付提示', {
@@ -90,14 +66,8 @@
         });
       }
     },
-    created () {
-      this.remainingTime();
-    },
-    mounted () {
-    },
-    beforeDestroy () {
-      clearInterval(this.timer);
-    },
+    created () {},
+    mounted () {},
     destroyed () {
       this.$snotify.clear();
     },
@@ -140,8 +110,10 @@
         color: @fontColor1;
       }
       .time {
-        font-size: 1rem;
-        color: @fontColor;
+        span {
+          font-size: 1rem;
+          color: @fontColor;
+        }
       }
     }
     .pay-way-list {

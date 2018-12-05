@@ -56,7 +56,7 @@
     </div>
 </template>
 <script>
-  import { mapState } from 'vuex';
+  import { mapState, mapMutations } from 'vuex';
   import { imgBaseUrl } from '../../../config/env';
   export default {
     components: {},
@@ -71,6 +71,9 @@
         };
     },
     methods: {
+      ...mapMutations([
+        'OUTLOGIN'
+      ]),
       // 上传头像
       uploadAvatar () {
         var uploadInput = document.querySelector('.upload-avatar');
@@ -101,8 +104,20 @@
           timeout: 1000
         });
       },
+      // 退出登录
       exitLogin () {
-
+        this.$snotify.confirm('是否退出登陆?', '提示', {
+          timeout: 0,
+          buttons: [
+            { text: '取消' },
+            { text: '确认', action: this.confirmExitLogin }
+          ]
+        });
+      },
+      // 确认退出
+      confirmExitLogin () {
+        this.OUTLOGIN();
+        this.$router.go(-1);
       }
     },
     mounted () {

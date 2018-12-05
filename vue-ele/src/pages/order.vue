@@ -36,7 +36,10 @@
             </div>
           </div>
           <div class="order-item-btn-wrap">
-            <div v-if="item.status_bar.title == '等待支付'" class="order-item-btn-pay">等待支付</div>
+            <div v-if="timeoutFlag && item.status_bar.title === '等待支付'" class="order-item-btn-pay">
+              <span>等待支付</span>
+              (<compute-time @listenTimeoutFlag="listenTimeOut" :countNum="900 - item.time_pass"></compute-time>)
+            </div>
             <div v-else class="order-item-btn-again">再来一单</div>
           </div>
         </div>
@@ -47,9 +50,12 @@
   import { mapState, mapMutations } from 'vuex';
   import { imgBaseUrl } from '../../config/env';
   import { loadMore } from '../publicFn/loadMore';
+  import computeTime from  '../components/computeTime';
   export default {
     mixins: [loadMore],
-    components: {},
+    components: {
+      computeTime
+    },
     computed: {
       ...mapState([
         'USERINFO'
@@ -59,7 +65,8 @@
         return {
           imgBaseUrl,
           orderList: [],
-          offset: 0
+          offset: 0,
+          timeoutFlag: true
         };
     },
     methods: {
@@ -93,11 +100,16 @@
       showOrderDetail (item) {
         this.SAVEORDERDETAIL(item);
         this.$router.push('orderDetail');
+      },
+      // 监听计时组件的超时信号
+      listenTimeOut (flag) {
+        this.timeoutFlag = flag;
       }
     },
-    mounted () {
+    created () {
       this.getOrderList();
     },
+    mounted () {},
     watch: {}
   };
 </script>
@@ -202,8 +214,13 @@
             color: @blue;
           }
           .order-item-btn-pay {
-            border: .025rem solid @fontColor3;
-            color: @fontColor3;
+            display: flex;
+            align-items: center;
+            border: .025rem solid @fontColor4;
+            color: @fontColor4;
+            span {
+              color: @fontColor4;
+            }
           }
         }
       }

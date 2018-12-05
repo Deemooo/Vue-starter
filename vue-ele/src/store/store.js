@@ -147,6 +147,11 @@ export default new Vuex.Store({
     // 保存订单发票信息
     SAVEORDERINVOICE (state, data) {
       state.ORDERINVOICE = data;
+    },
+    // 退出
+    OUTLOGIN (state) {
+      state.USERINFO = {};
+      removeListData('USERINFO')
     }
   },
   actions: {
