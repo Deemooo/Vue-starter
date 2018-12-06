@@ -70,7 +70,8 @@
     methods: {
       ...mapMutations([
         'SAVEGEOHASH',
-        'INITUSERINFO'
+        'INITUSERINFO',
+        'INITGEOHASH'
       ]),
       getMsiteAddress () {
         this.https({url: '/v2/pois/' + this.GEOHASH, method: 'get'}).then(
@@ -103,6 +104,7 @@
     },
     created () {
       this.INITUSERINFO();
+      this.INITGEOHASH();
     },
     mounted () {
       if (!this.GEOHASH) {
@@ -123,9 +125,9 @@
 <style lang="less" scoped>
   @import (reference) "../assets/style/dynamic";
   .msite {
+    position: relative;
     width: 100%;
     overflow-y: auto;
-    position: relative;
     color: #fff;
     .msite-head {
       justify-content: space-between;

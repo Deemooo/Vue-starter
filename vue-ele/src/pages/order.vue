@@ -1,5 +1,5 @@
 <template>
-    <div class="order">
+    <div class="order" v-load-more="getMoreList">
       <top-header>
         <template>
           <svg class="arrow-left" xmlns="http://www.w3.org/2000/svg" version="1.1" @click="$router.go(-1)">
@@ -8,7 +8,7 @@
           <span class="order-title">订单列表</span>
         </template>
       </top-header>
-      <div v-load-more="getMoreList" class="order-list-wrap">
+      <div class="order-list-wrap">
         <div v-for="item in orderList" :key="item.id" class="order-list-item">
           <div @click="showOrderDetail(item)" class="order-item-shop">
             <img :src="imgBaseUrl + item.restaurant_image_url" alt="" class="order-item-shop-img">
@@ -36,14 +36,15 @@
             </div>
           </div>
           <div class="order-item-btn-wrap">
-            <div v-if="timeoutFlag && item.status_bar.title === '等待支付'" class="order-item-btn-pay">
+            <div v-if="item.status_bar.title === '等待支付'" class="order-item-btn-pay">
               <span>等待支付</span>
-              (<compute-time @listenTimeoutFlag="listenTimeOut" :countNum="900 - item.time_pass"></compute-time>)
+              (<compute-time @listenTimeOutFlag="listenTimeOut" :countNum="900 - item.time_pass"></compute-time>)
             </div>
             <div v-else class="order-item-btn-again">再来一单</div>
           </div>
         </div>
       </div>
+      <bottom-footer></bottom-footer>
     </div>
 </template>
 <script>
@@ -102,8 +103,8 @@
         this.$router.push('orderDetail');
       },
       // 监听计时组件的超时信号
-      listenTimeOut (flag) {
-        this.timeoutFlag = flag;
+      listenTimeOut () {
+        this.getOrderList();
       }
     },
     created () {
@@ -116,9 +117,9 @@
 <style lang="less" scoped>
   @import (reference) "../assets/style/dynamic";
   .order {
+    position: relative;
     width: 100%;
     overflow-y: auto;
-    position: relative;
     color: #fff;
     svg {
       box-sizing: border-box;
@@ -138,6 +139,7 @@
     }
     .order-list-wrap {
       margin-top: 1.95rem;
+      margin-bottom: 1.95rem;
       .order-list-item {
         padding: .8rem;
         box-shadow: 0.025rem 0 0.25rem @gray;

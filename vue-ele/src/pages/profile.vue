@@ -10,7 +10,7 @@
       </top-header>
       <div>
         <!--账户信息-->
-        <router-link :to="USERINFO.user_id ? 'profileInfo' : 'login'" tag="div" class="profile-info">
+        <router-link to='profileInfo' tag="div" class="profile-info">
           <img :src="imgBaseUrl + USERINFO.avatar" class="avatar-default" v-if="USERINFO.user_id">
           <svg v-else class="avatar-default">
             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#avatar-default"></use>

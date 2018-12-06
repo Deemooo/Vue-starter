@@ -50,7 +50,7 @@
               timeout: 0,
               showProgressBar: false,
               buttons: [
-                {text: '确定', action: () => this.$emit('listenTimeoutFlag', false)}
+                {text: '确定', action: () => this.$emit('listenTimeOutFlag', false)}
               ]
             });
           }

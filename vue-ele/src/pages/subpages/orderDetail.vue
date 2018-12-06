@@ -13,10 +13,10 @@
           <img :src="imgBaseUrl + ORDERDETAIL.restaurant_image_url">
           <div class="order-status">{{ ORDERDETAIL.status_bar.title }}</div>
           <div v-if="ORDERDETAIL.timeline_node.description" class="order-des">{{ ORDERDETAIL.timeline_node.description }}</div>
-          <router-link tag="div" :to="{path: '/shop', query: {geohash, id: ORDERDETAIL.restaurant_id}}" class="order-item-btn-again">再来一单</router-link>
+          <router-link tag="div" :to="{path: '/shop', query: {geohash: this.GEOHASH, id: ORDERDETAIL.restaurant_id}}" class="order-item-btn-again">再来一单</router-link>
         </div>
         <div class="order-detail-info">
-          <router-link tag="div" :to="{path: '/shop', query: {geohash, id: ORDERDETAIL.restaurant_id}}" class="order-detail-info-item">
+          <router-link tag="div" :to="{path: '/shop', query: {geohash: this.GEOHASH, id: ORDERDETAIL.restaurant_id}}" class="order-detail-info-item">
             <div class="shop-name">
               <img :src="imgBaseUrl + ORDERDETAIL.restaurant_image_url">
               <span>{{ ORDERDETAIL.restaurant_name }}</span>

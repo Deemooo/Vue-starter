@@ -53,6 +53,7 @@
         </li>
         <p v-if="noResultFlag && restaurantsList.length === 0" class="no-result">很抱歉!无搜索结果。</p>
       </ul>
+      <bottom-footer></bottom-footer>
     </div>
 </template>
 <script>
@@ -217,6 +218,7 @@
     }
     .search-result {
       border-top: .025rem solid @gray;
+      margin-bottom: 1.95rem;
       background-color: #fff;
       .search-result-item {
         display: flex;

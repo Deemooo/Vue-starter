@@ -7,8 +7,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     CITYINFO: {},
-    USERINFO: {},
-    GEOHASH: '',
+    USERINFO: {}, // 用户信息
+    GEOHASH: '', // 经纬度信息
     SPECIFICSPACENAME: '',
     ADDRESSOTHERINFO: {},
     ADDRESSLIST: [],
@@ -43,11 +43,16 @@ export default new Vuex.Store({
     INITUSERINFO (state) {
       state.USERINFO = getListData('USERINFO') || {};
     },
-    // 更新地理位置信息
+    // 保存理位置信息
     SAVEGEOHASH (state, data) {
       if (data) {
         state.GEOHASH = data;
       }
+      setListData('GEOHASH', state.GEOHASH);
+    },
+    // 从缓存中初始化购物车
+    INITGEOHASH (state) {
+      state.GEOHASH = getListData('GEOHASH') || {};
     },
     // 设置用户名
     SAVEUSERNAME (state, name) {
