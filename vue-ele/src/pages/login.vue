@@ -13,6 +13,7 @@
       <form class="login-form" v-on:submit.prevent v-if="loginWay">
         <div>
           <input type="text" name="count" placeholder="账号" class="count"  v-model='userAccount'>
+          <div v-if="checkUserAccount" class="input-error-tips">{{ this.erroTip('账号') }}</div>
         </div>
         <div class="password-wrap">
           <input v-if="!showPassword" type="password" name="password" placeholder="密码" class="password"  v-model='password'>
@@ -21,10 +22,12 @@
             <div class="switch-button" :class="{'switch-button-move': showPassword }"></div>
           </div>
         </div>
+        <div v-if="checkPassword" class="input-error-tips">{{ this.erroTip('密码') }}</div>
         <div class="code-wrap">
           <input type="text" name="codeNumber" placeholder="验证码" class="code" maxlength="4" v-model="codeNumber">
           <img v-show="captchaCodeImg" :src="captchaCodeImg" alt="验证码" @click="getCaptchaCode">
         </div>
+        <div v-if="checkCodeNumber" class="input-error-tips">{{ this.erroTip('验证码') }}</div>
         <div class="login-btn" @click="login">
           <input type="submit" name="submit" class="login-submit" value="登陆">
         </div>
@@ -54,7 +57,16 @@
     computed: {
       ...mapState([
         'USERINFO'
-      ])
+      ]),
+      checkUserAccount () {
+        return !(this.isNull(this.userAccount) && this.validateUser(this.userAccount));
+      },
+      checkPassword () {
+        return !(this.isNull(this.password) && this.validatePassword(this.password));
+      },
+      checkCodeNumber () {
+        return !(this.isNull(this.codeNumber) && this.validateCodeNumber(this.codeNumber));
+      }
     },
     data () {
         return {
@@ -99,36 +111,28 @@
       },
       // 登陆
       login () {
-        if (!this.userAccount) {
-          alert('请输入手机号/邮箱/用户名！');
-          return;
-        } else if (!this.password) {
-          alert('请输入密码！');
-          return;
-        } else if (!this.codeNumber) {
-          alert('请输入验证码！');
-          return;
+        if (!(this.checkUserAccount && this.checkPassword && this.checkCodeNumber)) {
+          let params = {
+            username: this.userAccount,
+            password: this.password,
+            captcha_code: this.codeNumber
+          };
+          this.https({url: '/v2/login', params, method: 'post'}).then(
+            (res) => {
+              this.userInfo = res;
+              //如果返回的值不正确，则弹出提示框，返回的值正确则返回上一页
+              if (!this.userInfo.user_id) {
+                this.$snotify.warning(this.userInfo.message, {
+                  showProgressBar: false,
+                  timeout: 1000
+                });
+                this.getCaptchaCode();
+              } else {
+                this.UPDATEUSERINFO(this.userInfo);
+                this.$router.go(-1);
+              }
+            });
         }
-        let params = {
-          username: this.userAccount,
-          password: this.password,
-          captcha_code: this.codeNumber
-        };
-        this.https({url: '/v2/login', params, method: 'post'}).then(
-          (res) => {
-            this.userInfo = res;
-            //如果返回的值不正确，则弹出提示框，返回的值正确则返回上一页
-            if (!this.userInfo.user_id) {
-              this.$snotify.warning(this.userInfo.message, {
-                showProgressBar: false,
-                timeout: 1000
-              });
-              this.getCaptchaCode();
-            } else {
-              this.UPDATEUSERINFO(this.userInfo);
-              this.$router.go(-1);
-            }
-          });
       },
       changeLoginWay () {
         this.loginWay = !this.loginWay;
@@ -139,8 +143,8 @@
     },
     created () {
       this.INITUSERINFO();
-      this.userAccount = this.USERINFO.userAccount;
-      this.password = this.USERINFO.password;
+      this.userAccount = this.USERINFO.userAccount || '';
+      this.password = this.USERINFO.password || '';
     },
     mounted () {
       this.getCaptchaCode();
@@ -186,7 +190,6 @@
       margin-top: 1.95rem;
       div {
         width: 100%;
-        padding: .2rem 0;
         border-top: .025rem solid @gray;
         text-align: left;
         input {

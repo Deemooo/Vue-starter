@@ -97,7 +97,10 @@
                 this.noResultFlag = true;
               });
           } else {
-            alert('请输入商家或美食名称进行搜索！');
+            this.$snotify.warning('请输入商家或美食名称进行搜索！', {
+              showProgressBar: false,
+              timeout: 1000
+            });
           }
         },
         // 点击搜索结果项

@@ -9,7 +9,7 @@
         </template>
       </top-header>
       <form class="exchange-form" v-on:submit.prevent>
-        <div class="password-wrap">
+        <div class="exchange-code-wrap">
           <input type="text" name="exchangeCode" placeholder="请输入兑换码"  v-model='exchangeCode'>
           <div v-if="checkExchangeCode" class="input-error-tips">{{ this.erroTip('兑换码') }}</div>
         </div>
@@ -112,23 +112,18 @@
     }
     .exchange-form {
       background-color: #fff;
-      border-top: .025rem solid @gray;
       margin-top: 1.95rem;
       div {
         width: 100%;
-        padding: .2rem 0;
-        border-top: .025rem solid @gray;
         text-align: left;
+        border-top: .025rem solid @gray;
         input {
           height: 1.4rem;
-          width: 60%;
-          margin-left: .4rem;
+          width: 100%;
+          padding: 0 .7rem;
           border-radius: .1rem;
-          padding: 0 .3rem;
-          border: none;
           font-size: .65rem;
           color: @fontColor;
-          outline: none;
         }
         input[type=submit] {
           margin-left: 0;

@@ -16,8 +16,8 @@
         </div>
         <div class="code-wrap">
           <input type="text" name="cartPassword" placeholder="请输入6位卡密" class="code" maxlength="6" v-model="cartPassword">
+          <div v-if="checkCartPassword" class="input-error-tips">{{ this.erroTip('卡密') }}</div>
         </div>
-        <div v-if="checkCartPassword" class="input-error-tips">{{ this.erroTip('卡密') }}</div>
         <div class="exchange-btn" @click="exchange">
           <input type="submit" name="submit" class="exchange-submit" value="兑换">
         </div>
@@ -120,33 +120,21 @@
     }
     .exchange-form {
       background-color: #fff;
-      border-top: .025rem solid @gray;
       div {
         width: 100%;
-        padding: .2rem 0;
-        border-top: .025rem solid @gray;
         text-align: left;
         input {
           height: 1.4rem;
-          width: 60%;
-          margin-left: .4rem;
+          width: 100%;
+          padding: 0 .7rem;
+          border-top: .025rem solid @gray;
+          border-bottom: .025rem solid @gray;
           border-radius: .1rem;
-          padding: 0 .3rem;
-          border: none;
           font-size: .65rem;
           color: @fontColor;
-          outline: none;
         }
         input[type=submit] {
           margin-left: 0;
-        }
-      }
-      .code-wrap {
-        display: flex;
-        align-items: center;
-        img {
-          margin-left: 1.4rem;
-          background-color: @gray;
         }
       }
       .exchange-btn {
@@ -160,14 +148,6 @@
           font-size: .65rem;
           color: #fff;
         }
-      }
-      .input-error-tips {
-        width: 100%;
-        height: 0.58rem;
-        padding: .4rem;
-        font-size: .58rem;
-        color: @fontColor3;
-        text-align: left;
       }
     }
     .exchange-vip-tips {
