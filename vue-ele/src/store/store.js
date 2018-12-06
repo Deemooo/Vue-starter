@@ -6,24 +6,24 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    CITYINFO: {},
+    CITYINFO: {}, // 城市信息
     USERINFO: {}, // 用户信息
     GEOHASH: '', // 经纬度信息
-    SPECIFICSPACENAME: '',
-    ADDRESSOTHERINFO: {},
-    ADDRESSLIST: [],
-    QUESTION: {},
-    ORDERDETAIL: {},
-    SHOPDETAIL: {},
-    CARTLIST: {},
-    DEFAULTADDRESS: {},
-    DEFAULTADDRESSINDEX: 0,
+    SPECIFICSPACENAME: '', // 特殊地名
+    ADDRESSOTHERINFO: {}, // 新增地址时的其他信息
+    ADDRESSLIST: [], // 添加新地址时的列表
+    QUESTION: {}, // 问题详情
+    ORDERDETAIL: {}, // 订单详情
+    SHOPDETAIL: {}, // 商铺信息
+    CARTLIST: {}, // 购物车中商品信息
+    DEFAULTADDRESS: {}, // 默认地址
+    DEFAULTADDRESSINDEX: 0, // 默认地址索引
     ORDERREMARK: {
-      remarkList: [],
+      remarkList: [],  // 订单中的备注信息
       customRemark: ''
     },
-    ORDERINVOICE: false,
-    CHECKORDERINFO: {}
+    ORDERINVOICE: false, // 订单中的发票信息
+    CHECKORDERINFO: {} // 订单校验信息
   },
   mutations: {
     // 更新城市信息

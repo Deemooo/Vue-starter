@@ -2,6 +2,7 @@
   <div id="app">
     <router-view/>
     <svg-icon></svg-icon>
+    <vue-snotify></vue-snotify>
   </div>
 </template>
 <script>

@@ -92,12 +92,10 @@
           });
       }
     },
-    mounted () {
+    created () {
       this.getDeliveryData();
     },
-    activated () {
-      this.getDeliveryData();
-    },
+    mounted () {},
     watch: {}
   };
 </script>

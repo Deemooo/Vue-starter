@@ -1,7 +1,6 @@
 // 项目通用方法
-/**
- * 获取style样式
- */
+
+//获取style样式
 const getStyle = (element, attr, NumberMode = 'int') => {
   let target;
   // scrollTop 获取方式不同，没有它不属于style，而且只有document.body才能用

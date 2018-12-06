@@ -9,7 +9,6 @@ import https from  './publicFn/https';
 import mixins from  './publicFn/mixins';
 // 表单验证
 import validate from  './publicFn/validate';
-
 // 顶栏
 import topHeader from './components/topHeader.vue';
 // 底栏
@@ -22,6 +21,7 @@ import 'github-markdown-css/github-markdown.css';
 // 弹出框
 import 'vue-snotify/styles/material.css';
 import Snotify from 'vue-snotify';
+
 Vue.config.productionTip = false;
 
 Vue.use(https);

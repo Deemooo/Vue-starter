@@ -10,7 +10,7 @@
       </top-header>
       <form class="search-form" v-on:submit.prevent>
         <div>
-          <input type="search" placeholder="请输入商家或美食名称" class="search-input" required v-model='inputValue'>
+          <input type="search" placeholder="请输入商家或美食名称" class="search-input"  v-model='inputValue'>
           <p v-if="checkInputValue" class="input-error-tips">{{ this.erroTip('名称') }}</p>
         </div>
         <div>

@@ -1,3 +1,4 @@
+// 请求方法
 'use strict';
 import { baseUrl } from '../../config/env';
 export default {

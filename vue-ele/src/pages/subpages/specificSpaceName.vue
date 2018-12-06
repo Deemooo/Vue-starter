@@ -10,7 +10,7 @@
       </top-header>
       <form class="add-detail-form" v-on:submit.prevent>
         <div>
-          <input type="search" placeholder="输入学校、商务楼、地址" class="search-input" required v-model='inputValue'>
+          <input type="search" placeholder="输入学校、商务楼、地址" class="search-input"  v-model='inputValue'>
         </div>
         <div>
           <input type="submit" name="submit" class="search-submit" @click='getPois' value="提交">
@@ -22,7 +22,6 @@
           <div class="content">{{ item.address }}</div>
         </div>
       </div>
-      <vue-snotify></vue-snotify>
     </div>
 </template>
 <script>

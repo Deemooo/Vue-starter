@@ -77,6 +77,7 @@
           };
       },
       methods: {
+        // 获取商铺列表
         getShopList () {
           let supportStr = '';
           if (this.supportIds) {

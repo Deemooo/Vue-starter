@@ -68,6 +68,7 @@
       ])
     },
     methods: {
+      // 路由跳转
       gotoAddress (path) {
         this.$router.push(path);
       }

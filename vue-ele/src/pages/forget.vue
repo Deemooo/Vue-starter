@@ -11,16 +11,16 @@
     <!--密码登陆-->
     <form class="login-form" v-on:submit.prevent>
       <div>
-        <input type="text" name="count" placeholder="账号" class="count" required v-model='userAccount'>
+        <input type="text" name="count" placeholder="账号" class="count"  v-model='userAccount'>
       </div>
       <div class="password-wrap">
-        <input type="password" name="password" placeholder="旧密码" class="oldPassWord" required v-model='oldPassWord'>
+        <input type="password" name="password" placeholder="旧密码" class="oldPassWord"  v-model='oldPassWord'>
       </div>
       <div class="password-wrap">
-        <input type="password" name="password" placeholder="新密码" class="newPassWord" required v-model='newPassWord'>
+        <input type="password" name="password" placeholder="新密码" class="newPassWord"  v-model='newPassWord'>
       </div>
       <div class="password-wrap">
-        <input type="password" name="password" placeholder="确认新密码" class="confirmPassWord" required v-model='confirmPassWord'>
+        <input type="password" name="password" placeholder="确认新密码" class="confirmPassWord"  v-model='confirmPassWord'>
       </div>
       <div class="code-wrap">
         <input type="text" name="codeNumber" placeholder="验证码" class="code" maxlength="4" v-model="codeNumber">
@@ -30,7 +30,6 @@
         <input type="submit" name="submit" class="login-submit" value="确认修改">
       </div>
     </form>
-    <vue-snotify></vue-snotify>
   </div>
 </template>
 <script>

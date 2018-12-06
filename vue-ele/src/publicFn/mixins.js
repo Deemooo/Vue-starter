@@ -59,7 +59,7 @@ export default {
 
       return str;
     },
-    //传递过来的图片地址需要处理后才能正常使用
+    // 图片地址处理后
     getImgPath (path) {
       let suffix;
       if (!path) {

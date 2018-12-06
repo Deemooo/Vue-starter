@@ -122,7 +122,6 @@
         </ul>
       </section>
       <screen-cover :coverShow="payWayShow" @click.native="payWayShow = !payWayShow"></screen-cover>
-      <vue-snotify></vue-snotify>
     </div>
 </template>
 <script>

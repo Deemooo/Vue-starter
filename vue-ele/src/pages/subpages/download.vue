@@ -15,7 +15,6 @@
           <input type="submit" name="submit" class="search-submit" @click='download' value="下载">
         </div>
       </div>
-      <vue-snotify></vue-snotify>
     </div>
 </template>
 <script>

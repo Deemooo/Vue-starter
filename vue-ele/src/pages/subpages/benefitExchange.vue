@@ -10,7 +10,7 @@
       </top-header>
       <form class="exchange-form" v-on:submit.prevent>
         <div class="password-wrap">
-          <input type="text" name="exchangeCode" placeholder="请输入兑换码" required v-model='exchangeCode'>
+          <input type="text" name="exchangeCode" placeholder="请输入兑换码"  v-model='exchangeCode'>
           <div v-if="checkExchangeCode" class="input-error-tips">{{ this.erroTip('兑换码') }}</div>
         </div>
         <div class="code-wrap">
@@ -22,7 +22,6 @@
           <input type="submit" name="submit" class="exchange-submit" value="兑换">
         </div>
       </form>
-      <vue-snotify></vue-snotify>
     </div>
 </template>
 <script>

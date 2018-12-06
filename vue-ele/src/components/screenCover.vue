@@ -1,3 +1,4 @@
+<!--遮罩-->
 <template>
     <div v-show="coverShow" class="cover">
       <slot></slot>

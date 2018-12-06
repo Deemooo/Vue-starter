@@ -52,7 +52,6 @@
         </router-link>
       </div>
       <div @click="exitLogin" class="exit-login">退出登录</div>
-      <vue-snotify></vue-snotify>
     </div>
 </template>
 <script>

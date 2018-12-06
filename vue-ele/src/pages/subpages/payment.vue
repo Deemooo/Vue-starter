@@ -38,7 +38,6 @@
       </section>
     </section>
     <div class="confirm-btn" @click="confirmPay">确定支付</div>
-    <vue-snotify></vue-snotify>
   </div>
 </template>
 <script>

@@ -33,7 +33,6 @@
           <input type="submit" name="submit" class="add-address-submit" @click='saveAddress' value="提交">
         </div>
       </form>
-      <vue-snotify></vue-snotify>
     </div>
 </template>
 <script>
@@ -48,7 +47,7 @@
         'ADDRESSOTHERINFO'
       ]),
       checkName () {
-        return !(this.isNull(this.inputName) && this.validateUser(this.inputName));
+        return !(this.isNull(this.inputName));
       },
       checkAddress () {
         return !this.isNull(this.SPECIFICSPACENAME);

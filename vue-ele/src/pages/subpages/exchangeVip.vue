@@ -11,7 +11,7 @@
       <div class="vipcard-user">成功兑换后将关联到当前帐号: <span>{{ USERINFO.username }}</span></div>
       <form class="exchange-form" v-on:submit.prevent>
         <div class="password-wrap">
-          <input type="text" name="cartNumber" placeholder="请输入10位卡号" required v-model='cartNumber'>
+          <input type="text" name="cartNumber" placeholder="请输入10位卡号"  v-model='cartNumber'>
           <div v-if="checkcartNumber" class="input-error-tips">{{ this.erroTip('卡号') }}</div>
         </div>
         <div class="code-wrap">
@@ -30,7 +30,6 @@
         <div>年卡：<b>360</b>次减免配送费。</div>
         <div>＊仅限蜂鸟专送订单，每日最多减免3单，每单最高减免4元（一个月按31天计算）</div>
       </footer>
-      <vue-snotify></vue-snotify>
     </div>
 </template>
 <script>

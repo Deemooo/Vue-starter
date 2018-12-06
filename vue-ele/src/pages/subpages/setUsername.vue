@@ -10,7 +10,7 @@
       </top-header>
       <form class="set-username-form" v-on:submit.prevent>
         <div>
-          <input type="search" v-model='inputValue' @input="checkInput" placeholder="输入用户名" :class="{'input-error': !effective}" class="search-input" required>
+          <input type="search" v-model='inputValue' @input="checkInput" placeholder="输入用户名" :class="{'input-error': !effective}" class="search-input" >
         </div>
         <div v-if="effective" class="input-tips">用户名只能修改一次(5-24字符之间)</div>
         <div v-else class="input-tips error">请输入5-24位的字符！</div>

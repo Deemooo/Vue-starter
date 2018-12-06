@@ -1,4 +1,4 @@
-<!--商家评分-->
+<!--评分-->
 <template>
    <div class="rating_container">
      <section class="star_container">

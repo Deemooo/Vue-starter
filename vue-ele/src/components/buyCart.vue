@@ -1,3 +1,4 @@
+<!--购物车-->
 <template>
   <div class="buy-cart">
     <div class="cart-button" >
@@ -34,9 +35,11 @@
       };
     },
     methods: {
+      // 购物车新增
       addToCart () {
         this.$emit('addToCart');
       },
+      // 购物车移除
       reduceFromCart () {
         if (this.foodNum > 0) {
           this.$emit('reduceFromCart');

@@ -12,11 +12,11 @@
       <!--密码登陆-->
       <form class="login-form" v-on:submit.prevent v-if="loginWay">
         <div>
-          <input type="text" name="count" placeholder="账号" class="count" required v-model='userAccount'>
+          <input type="text" name="count" placeholder="账号" class="count"  v-model='userAccount'>
         </div>
         <div class="password-wrap">
-          <input v-if="!showPassword" type="password" name="password" placeholder="密码" class="password" required v-model='password'>
-          <input v-else type="text" name="password" placeholder="密码" class="password" required v-model='password'>
+          <input v-if="!showPassword" type="password" name="password" placeholder="密码" class="password"  v-model='password'>
+          <input v-else type="text" name="password" placeholder="密码" class="password"  v-model='password'>
           <div class="switch" :class="{'password-show': showPassword }" @click="changePassWordType">
             <div class="switch-button" :class="{'switch-button-move': showPassword }"></div>
           </div>
@@ -33,7 +33,7 @@
       <!--手机号登陆-->
       <form class="login-form" v-on:submit.prevent v-else>
         <div>
-          <input type="text" placeholder="手机号码" name="phone" maxlength="11" required v-model='phoneNumber'>
+          <input type="text" placeholder="手机号码" name="phone" maxlength="11"  v-model='phoneNumber'>
           <span class="get-code-btn" :class="{'sended': !sendFlag}" @click.self="getVerifyCode" v-if="!sendFlag">获取验证码</span>
           <span class="get-code-btn" v-else>已发送 ({{ computeTime }}s)</span>
         </div>
@@ -45,7 +45,6 @@
         </div>
         <div class="reset-btn" @click="$router.push('forget')">重置密码？</div>
       </form>
-      <vue-snotify></vue-snotify>
     </div>
 </template>
 <script>

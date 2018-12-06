@@ -34,7 +34,6 @@
         </li>
         <p v-if="noResultFlag && placeList.length === 0" class="no-result">很抱歉!无搜索结果。</p>
       </ul>
-      <vue-snotify></vue-snotify>
     </div>
 </template>
 <script>

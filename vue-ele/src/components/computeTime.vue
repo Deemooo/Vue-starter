@@ -1,7 +1,7 @@
+<!--记时-->
 <template>
   <span class="time">
     {{remaining}}
-    <vue-snotify></vue-snotify>
   </span>
 </template>
 <script>
