@@ -12,20 +12,25 @@
     <form class="login-form" v-on:submit.prevent>
       <div>
         <input type="text" name="count" placeholder="账号" class="count"  v-model='userAccount'>
+        <div v-if="checkUserAccount" class="input-error-tips">{{ this.erroTip('账号') }}</div>
       </div>
       <div class="password-wrap">
-        <input type="password" name="password" placeholder="旧密码" class="oldPassWord"  v-model='oldPassWord'>
+        <input type="password" name="password" placeholder="旧密码" class="oldPassword"  v-model='oldPassword'>
+        <div v-if="checkOldPassword" class="input-error-tips">{{ this.erroTip('旧密码') }}</div>
       </div>
       <div class="password-wrap">
-        <input type="password" name="password" placeholder="新密码" class="newPassWord"  v-model='newPassWord'>
+        <input type="password" name="password" placeholder="新密码" class="newPassword"  v-model='newPassword'>
+        <div v-if="checkNewPassword" class="input-error-tips">{{ this.erroTip('新密码') }}</div>
       </div>
       <div class="password-wrap">
-        <input type="password" name="password" placeholder="确认新密码" class="confirmPassWord"  v-model='confirmPassWord'>
+        <input type="password" name="password" placeholder="确认新密码" class="confirmPassword"  v-model='confirmPassword'>
+        <div v-if="checkConfirmPassword" class="input-error-tips">{{ this.erroTip('密码') }}</div>
       </div>
       <div class="code-wrap">
         <input type="text" name="codeNumber" placeholder="验证码" class="code" maxlength="4" v-model="codeNumber">
         <img v-show="captchaCodeImg" :src="captchaCodeImg" alt="验证码" @click="getCaptchaCode">
       </div>
+      <div v-if="checkCodeNumber" class="input-error-tips">{{ this.erroTip('验证码') }}</div>
       <div class="login-btn" @click="resetPassword">
         <input type="submit" name="submit" class="login-submit" value="确认修改">
       </div>
@@ -35,13 +40,29 @@
 <script>
   export default {
     components: {},
-    computed: {},
+    computed: {
+      checkUserAccount () {
+        return !(this.isNull(this.userAccount) && this.validateUser(this.userAccount));
+      },
+      checkOldPassword () {
+        return !(this.isNull(this.oldPassword) && this.validatePassword(this.oldPassword));
+      },
+      checkNewPassword () {
+        return !(this.isNull(this.newPassword) && this.validatePassword(this.newPassword));
+      },
+      checkConfirmPassword () {
+        return this.newPassword === this.confirmPassword;
+      },
+      checkCodeNumber () {
+        return !(this.isNull(this.codeNumber) && this.validateCodeNumber(this.codeNumber));
+      }
+    },
     data () {
       return {
         userAccount: '',
-        oldPassWord: '',
-        newPassWord: '',
-        confirmPassWord: '',
+        oldPassword: '',
+        newPassword: '',
+        confirmPassword: '',
         codeNumber: '',
         captchaCodeImg: '',
         showPassword: false,
@@ -64,45 +85,30 @@
       },
       // 修改密码
       resetPassword () {
-        if (!this.userAccount) {
-          alert('请输入手机号/邮箱/用户名！');
-          return;
-        } else if (!this.oldPassWord) {
-          alert('请输入密码！');
-          return;
-        } else if (!this.newPassWord) {
-          alert('请输入新密码！');
-          return;
-        } else if (!this.confirmPassWord) {
-          alert('请确认新密码！');
-          return;
-        } else if (this.newPassWord !== this.confirmPassWord) {
-          alert('两次输入的密码不一致！');
-          return;
-        } else if (!this.codeNumber) {
-          alert('请输入验证码！');
-          return;
+        if (!(this.checkUserAccount && this.checkOldPassword && this.checkNewPassword && this.checkConfirmPassword && this.checkCodeNumber)) {
+          let params = {
+            username: this.userAccount,
+            oldpassWord: this.oldPassword,
+            newpassword: this.newPassword,
+            confirmpassword: this.confirmPassword,
+            captcha_code: this.codeNumber
+          };
+          this.https({url: '/v2/changepassword', params, method: 'post'}).then(
+            (res) => {
+              if (res.message) {
+                this.$snotify.warning(res.message, {
+                  showProgressBar: false,
+                  timeout: 1000
+                });
+                this.getCaptchaCode();
+              } else {
+                this.$snotify.success('密码修改成功！', {
+                  showProgressBar: false,
+                  timeout: 1000
+                });
+              }
+            });
         }
-        let params = {
-          username: this.userAccount,
-          oldpassWord: this.oldPassWord,
-          newpassword: this.newPassWord,
-          confirmpassword: this.confirmPassWord,
-          captcha_code: this.codeNumber
-        };
-        this.https({url: '/v2/changepassword', params, method: 'post'}).then(
-          (res) => {
-            if (res.message) {
-              this.$snotify.warning(res.message, {
-                showProgressBar: false,
-                timeout: 1000
-              });
-              this.getCaptchaCode();
-            } else {
-              alert('密码修改成功！');
-
-            }
-          });
       }
     },
     mounted () {
@@ -142,11 +148,9 @@
     }
     .login-form {
       background-color: #fff;
-      border-top: .025rem solid @gray;
       margin-top: 1.95rem;
       div {
         width: 100%;
-        padding: .2rem 0;
         border-top: .025rem solid @gray;
         text-align: left;
         input {
@@ -162,13 +166,6 @@
         }
         input[type=submit] {
           margin-left: 0;
-        }
-      }
-      .password-wrap {
-        display: flex;
-        align-items: center;
-        .password-show {
-          background-color: @blue;
         }
       }
       .code-wrap {
