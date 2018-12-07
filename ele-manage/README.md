@@ -12,7 +12,7 @@ http://localhost:8080
 
 ## 目录结构
   ```html
-  imp-web-admin-v2
+  ele-manage
       ├─build                     # 编译配置
       │   ├─build.js              # 构建环境下的配置
       │   ├─check-versions.js     # 检查npm和node版本是否对应
@@ -55,7 +55,7 @@ http://localhost:8080
   ```
 
 ## 技术栈
-    * vuejs
+    * vue.js
     * vue-router
     * vuex
     * ES6
