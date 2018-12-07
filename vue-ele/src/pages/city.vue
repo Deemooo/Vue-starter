@@ -14,7 +14,7 @@
           <input type="search" name="city" placeholder="输入学校、商务楼、地址" class="search-input" v-model='inputValue'>
         </div>
         <div>
-          <input type="submit" name="submit" class="search-submit" @click='getPois' value="提交">
+          <input type="submit" name="submit" class="search-submit" @click='searchPlace' value="提交">
         </div>
       </form>
       <div v-if="showFlag && placeHistory.length !== 0" class="search-history">
@@ -61,13 +61,15 @@
           'UPDATECITYINFO',
           'SAVEGEOHASH'
         ]),
+        // 获取当前城市信息
         getCurrentcity () {
           this.https({url: '/v1/cities/' + this.cityId, method: 'get'}).then(
             (res) => {
               this.UPDATECITYINFO(res);
             });
         },
-        getPois () {
+        // 搜索
+        searchPlace () {
           if (this.inputValue) {
             let params = this.setStrOfUrl({
               type: 'search',
@@ -87,10 +89,12 @@
             });
           }
         },
+        // 选择历史记录项
         selectHistoryItem (geohash) {
           this.$router.push('/msite');
           this.SAVEGEOHASH(geohash);
         },
+        // 选择搜索结果项
         selectPlace (index, geohash) {
           let res = this.historyArr.every((item) => {
             return item.geohash !== geohash;
@@ -100,20 +104,22 @@
           }
           this.SAVEGEOHASH(geohash);
           this.selectHistoryItem(geohash);
-          this.setListData('searchHistory', this.historyArr);
+          this.setListData('SEARCHHISTORY', this.historyArr);
         },
+        // 清空历史记录
         clearAll () {
           this.placeHistory = [];
-          this.removeListData('searchHistory');
+          this.removeListData('SEARCHHISTORY');
           this.showFlag = false;
         }
       },
-      mounted () {
+      created () {
         this.cityId = this.$route.params.cityid || '';
         this.getCurrentcity();
-        this.placeHistory = this.getListData('searchHistory') || [];
-        this.historyArr = this.getListData('searchHistory') || [];
+        this.placeHistory = this.getListData('SEARCHHISTORY') || [];
+        this.historyArr = this.getListData('SEARCHHISTORY') || [];
       },
+      mounted () {},
       destroyed () {
         this.$snotify.clear();
       },
@@ -123,9 +129,9 @@
 <style lang="less" scoped>
   @import (reference) "../assets/style/dynamic";
   .city {
+    position: relative;
     width: 100%;
     overflow-y: auto;
-    position: relative;
     svg, span {
       box-sizing: border-box;
       color: #fff;

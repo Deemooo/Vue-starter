@@ -134,9 +134,11 @@
             });
         }
       },
+      // 切换登陆方式
       changeLoginWay () {
         this.loginWay = !this.loginWay;
       },
+      // 切换密码可见性
       changePassWordType () {
         this.showPassword = !this.showPassword;
       }

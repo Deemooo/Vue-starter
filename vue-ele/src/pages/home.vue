@@ -77,7 +77,7 @@
       reload () {
         window.location.reload();
       },
-      // 获取热门城市
+      // 获取当前城市信息
       getCurrentCity () {
         let params = this.setStrOfUrl({
           type: 'guess'
@@ -123,10 +123,10 @@
 <style lang="less" scoped>
   @import (reference) "../assets/style/dynamic";
   .home {
+    position: relative;
     width: 100%;
     height: 100%;
     overflow-y: auto;
-    position: relative;
     .home-head {
       justify-content: space-between;
       box-sizing: border-box;

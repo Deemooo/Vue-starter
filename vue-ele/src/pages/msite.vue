@@ -73,13 +73,15 @@
         'INITUSERINFO',
         'INITGEOHASH'
       ]),
+      // 获取地址信息
       getMsiteAddress () {
         this.https({url: '/v2/pois/' + this.GEOHASH, method: 'get'}).then(
           (res) => {
             this.msiteTitle = res.name;
           });
       },
-      getFoodTypes () {
+      // 获取商铺种类
+      getShopTypes () {
         let params = {
           geohash: this.GEOHASH,
           group_type: '1',
@@ -107,6 +109,7 @@
       this.INITGEOHASH();
     },
     mounted () {
+      // 更新经纬度信息
       if (!this.GEOHASH) {
         let params = this.setStrOfUrl({
           type: 'guess'
@@ -117,7 +120,7 @@
           });
       }
       this.getMsiteAddress();
-      this.getFoodTypes();
+      this.getShopTypes();
     },
     watch: {}
   };

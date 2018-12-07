@@ -309,9 +309,9 @@
 <style lang="less" scoped>
   @import (reference) "../assets/style/dynamic";
   .food {
+    position: relative;
     width: 100%;
     overflow-y: auto;
-    position: relative;
     font-size: .55rem;
     svg, span {
       box-sizing: border-box;
