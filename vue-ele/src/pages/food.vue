@@ -292,12 +292,11 @@
         }
       },
       mounted () {
-        this.geohash = this.$route.query.geohash || '';
         this.headTitle = this.$route.query.title || '';
         this.restaurantCategoryId = this.$route.query.restaurant_category_id || '';
-        if (this.geohash) {
-          this.latitude = this.geohash.split(',')[0];
-          this.longitude = this.geohash.split(',')[1];
+        if (this.GEOHASH) {
+          this.latitude = this.GEOHASH.split(',')[0];
+          this.longitude = this.GEOHASH.split(',')[1];
           this.getFoodDelivery();
           this.getFoodActivity();
           this.getFoodCategory();
