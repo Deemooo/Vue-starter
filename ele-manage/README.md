@@ -60,3 +60,6 @@ http://localhost:8080
     * vuex
     * ES6
     * iview
+## 项目截图
+<img src="https://github.com/Deemooo/Vue-starter/blob/master/screenshots/ele-manage1.gif"/>
+<img src="https://github.com/Deemooo/Vue-starter/blob/master/screenshots/ele-manage2.gif"/>
