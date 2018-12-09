@@ -54,7 +54,4 @@ http://localhost:8010
       └─README.md                # 项目注释
 ```
 ## 项目截图
-<img src="https://github.com/Deemooo/Vue-starter/blob/master/screenshots/vue-ele1.gif" width="290"/>
-<img src="https://github.com/Deemooo/Vue-starter/blob/master/screenshots/vue-ele2.gif" width="290"/>
-<img src="https://github.com/Deemooo/Vue-starter/blob/master/screenshots/vue-ele3.gif" width="290"/>
-
+<img src="https://github.com/Deemooo/Vue-starter/blob/master/screenshots/vue-ele1.gif" width="290"/> <img src="https://github.com/Deemooo/Vue-starter/blob/master/screenshots/vue-ele2.gif" width="290"/> <img src="https://github.com/Deemooo/Vue-starter/blob/master/screenshots/vue-ele3.gif" width="290"/>
