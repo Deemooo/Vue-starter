@@ -53,3 +53,7 @@ http://localhost:8010
       ├─package.json             # 各种配置文件管理
       └─README.md                # 项目注释
 ```
+## 项目截图
+<img src="https://github.com/Deemooo/Vue-starter/blob/master/screenshots/vue-ele1.gif" /> 
+<img src="https://github.com/Deemooo/Vue-starter/blob/master/screenshots/vue-ele2.gif" /> 
+<img src="https://github.com/Deemooo/Vue-starter/blob/master/screenshots/vue-ele3.gif" />
