@@ -13,6 +13,8 @@ import validate from  './publicFn/validate';
 import topHeader from './components/topHeader.vue';
 // 底栏
 import bottomFooter from './components/bottomFooter.vue';
+// 重置样式
+import 'normalize.css';
 // 触摸滑动组件
 import Swiper from 'vue-awesome-swiper';
 import 'swiper/dist/css/swiper.css';
